@@ -3,6 +3,7 @@ using UnityEngine;
 public class CarsSpawn : MonoBehaviour
 {
     [SerializeField] private GameObject carPrefab;
+    //private GameObject[] carPrefabs;
     [SerializeField] private float spawnTime;
     [SerializeField] private float spawnPositionZ;
     [SerializeField] private float spawnPositionY;
@@ -21,6 +22,8 @@ public class CarsSpawn : MonoBehaviour
         if (timePassed >= spawnTime)
         {
             float randomX = Random.Range(spawnMinPositionX, spawnMaxPositionX);
+            //int i = Random.Range(0, carPrefabs.Count);
+            //GameObject car = Instantiate(carPrefabs[i]);
             GameObject car = Instantiate(carPrefab);
             car.transform.position = new Vector3(randomX, spawnPositionY, spawnPositionZ);
             car.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
