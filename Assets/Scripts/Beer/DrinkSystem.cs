@@ -1,0 +1,323 @@
+﻿using System.Collections;
+using TMPro;
+using Unity.Burst.Intrinsics;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
+
+public enum DrinkState { Idle, Moving, Drinking, Returning }
+
+public class DrinkSystem : MonoBehaviour
+{
+    [SerializeField] private InputActionAsset inputActions;
+    [SerializeField] private GameObject handOnSteering;
+    [SerializeField] private GameObject handOnGlass;
+    [SerializeField] private Transform targetTransform;
+    [SerializeField] private Liquid beer;
+    [SerializeField] private float inputDeadZone;
+    [SerializeField] private float rightHandSpeed;
+    [SerializeField] private float movementSpeedWhileReturning;
+    [SerializeField] private float movementDurationBeforeDrinking;
+    [SerializeField] private float returnDuration;
+    [SerializeField] private float rotationSpeedWhileReturning;
+    [SerializeField] private float drinkDuration;
+    [SerializeField] private float shaderBugExtraFill;
+    [SerializeField] private float minFill;
+    [SerializeField] private float maxFill;
+    [SerializeField] private float maxTilt;
+    [SerializeField] private float maxHeight;
+    [SerializeField] private float beerLossDuration;
+    [SerializeField] private GameObject[] beerParticles;
+    private Rigidbody rb;
+    private InputActionMap inputMap;
+    private InputAction holdT, holdS, rightHand, actionTest;
+    private DrinkState state = DrinkState.Idle;
+    private Vector3 startPos;
+    private Quaternion startRot;
+    private Coroutine routine;
+    private float beerConsumed;
+    private float totalBeerConsumed;
+    private float extraFillWhileMoving;
+    private float startingFill;
+    private bool shouldDrink;
+    private Vector2 rightHandMovement;
+    private bool iHateNiggers;
+    private bool stunned;
+
+    private void Awake()
+    {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
+        rb = GetComponent<Rigidbody>();
+        inputMap = inputActions.FindActionMap("Player");
+        holdT = inputMap.FindAction("Hold T");
+        holdS = inputMap.FindAction("Hold S");
+        rightHand = inputMap.FindAction("Speed");
+        actionTest = inputMap.FindAction("Test");
+        totalBeerConsumed = 0;
+        startPos = transform.position;
+        startRot = transform.rotation;
+        iHateNiggers = false;
+        stunned = false;
+    }
+
+    private void OnEnable() => inputMap.Enable();
+    private void OnDisable() => inputMap.Disable();
+
+    private void Update()
+    {
+        bool holdingGlass = holdT.IsPressed() && holdS.IsPressed();
+        rightHandMovement = rightHand.ReadValue<Vector2>();
+        switch (state)
+        {
+            case DrinkState.Idle:
+                if (holdingGlass)
+                    StartMoving();
+                break;
+            case DrinkState.Moving:
+                if (!holdingGlass)
+                {
+                    StartReturning();
+                }
+                else
+                {
+                    StartMoving();
+                }
+                break;
+            case DrinkState.Drinking:
+                if (!holdingGlass)
+                {
+                    beerConsumed = beer.fillAmount + extraFillWhileMoving - startingFill;
+                    StartReturning();
+                }
+                break;
+            case DrinkState.Returning:
+                if (holdingGlass && !stunned && beer.fillAmount < maxFill)
+                {
+                    StartMoving();
+                }
+                break;
+        }
+        UpdateHands(holdingGlass);
+        UpdateWobble();
+        if (actionTest.WasPressedThisFrame())
+        {
+            StartCoroutine(GainBeer(0.2f));
+        }
+    }
+
+    private void UpdateHands(bool holdingGlass)
+    {
+        bool handShouldHold = state == DrinkState.Drinking || state == DrinkState.Returning || state == DrinkState.Moving;
+        handOnGlass.SetActive(handShouldHold);
+        handOnSteering.SetActive(!handShouldHold);
+    }
+
+    private void UpdateWobble()
+    {
+        bool stable = state == DrinkState.Drinking || state == DrinkState.Returning;
+        beer.MaxWobble = stable ? 0.01f : 0.05f;
+    }
+
+    private void StartMoving()
+    {
+        state = DrinkState.Moving;
+        RestartRoutine(MoveRoutine());
+    }
+
+    public void StartDrinking()
+    {
+        if (beer.fillAmount < maxFill)
+        {
+            state = DrinkState.Drinking;
+            RestartRoutine(DrinkRoutine());
+        }
+    }
+
+    private void StartReturning()
+    {
+        if (state == DrinkState.Drinking || state == DrinkState.Idle || state == DrinkState.Moving)
+        {
+            if (beer.fillAmount + extraFillWhileMoving >= maxFill)
+            {
+                beer.fillAmount = maxFill + 1;
+                iHateNiggers = true;
+            }
+            state = DrinkState.Returning;
+            RestartRoutine(ReturnRoutine());
+        }
+    }
+
+    private void RestartRoutine(IEnumerator newRoutine)
+    {
+        if (routine != null)
+            StopCoroutine(routine);
+        routine = StartCoroutine(newRoutine);
+    }
+
+    private IEnumerator LoseBeer(float fillGain)
+    {
+        StartCoroutine(SimulateCarCollision());
+        //spawna palline
+        float elapsed = 0f;
+        float previousFill = 0f;
+        while (elapsed < beerLossDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / beerLossDuration);
+            float currentFill = fillGain * t;
+            float increment = currentFill - previousFill;
+            if (beer.fillAmount + increment > maxFill)
+            {
+                increment = maxFill - beer.fillAmount;
+            }
+            beer.fillAmount += increment;
+            previousFill = currentFill;
+            yield return null;
+        }
+    }
+
+    private IEnumerator SimulateCarCollision()
+    {
+        //alza e abbassa il calice e la camera
+        yield return null;
+    }
+
+    private IEnumerator GainBeer(float fillLoss)
+    {
+        float elapsed = 0f;
+        float previousFill = 0f;
+        while (elapsed < beerLossDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / beerLossDuration);
+            float currentFill = fillLoss * t;
+            float decrement = currentFill - previousFill;
+            if (beer.fillAmount - decrement < minFill)
+            {
+                decrement = minFill + beer.fillAmount;
+            }
+            beer.fillAmount -= decrement;
+            previousFill = currentFill;
+            yield return null;
+        }
+    }
+
+    private IEnumerator MoveRoutine()
+    {
+        Vector3 currentVelocity = rb.linearVelocity;
+        float moveX = Mathf.Abs(rightHandMovement.x) > inputDeadZone ? rightHandMovement.x : 0f;
+        float moveY = Mathf.Abs(rightHandMovement.y) > inputDeadZone ? rightHandMovement.y : 0f;
+        rb.linearVelocity = new Vector3(moveX * rightHandSpeed, currentVelocity.y, moveY * rightHandSpeed);
+        yield return null;
+    }
+
+    private IEnumerator DrinkRoutine()
+    {
+        float tRot = Mathf.InverseLerp(minFill, maxFill, beer.fillAmount);
+        float xRot = Mathf.Lerp(-5, maxTilt, tRot);
+        float yPos = Mathf.Lerp(targetTransform.position.y, maxHeight, tRot);
+        Quaternion targetRotation = Quaternion.Euler(xRot, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+        Vector3 targetPosition = new Vector3(targetTransform.position.x, yPos, targetTransform.position.z);
+        Quaternion maxRotation = Quaternion.Euler(maxTilt, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+        Vector3 maxPosition = new Vector3(targetTransform.position.x, maxHeight, targetTransform.position.z);
+        beerConsumed = 0f;
+        extraFillWhileMoving = 0f;
+        startingFill = beer.fillAmount;
+        float totalDistance = Vector3.Distance(startPos, targetTransform.position);
+        float elapsedMovement = 0f;
+        float elapsedDrinking = 0f;
+        float realDrinkDuration = (beer.fillAmount - maxFill) * -1 * drinkDuration;       
+
+        while (state == DrinkState.Drinking)
+        {
+            if (elapsedMovement < movementDurationBeforeDrinking)
+            {
+                elapsedMovement += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsedMovement / movementDurationBeforeDrinking);
+                Vector3 absolutePos = Vector3.Lerp(startPos, targetPosition, t);
+                Quaternion absoluteRot = Quaternion.Lerp(startRot, targetRotation, t);
+                Vector3 deltaPos = absolutePos - transform.position;
+                transform.position += deltaPos;
+                Quaternion deltaRot = absoluteRot * Quaternion.Inverse(transform.rotation);
+                transform.rotation = deltaRot * transform.rotation;
+                float targetFill = Mathf.Lerp(startingFill, startingFill - shaderBugExtraFill, t);
+                float deltaFill = beer.fillAmount - targetFill;
+                beer.fillAmount -= deltaFill;
+                extraFillWhileMoving = startingFill - beer.fillAmount;
+            }
+            else
+            {
+                elapsedDrinking += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsedDrinking / realDrinkDuration);
+                Quaternion absRot = Quaternion.Lerp(targetRotation, maxRotation, t);
+                Vector3 absPos = Vector3.Lerp(targetPosition, maxPosition, t);
+                Quaternion deltaRot = absRot * Quaternion.Inverse(transform.rotation);
+                transform.rotation = deltaRot * transform.rotation;
+                Vector3 deltaPos = absPos - transform.position;
+                transform.position += deltaPos;
+
+                float targetFill = Mathf.Lerp(startingFill, maxFill - shaderBugExtraFill, t);
+                float deltaFill = beer.fillAmount - targetFill;
+                beer.fillAmount -= deltaFill;
+
+                if (beer.fillAmount >= maxFill - shaderBugExtraFill)
+                {
+                    beerConsumed = beer.fillAmount + extraFillWhileMoving - startingFill;
+                    StartReturning();
+                    yield break;
+                }
+            }
+            yield return null;
+        }
+    }
+
+    private IEnumerator ReturnRoutine()
+    {
+        float elapsed = 0f;
+        float startFill = beer.fillAmount;
+        float startExtra = extraFillWhileMoving;
+        float baseFill = startFill + startExtra;
+        float maxDistance = Vector3.Distance(new Vector3(targetTransform.position.x, maxHeight, targetTransform.position.z), startPos);
+        float distance = Vector3.Distance(transform.position, startPos);
+        float realReturnDuration = (distance / maxDistance) * returnDuration;
+
+        Vector3 startPosAtReturn = transform.position;
+        Quaternion startRotAtReturn = transform.rotation;
+
+        while (elapsed < realReturnDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / returnDuration);
+            Vector3 absPos = Vector3.Lerp(startPosAtReturn, startPos, t);
+            Quaternion absRot = Quaternion.Lerp(startRotAtReturn, startRot, t);
+            Vector3 deltaPos = absPos - transform.position;
+            transform.position += deltaPos;
+            Quaternion deltaRot = absRot * Quaternion.Inverse(transform.rotation);
+            transform.rotation = deltaRot * transform.rotation;
+            float targetFill = Mathf.Lerp(baseFill, baseFill - startExtra, t);
+            float deltaFill = beer.fillAmount - targetFill;
+            beer.fillAmount -= deltaFill;
+            extraFillWhileMoving = Mathf.Lerp(startExtra, 0f, t);
+            yield return null;
+        }
+        if (iHateNiggers)
+        {
+            beer.fillAmount -= 1;
+            iHateNiggers = false;
+        }
+        else
+        {
+            beer.fillAmount = baseFill;
+        }
+
+        extraFillWhileMoving = 0f;
+        totalBeerConsumed += beerConsumed;
+        state = DrinkState.Idle;
+        rb.linearVelocity = new Vector3(0f, 0f, 0f);
+        Debug.Log("BEVUTO ORA: " + beerConsumed);
+        Debug.Log("TOTALE BEVUTO: " + totalBeerConsumed);
+    }
+
+    public bool IsDrinking() => state == DrinkState.Drinking;
+}
