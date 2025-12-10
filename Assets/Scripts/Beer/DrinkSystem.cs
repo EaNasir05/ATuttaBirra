@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
-enum DrinkState { Idle, Drinking, Returning }
+public enum DrinkState { Idle, Moving, Drinking, Returning }
 
 public class DrinkSystem : MonoBehaviour
 {
@@ -14,6 +14,8 @@ public class DrinkSystem : MonoBehaviour
     [SerializeField] private GameObject handOnGlass;
     [SerializeField] private Transform targetTransform;
     [SerializeField] private Liquid beer;
+    [SerializeField] private float inputDeadZone;
+    [SerializeField] private float rightHandSpeed;
     [SerializeField] private float movementSpeedWhileReturning;
     [SerializeField] private float movementDurationBeforeDrinking;
     [SerializeField] private float returnDuration;
@@ -26,6 +28,7 @@ public class DrinkSystem : MonoBehaviour
     [SerializeField] private float maxHeight;
     [SerializeField] private float beerLossDuration;
     [SerializeField] private GameObject[] beerParticles;
+    private Rigidbody rb;
     private InputActionMap inputMap;
     private InputAction holdT, holdS, rightHand, actionTest;
     private DrinkState state = DrinkState.Idle;
@@ -36,12 +39,16 @@ public class DrinkSystem : MonoBehaviour
     private float totalBeerConsumed;
     private float extraFillWhileMoving;
     private float startingFill;
+    private bool shouldDrink;
+    private Vector2 rightHandMovement;
     private bool iHateNiggers;
+    private bool stunned;
 
     private void Awake()
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
+        rb = GetComponent<Rigidbody>();
         inputMap = inputActions.FindActionMap("Player");
         holdT = inputMap.FindAction("Hold T");
         holdS = inputMap.FindAction("Hold S");
@@ -51,6 +58,7 @@ public class DrinkSystem : MonoBehaviour
         startPos = transform.position;
         startRot = transform.rotation;
         iHateNiggers = false;
+        stunned = false;
     }
 
     private void OnEnable() => inputMap.Enable();
@@ -58,26 +66,39 @@ public class DrinkSystem : MonoBehaviour
 
     private void Update()
     {
-        bool fourButtons = holdT.IsPressed() && holdS.IsPressed();
-        //bool drinkBtn = trigger.IsPressed();
-        bool shouldDrink = fourButtons; //&& drinkBtn;
+        bool holdingGlass = holdT.IsPressed() && holdS.IsPressed();
+        rightHandMovement = rightHand.ReadValue<Vector2>();
         switch (state)
         {
             case DrinkState.Idle:
-                if (shouldDrink)
-                    StartDrinking();
+                if (holdingGlass)
+                    StartMoving();
+                break;
+            case DrinkState.Moving:
+                if (!holdingGlass)
+                {
+                    StartReturning();
+                }
+                else
+                {
+                    StartMoving();
+                }
                 break;
             case DrinkState.Drinking:
-                if (!shouldDrink)
+                if (!holdingGlass)
                 {
                     beerConsumed = beer.fillAmount + extraFillWhileMoving - startingFill;
                     StartReturning();
                 }
                 break;
             case DrinkState.Returning:
+                if (holdingGlass && !stunned && beer.fillAmount < maxFill)
+                {
+                    StartMoving();
+                }
                 break;
         }
-        UpdateHands(fourButtons);
+        UpdateHands(holdingGlass);
         UpdateWobble();
         if (actionTest.WasPressedThisFrame())
         {
@@ -85,9 +106,9 @@ public class DrinkSystem : MonoBehaviour
         }
     }
 
-    private void UpdateHands(bool fourButtons)
+    private void UpdateHands(bool holdingGlass)
     {
-        bool handShouldHold = state == DrinkState.Drinking || state == DrinkState.Returning || (state == DrinkState.Idle && fourButtons);
+        bool handShouldHold = state == DrinkState.Drinking || state == DrinkState.Returning || state == DrinkState.Moving;
         handOnGlass.SetActive(handShouldHold);
         handOnSteering.SetActive(!handShouldHold);
     }
@@ -98,7 +119,13 @@ public class DrinkSystem : MonoBehaviour
         beer.MaxWobble = stable ? 0.01f : 0.05f;
     }
 
-    private void StartDrinking()
+    private void StartMoving()
+    {
+        state = DrinkState.Moving;
+        RestartRoutine(MoveRoutine());
+    }
+
+    public void StartDrinking()
     {
         if (beer.fillAmount < maxFill)
         {
@@ -109,7 +136,7 @@ public class DrinkSystem : MonoBehaviour
 
     private void StartReturning()
     {
-        if (state == DrinkState.Drinking || state == DrinkState.Idle)
+        if (state == DrinkState.Drinking || state == DrinkState.Idle || state == DrinkState.Moving)
         {
             if (beer.fillAmount + extraFillWhileMoving >= maxFill)
             {
@@ -174,6 +201,15 @@ public class DrinkSystem : MonoBehaviour
             previousFill = currentFill;
             yield return null;
         }
+    }
+
+    private IEnumerator MoveRoutine()
+    {
+        Vector3 currentVelocity = rb.linearVelocity;
+        float moveX = Mathf.Abs(rightHandMovement.x) > inputDeadZone ? rightHandMovement.x : 0f;
+        float moveY = Mathf.Abs(rightHandMovement.y) > inputDeadZone ? rightHandMovement.y : 0f;
+        rb.linearVelocity = new Vector3(moveX * rightHandSpeed, currentVelocity.y, moveY * rightHandSpeed);
+        yield return null;
     }
 
     private IEnumerator DrinkRoutine()
@@ -278,7 +314,7 @@ public class DrinkSystem : MonoBehaviour
         extraFillWhileMoving = 0f;
         totalBeerConsumed += beerConsumed;
         state = DrinkState.Idle;
-
+        rb.linearVelocity = new Vector3(0f, 0f, 0f);
         Debug.Log("BEVUTO ORA: " + beerConsumed);
         Debug.Log("TOTALE BEVUTO: " + totalBeerConsumed);
     }

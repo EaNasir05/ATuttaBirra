@@ -257,11 +257,12 @@ GameObject:
   - component: {fileID: 9123432702954240443}
   - component: {fileID: 7176087528215908336}
   - component: {fileID: 424407743869416638}
-  - component: {fileID: 8840546989125659151}
   - component: {fileID: 2443051907514274114}
+  - component: {fileID: -4447922480358081068}
+  - component: {fileID: 8062398348995383910}
   m_Layer: 0
   m_Name: BeerJug
-  m_TagString: Untagged
+  m_TagString: Beer Jug
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -339,28 +340,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8840546989125659151
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6856294022305453184}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 6822968117639508780, guid: 8a99252e301bebd43be6bf5c8d315190, type: 3}
 --- !u!114 &2443051907514274114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -378,6 +357,8 @@ MonoBehaviour:
   handOnGlass: {fileID: 508116167518013566}
   targetTransform: {fileID: 0}
   beer: {fileID: 4347649881253560972}
+  inputDeadZone: 0.15
+  rightHandSpeed: 1.5
   movementSpeedWhileReturning: 2
   movementDurationBeforeDrinking: 1
   returnDuration: 1
@@ -390,3 +371,51 @@ MonoBehaviour:
   maxHeight: 0.9
   beerLossDuration: 0.5
   beerParticles: []
+--- !u!54 &-4447922480358081068
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6856294022305453184}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &8062398348995383910
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6856294022305453184}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.78460264, y: 0.79159594, z: 1.3746393}
+  m_Center: {x: 0.003434539, y: 0.01278171, z: 0.69150555}
