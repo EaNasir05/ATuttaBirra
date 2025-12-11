@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,7 +19,25 @@ public class CarController : MonoBehaviour
     public float rotationAngle = 10f;
     public float rotationSpeed = 5f;
 
+    [Header("Auto Flip Rotation")]
+    public float delayBeforeFlip = 1f;   
+    public float flipAngle = 20f;        
+    public float flipRotationSpeed = 8f; 
+
+    [Header("Gamepad Vibration")]
+    public float vibrationLow = 0.2f;
+    public float vibrationHigh = 0.5f;
+    public float vibrationDuration = 0.2f;
+
     private Rigidbody rb;
+
+    
+    private float moveTimer = 0f;
+    private bool hasFlipped = false;
+
+    private float vibrationTimer = 0f;
+    private bool vibrating = false;
+
 
     void Awake()
     {
@@ -29,30 +46,26 @@ public class CarController : MonoBehaviour
 
     void OnEnable()
     {
-        if (moveAction.action != null)
-            moveAction.action.Enable();
-
-        if (speedAction.action != null)
-            speedAction.action.Enable();
+        moveAction.action?.Enable();
+        speedAction.action?.Enable();
     }
 
     void OnDisable()
     {
-        if (moveAction.action != null)
-            moveAction.action.Disable();
-
-        if (speedAction.action != null)
-            speedAction.action.Disable();
+        moveAction.action?.Disable();
+        speedAction.action?.Disable();
+        StopVibration();
     }
+
 
     void FixedUpdate()
     {
-
         Vector2 move = moveAction.action != null ? moveAction.action.ReadValue<Vector2>() : Vector2.zero;
         Vector2 speed = speedAction.action != null ? speedAction.action.ReadValue<Vector2>() : Vector2.zero;
 
-
         float moveX = Mathf.Abs(move.x) > inputDeadzone ? move.x : 0f;
+
+       
 
         bool rightActive = speed.magnitude > inputDeadzone;
         bool sameDirection = false;
@@ -64,8 +77,6 @@ public class CarController : MonoBehaviour
             sameDirection = dot >= sameDirectionDotThreshold;
         }
 
-
-
         float targetSpeed = baseSpeed;
         if (sameDirection)
         {
@@ -73,26 +84,96 @@ public class CarController : MonoBehaviour
             targetSpeed = baseSpeed * (1f + accelMultiplier * rightMag);
         }
 
-
-
         float desiredVelX = moveX * targetSpeed;
         Vector3 currentVel = rb.linearVelocity;
-        float newVelX = Mathf.Lerp(currentVel.x, desiredVelX, 1f - Mathf.Exp(-accelSmoothing * Time.fixedDeltaTime));
-
-
+        float newVelX = Mathf.Lerp(
+            currentVel.x,
+            desiredVelX,
+            1f - Mathf.Exp(-accelSmoothing * Time.fixedDeltaTime)
+        );
 
         rb.linearVelocity = new Vector3(newVelX, currentVel.y, currentVel.z);
 
 
-
+        
         if (moveX != 0f)
         {
+            moveTimer += Time.fixedDeltaTime;
 
+            
+            if (!hasFlipped && moveTimer >= delayBeforeFlip)
+            {
+                hasFlipped = true;
+                StartVibration();
+            }
 
             float targetRotation = -moveX * rotationAngle;
+
+            
+            float appliedRotationSpeed = hasFlipped ? flipRotationSpeed : rotationSpeed;
+
+            if (hasFlipped)
+            {
+                targetRotation += moveX * flipAngle;
+            }
+
             float currentRotation = transform.eulerAngles.y;
-            float smoothRotation = Mathf.LerpAngle(currentRotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+
+            float smoothRotation = Mathf.LerpAngle(
+                currentRotation,
+                targetRotation,
+                appliedRotationSpeed * Time.fixedDeltaTime
+            );
+
             transform.eulerAngles = new Vector3(0f, smoothRotation, 0f);
         }
+        else
+        {
+            
+            moveTimer = 0f;
+            hasFlipped = false;
+
+            float currentRotation = transform.eulerAngles.y;
+            float smoothRotation = Mathf.LerpAngle(
+                currentRotation,
+                0f,
+                rotationSpeed * Time.fixedDeltaTime
+            );
+
+            transform.eulerAngles = new Vector3(0f, smoothRotation, 0f);
+        }
+
+        UpdateVibration();
+    }
+
+   
+
+    void StartVibration()
+    {
+        if (Gamepad.current == null) return;
+
+        Gamepad.current.SetMotorSpeeds(vibrationLow, vibrationHigh);
+        vibrating = true;
+        vibrationTimer = 0f;
+    }
+
+    void UpdateVibration()
+    {
+        if (!vibrating) return;
+
+        vibrationTimer += Time.deltaTime;
+
+        if (vibrationTimer >= vibrationDuration)
+        {
+            StopVibration();
+        }
+    }
+
+    void StopVibration()
+    {
+        if (Gamepad.current == null) return;
+
+        Gamepad.current.SetMotorSpeeds(0f, 0f);
+        vibrating = false;
     }
 }
