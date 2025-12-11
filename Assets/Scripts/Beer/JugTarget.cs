@@ -6,8 +6,11 @@ public class JugTarget : MonoBehaviour
     {
         if (other.transform.CompareTag("Beer Jug"))
         {
-            Debug.Log("BEVI!");
-            other.GetComponent<DrinkSystem>().StartDrinking();
+            DrinkSystem drinkSystem = other.GetComponent<DrinkSystem>();
+            if (drinkSystem.IsMoving())
+            {
+                drinkSystem.StartDrinking();
+            }
         }
     }
 }
