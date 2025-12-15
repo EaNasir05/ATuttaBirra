@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1109945930694138737}
   - component: {fileID: 2049336118843968260}
   - component: {fileID: 8776404163910347921}
+  - component: {fileID: 2163240773212298322}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -154,3 +155,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!114 &2163240773212298322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4517383031248591343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85458cd8cbe87b44b906007e579404e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PushOnCollision
+  objectPushForce: 10
+  playerPushForce: 5
+  playerPushSpeed: 5
+  objectPushSpeed: 3
