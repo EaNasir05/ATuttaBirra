@@ -1,22 +1,18 @@
-﻿using System.Collections;
-using UnityEditor.Experimental.GraphView;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 
-public enum DrinkState { Idle, Moving, Drinking, Returning }
-
-public class DrinkSystem : MonoBehaviour
+public class DrinkSystem2 : MonoBehaviour
 {
-    [Header ("Input system")]
+    [Header("Input system")]
     [SerializeField] private InputActionAsset inputActions;
     [SerializeField] private float inputDeadZone;
     private InputActionMap inputMap;
     private InputAction holdT, holdS, rightHand, actionTest;
     private Vector2 rightHandMovement;
-    private Vector2 randomHandMovement;
-    private bool readyToRandomlyMove;
 
-    [Header ("Game objects")]
+    [Header("GameObjects")]
     [SerializeField] private GameObject handOnSteering;
     [SerializeField] private GameObject handOnGlass;
     [SerializeField] private Transform targetTransform;
@@ -31,28 +27,27 @@ public class DrinkSystem : MonoBehaviour
     [SerializeField] private float maxTilt;
     [SerializeField] private float maxHeight;
     [SerializeField] private float maxZ;
+    private float realMaxDrink;
+    private float fakeMaxDrink;
+    private float ratioFakeRealMaxDrink;
     private float totalBeerConsumed;
-    private float extraFillWhileMoving;
     private float startingFill;
     private float beerConsumed;
 
-    [Header ("Durate e velocità")]
+    [Header("Stati e velocit�")]
     [SerializeField] private float rightHandSpeed;
-    [SerializeField] private float randomMovementMultiplier;
-    [SerializeField] private float randomMovementDuration;
-    [SerializeField] private float maxRandomMovement;
-    [SerializeField] private float glassTiltDuration;
+    [SerializeField] private float movementSpeedWhileReturning;
+    [SerializeField] private float movementDurationBeforeDrinking;
     [SerializeField] private float returnDuration;
-    [SerializeField] private float drinkDuration;
+    [SerializeField] private float rotationSpeedWhileReturning;
     [SerializeField] private float beerLossDuration;
-    private float realDrinkDuration;
-
-    [Header ("Stati")]
+    [SerializeField] private float gulpDuration;
+    [SerializeField] private float gulpPauseDuration;
     private DrinkState state = DrinkState.Idle;
     private Coroutine routine;
     private Vector3 startPos;
     private Quaternion startRot;
-    private bool iHateJews;
+    private bool canHoldTheGlass;
     private bool stunned;
 
     private void Awake()
@@ -64,12 +59,14 @@ public class DrinkSystem : MonoBehaviour
         rightHand = inputMap.FindAction("Speed");
         actionTest = inputMap.FindAction("Test");
         totalBeerConsumed = 0;
+        beerConsumed = 0;
         startPos = transform.position;
         startRot = transform.rotation;
-        randomHandMovement = Vector2.zero;
-        iHateJews = false;
+        realMaxDrink = maxFill - minFill;
+        fakeMaxDrink = maxFill - minFill - shaderBugExtraFill;
+        ratioFakeRealMaxDrink = fakeMaxDrink / realMaxDrink;
+        canHoldTheGlass = true;
         stunned = false;
-        readyToRandomlyMove = true;
     }
 
     private void OnEnable() => inputMap.Enable();
@@ -77,13 +74,15 @@ public class DrinkSystem : MonoBehaviour
 
     private void Update()
     {
-        bool holdingGlass = holdT.IsPressed() && holdS.IsPressed();
+        bool holdingGlass = holdT.IsPressed() && holdS.IsPressed() && canHoldTheGlass;
         rightHandMovement = rightHand.ReadValue<Vector2>();
         switch (state)
         {
             case DrinkState.Idle:
                 if (holdingGlass)
                     StartMoving();
+                else
+                    startingFill = beer.fillAmount;
                 break;
             case DrinkState.Moving:
                 if (!holdingGlass)
@@ -93,52 +92,18 @@ public class DrinkSystem : MonoBehaviour
                 break;
             case DrinkState.Drinking:
                 if (!holdingGlass)
+                {
                     StartReturning();
+                }
                 break;
             case DrinkState.Returning:
                 break;
         }
         UpdateHands(holdingGlass);
         UpdateWobble();
-        UpdateRotationFreezing();
         if (actionTest.WasPressedThisFrame())
         {
             StartCoroutine(GainBeer(0.2f));
-        }
-    }
-
-    private IEnumerator CreateRandomMovement()
-    {
-        if (readyToRandomlyMove)
-        {
-            readyToRandomlyMove = false;
-            int index = Random.Range(1, 7);
-            float extraMovement = Mathf.Round(totalBeerConsumed) * randomMovementMultiplier;
-            if (extraMovement > maxRandomMovement)
-                extraMovement = maxRandomMovement;
-            switch (index)
-            {
-                case 1:
-                    randomHandMovement = new Vector2(-extraMovement, 0);
-                    break;
-                case 2:
-                    randomHandMovement = new Vector2(-extraMovement, extraMovement);
-                    break;
-                case 3:
-                    randomHandMovement = new Vector2(0, extraMovement);
-                    break;
-                case 4:
-                    randomHandMovement = new Vector2(extraMovement, extraMovement);
-                    break;
-                case 5:
-                    randomHandMovement = new Vector2(extraMovement, 0);
-                    break;
-                default:
-                    randomHandMovement = new Vector2(extraMovement, -extraMovement);
-                    break;
-            }
-            yield return new WaitForSeconds(randomMovementDuration);
-            readyToRandomlyMove = true;
         }
     }
 
@@ -149,30 +114,23 @@ public class DrinkSystem : MonoBehaviour
         handOnSteering.SetActive(!handShouldHold);
     }
 
-    private void UpdateRotationFreezing()
-    {
-        if (state == DrinkState.Moving)
-            rb.constraints |= RigidbodyConstraints.FreezeRotationX;
-        else
-            rb.constraints &= ~RigidbodyConstraints.FreezeRotationX;
-    }
-
     private void UpdateWobble()
     {
         if (beer.fillAmount >= maxFill - 0.01)
         {
             beer.MaxWobble = 0;
+            //beer.WobbleSpeedMove = 4;
         }
         else
         {
             bool stable = state == DrinkState.Drinking;
             beer.MaxWobble = stable ? 0.001f : 0.03f;
+            //beer.WobbleSpeedMove = 2;
         }
     }
 
     private void StartMoving()
     {
-        StartCoroutine(CreateRandomMovement());
         state = DrinkState.Moving;
         RestartRoutine(MoveRoutine());
     }
@@ -213,21 +171,23 @@ public class DrinkSystem : MonoBehaviour
             float currentFill = fillGain * t;
             float increment = currentFill - previousFill;
             if (beer.fillAmount + increment > maxFill)
+            {
                 increment = maxFill - beer.fillAmount;
+            }
             beer.fillAmount += increment;
             previousFill = currentFill;
             yield return null;
         }
     }
 
+    private IEnumerator SimulateCarCollision()
+    {
+        //spawna palline
+        yield return null;
+    }
+
     private IEnumerator GainBeer(float fillLoss)
     {
-        float tot = 0;
-        if (iHateJews)
-        {
-            iHateJews = false;
-            beer.fillAmount -= 2;
-        }
         float elapsed = 0f;
         float previousFill = 0f;
         while (elapsed < beerLossDuration)
@@ -237,12 +197,44 @@ public class DrinkSystem : MonoBehaviour
             float currentFill = fillLoss * t;
             float decrement = currentFill - previousFill;
             if (beer.fillAmount - decrement < minFill)
+            {
                 decrement = minFill - beer.fillAmount;
+            }
             beer.fillAmount -= decrement;
-            tot += decrement;
             previousFill = currentFill;
             yield return null;
-        };
+        }
+    }
+
+    private IEnumerator DrinkBeer()
+    {
+        float elapsed = 0f;
+        float partialBeerConsumed = 0f;
+        float previousFill = 0f;
+        while (elapsed < gulpDuration)
+        {
+            if (beerConsumed > 0.8)
+            {
+                Debug.Log("SIUM");
+            }
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / gulpDuration);
+            float currentFill = 0.2f * t * ratioFakeRealMaxDrink;
+            float increment = currentFill - previousFill;
+            if (beer.fillAmount + increment > maxFill - shaderBugExtraFill)
+                increment = maxFill - beer.fillAmount;
+            beer.fillAmount += increment;
+            partialBeerConsumed += increment > 0 ? (increment / ratioFakeRealMaxDrink) : 0;
+            previousFill = currentFill;
+            yield return null;
+        }
+        UpdateBeerConsumed(partialBeerConsumed);
+    }
+
+    private void UpdateBeerConsumed(float increment)
+    {
+        beerConsumed += increment;
+        Debug.Log(beerConsumed);
     }
 
     private IEnumerator MoveRoutine()
@@ -250,7 +242,7 @@ public class DrinkSystem : MonoBehaviour
         Vector3 currentVelocity = rb.linearVelocity;
         float moveX = Mathf.Abs(rightHandMovement.x) > inputDeadZone ? rightHandMovement.x : 0f;
         float moveY = Mathf.Abs(rightHandMovement.y) > inputDeadZone ? rightHandMovement.y : 0f;
-        rb.linearVelocity = new Vector3((moveX * rightHandSpeed) + randomHandMovement.x, currentVelocity.y, (moveY * rightHandSpeed) + randomHandMovement.y);
+        rb.linearVelocity = new Vector3(moveX * rightHandSpeed, currentVelocity.y, moveY * rightHandSpeed);
         yield return null;
     }
 
@@ -265,40 +257,33 @@ public class DrinkSystem : MonoBehaviour
         Vector3 targetPosition = new Vector3(targetTransform.position.x, yPos, zPos);
         Quaternion maxRotation = Quaternion.Euler(maxTilt, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
         Vector3 maxPosition = new Vector3(targetTransform.position.x, maxHeight, maxZ);
-        extraFillWhileMoving = 0f;
-        startingFill = beer.fillAmount;
         float startXDrinking = targetRotation.eulerAngles.x;
         float endXDrinking = maxRotation.eulerAngles.x;
         float elapsedMovement = 0f;
         float elapsedDrinking = 0f;
-        realDrinkDuration = (beer.fillAmount - maxFill) * -1 * drinkDuration;
-        float previousFill = 0f;
-        bool firstTime = true;
-
+        float remainingBeer = realMaxDrink - (beer.fillAmount - minFill);
+        int gulps = Mathf.CeilToInt(remainingBeer / 0.2f);
+        float realDrinkDuration = gulps * gulpDuration + (gulps - 1) * gulpPauseDuration;
+        int gulpCount = 0;
+        Debug.Log("SORSI TOTALI: " + gulps);
         while (state == DrinkState.Drinking)
         {
-            if (elapsedMovement < glassTiltDuration)
+            if (elapsedMovement < movementDurationBeforeDrinking)
             {
                 elapsedMovement += Time.deltaTime;
-                float t = Mathf.Clamp01(elapsedMovement / glassTiltDuration);
+                float t = Mathf.Clamp01(elapsedMovement / movementDurationBeforeDrinking);
                 Vector3 absolutePos = Vector3.Lerp(currentPos, targetPosition, t);
                 Quaternion absoluteRot = Quaternion.Lerp(startRot, targetRotation, t);
                 Vector3 deltaPos = absolutePos - transform.position;
                 transform.position += deltaPos;
                 Quaternion deltaRot = absoluteRot * Quaternion.Inverse(transform.rotation);
                 transform.rotation = deltaRot * transform.rotation;
-                float targetFill = Mathf.Lerp(startingFill, startingFill - shaderBugExtraFill, t);
+                float targetFill = Mathf.Lerp(startingFill, ((startingFill - minFill) * ratioFakeRealMaxDrink) + minFill, t);
                 float deltaFill = beer.fillAmount - targetFill;
                 beer.fillAmount -= deltaFill;
-                extraFillWhileMoving = startingFill - beer.fillAmount;
             }
             else
             {
-                if (firstTime)
-                {
-                    previousFill = beer.fillAmount;
-                    firstTime = false;
-                }
                 elapsedDrinking += Time.deltaTime;
                 float t = Mathf.Clamp01(elapsedDrinking / realDrinkDuration);
 
@@ -312,14 +297,14 @@ public class DrinkSystem : MonoBehaviour
                 Vector3 deltaPos = absPos - transform.position;
                 transform.position += deltaPos;
 
-                float currentFill = Mathf.Lerp(startingFill, maxFill - shaderBugExtraFill, t);
-                float deltaFill = previousFill - currentFill;
-                beer.fillAmount -= deltaFill;
-                GameManager.instance.UpdateTotalBeerConsumed(-deltaFill);
-                beerConsumed -= deltaFill;
-                previousFill = currentFill;
+                if (elapsedDrinking >= gulpCount * (gulpDuration + gulpPauseDuration))
+                {
+                    Debug.Log("SORSO " + (gulpCount + 1));
+                    StartCoroutine(DrinkBeer());
+                    gulpCount++;
+                }
 
-                if (beer.fillAmount + 0.01 >= maxFill - shaderBugExtraFill)
+                if (elapsedDrinking >= realDrinkDuration)
                 {
                     StartReturning();
                     yield break;
@@ -331,25 +316,14 @@ public class DrinkSystem : MonoBehaviour
 
     private IEnumerator ReturnRoutine()
     {
-        bool needToGainExtra = true;
         float elapsed = 0f;
-        if (beerConsumed * 100 >= 95)
-        {
-            GameManager.instance.UpdateTotalBeerConsumed(1 - beerConsumed);
-            beerConsumed = 1;
-        }
-        if (beer.fillAmount + extraFillWhileMoving >= maxFill - 0.01)
-        {
-            beer.fillAmount = maxFill + 2 + extraFillWhileMoving;
-            iHateJews = true;
-            needToGainExtra = false;
-        }
-        float startFill = beer.fillAmount;
-        float endFill = startFill + extraFillWhileMoving;
+        float startReturnFill = beer.fillAmount;
+        Debug.Log("FILL ATTUALE:" + startingFill + " / FILL TARGET" + beer.fillAmount);
+        float endReturnFill = beerConsumed > 0 ? startingFill + beerConsumed : startingFill;
+        float previousFill = 0f;
         float maxDistance = Vector3.Distance(new Vector3(targetTransform.position.x, maxHeight, targetTransform.position.z), startPos);
         float distance = Vector3.Distance(transform.position, startPos);
         float realReturnDuration = (distance / maxDistance) * returnDuration;
-        float previousFillGain = startFill;
 
         Vector3 startPosAtReturn = transform.position;
         Quaternion startRotAtReturn = transform.rotation;
@@ -362,41 +336,34 @@ public class DrinkSystem : MonoBehaviour
             Quaternion absRot = Quaternion.Lerp(startRotAtReturn, startRot, t);
             Vector3 deltaPos = absPos - transform.position;
             transform.position += deltaPos;
-            Quaternion deltaRot = absRot * Quaternion.Inverse(transform.rotation);
-            transform.rotation = deltaRot * transform.rotation;
-
-            if (needToGainExtra || extraFillWhileMoving == 0)
+            //Quaternion deltaRot = absRot * Quaternion.Inverse(transform.rotation);
+            transform.rotation = absRot; //deltaRot * transform.rotation;
+            if (beer.fillAmount != startingFill)
             {
-                float tFill = Mathf.Clamp01(elapsed / (returnDuration / 2));
-                float currentFillGain = Mathf.Lerp(startFill, endFill, tFill);
-                float deltaFill = currentFillGain - previousFillGain;
-                beer.fillAmount += deltaFill;
-                previousFillGain = currentFillGain;
+                float currentFill = Mathf.Lerp(startReturnFill, endReturnFill, t);
+                beer.fillAmount += (currentFill - previousFill);
+                previousFill = currentFill;
             }
-
             yield return null;
         }
-        if (iHateJews)
-        {
-            beer.fillAmount -= 2f;
-            if (beer.fillAmount < maxFill && maxFill - beer.fillAmount <= 0.02)
-            {
-                beer.fillAmount += (maxFill - beer.fillAmount);
-            }
-            iHateJews = false;
-        }
         transform.rotation = startRot;
-        extraFillWhileMoving = 0f;
         totalBeerConsumed += beerConsumed;
-        GameManager.instance.UpdateAlcoolPower(beerConsumed);
+        Debug.Log("BEVUTO ORA: " + beerConsumed);
+        Debug.Log("TOTALE BEVUTO: " + totalBeerConsumed);
         beerConsumed = 0f;
+        StartCoroutine(HoldingGlassCooldown());
         state = DrinkState.Idle;
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-        if (beer.fillAmount > maxFill)
-            beer.fillAmount = maxFill;
+        rb.linearVelocity = new Vector3(0f, 0f, 0f);
+    }
+
+    private IEnumerator HoldingGlassCooldown()
+    {
+        canHoldTheGlass = false;
+        yield return new WaitForSeconds(0.1f);
+        canHoldTheGlass = true;
     }
 
     public bool IsDrinking() => state == DrinkState.Drinking;
     public bool IsMoving() => state == DrinkState.Moving;
 }
+
