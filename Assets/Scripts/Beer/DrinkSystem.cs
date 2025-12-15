@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +13,8 @@ public class DrinkSystem : MonoBehaviour
     private InputActionMap inputMap;
     private InputAction holdT, holdS, rightHand, actionTest;
     private Vector2 rightHandMovement;
+    private Vector2 randomHandMovement;
+    private bool readyToRandomlyMove;
 
     [Header ("Game objects")]
     [SerializeField] private GameObject handOnSteering;
@@ -35,6 +38,9 @@ public class DrinkSystem : MonoBehaviour
 
     [Header ("Durate e velocità")]
     [SerializeField] private float rightHandSpeed;
+    [SerializeField] private float randomMovementMultiplier;
+    [SerializeField] private float randomMovementDuration;
+    [SerializeField] private float maxRandomMovement;
     [SerializeField] private float glassTiltDuration;
     [SerializeField] private float returnDuration;
     [SerializeField] private float drinkDuration;
@@ -60,8 +66,10 @@ public class DrinkSystem : MonoBehaviour
         totalBeerConsumed = 0;
         startPos = transform.position;
         startRot = transform.rotation;
+        randomHandMovement = Vector2.zero;
         iHateJews = false;
         stunned = false;
+        readyToRandomlyMove = true;
     }
 
     private void OnEnable() => inputMap.Enable();
@@ -92,9 +100,45 @@ public class DrinkSystem : MonoBehaviour
         }
         UpdateHands(holdingGlass);
         UpdateWobble();
+        UpdateRotationFreezing();
         if (actionTest.WasPressedThisFrame())
         {
             StartCoroutine(GainBeer(0.2f));
+        }
+    }
+
+    private IEnumerator CreateRandomMovement()
+    {
+        if (readyToRandomlyMove)
+        {
+            readyToRandomlyMove = false;
+            int index = Random.Range(1, 7);
+            float extraMovement = Mathf.Round(totalBeerConsumed) * randomMovementMultiplier;
+            if (extraMovement > maxRandomMovement)
+                extraMovement = maxRandomMovement;
+            switch (index)
+            {
+                case 1:
+                    randomHandMovement = new Vector2(-extraMovement, 0);
+                    break;
+                case 2:
+                    randomHandMovement = new Vector2(-extraMovement, extraMovement);
+                    break;
+                case 3:
+                    randomHandMovement = new Vector2(0, extraMovement);
+                    break;
+                case 4:
+                    randomHandMovement = new Vector2(extraMovement, extraMovement);
+                    break;
+                case 5:
+                    randomHandMovement = new Vector2(extraMovement, 0);
+                    break;
+                default:
+                    randomHandMovement = new Vector2(extraMovement, -extraMovement);
+                    break;
+            }
+            yield return new WaitForSeconds(randomMovementDuration);
+            readyToRandomlyMove = true;
         }
     }
 
@@ -103,6 +147,14 @@ public class DrinkSystem : MonoBehaviour
         bool handShouldHold = state == DrinkState.Drinking || state == DrinkState.Returning || state == DrinkState.Moving;
         handOnGlass.SetActive(handShouldHold);
         handOnSteering.SetActive(!handShouldHold);
+    }
+
+    private void UpdateRotationFreezing()
+    {
+        if (state == DrinkState.Moving)
+            rb.constraints |= RigidbodyConstraints.FreezeRotationX;
+        else
+            rb.constraints &= ~RigidbodyConstraints.FreezeRotationX;
     }
 
     private void UpdateWobble()
@@ -120,6 +172,7 @@ public class DrinkSystem : MonoBehaviour
 
     private void StartMoving()
     {
+        StartCoroutine(CreateRandomMovement());
         state = DrinkState.Moving;
         RestartRoutine(MoveRoutine());
     }
@@ -197,7 +250,7 @@ public class DrinkSystem : MonoBehaviour
         Vector3 currentVelocity = rb.linearVelocity;
         float moveX = Mathf.Abs(rightHandMovement.x) > inputDeadZone ? rightHandMovement.x : 0f;
         float moveY = Mathf.Abs(rightHandMovement.y) > inputDeadZone ? rightHandMovement.y : 0f;
-        rb.linearVelocity = new Vector3(moveX * rightHandSpeed, currentVelocity.y, moveY * rightHandSpeed);
+        rb.linearVelocity = new Vector3((moveX * rightHandSpeed) + randomHandMovement.x, currentVelocity.y, (moveY * rightHandSpeed) + randomHandMovement.y);
         yield return null;
     }
 
@@ -262,6 +315,7 @@ public class DrinkSystem : MonoBehaviour
                 float currentFill = Mathf.Lerp(startingFill, maxFill - shaderBugExtraFill, t);
                 float deltaFill = previousFill - currentFill;
                 beer.fillAmount -= deltaFill;
+                GameManager.instance.UpdateTotalBeerConsumed(-deltaFill);
                 beerConsumed -= deltaFill;
                 previousFill = currentFill;
 
@@ -279,6 +333,11 @@ public class DrinkSystem : MonoBehaviour
     {
         bool needToGainExtra = true;
         float elapsed = 0f;
+        if (beerConsumed * 100 >= 95)
+        {
+            GameManager.instance.UpdateTotalBeerConsumed(1 - beerConsumed);
+            beerConsumed = 1;
+        }
         if (beer.fillAmount + extraFillWhileMoving >= maxFill - 0.01)
         {
             beer.fillAmount = maxFill + 2 + extraFillWhileMoving;
@@ -329,8 +388,6 @@ public class DrinkSystem : MonoBehaviour
         transform.rotation = startRot;
         extraFillWhileMoving = 0f;
         totalBeerConsumed += beerConsumed;
-        Debug.Log("BEVUTO ORA: " + beerConsumed);
-        Debug.Log("TOTALE BEVUTO: " + totalBeerConsumed);
         GameManager.instance.UpdateAlcoolPower(beerConsumed);
         beerConsumed = 0f;
         state = DrinkState.Idle;

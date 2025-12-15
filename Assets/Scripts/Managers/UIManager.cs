@@ -11,7 +11,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text beerConsumed;
 
     [Header("VFX")]
-    [SerializeField] private int ebrezzaMultiplyer;
+    [SerializeField] private int ebrezzaMultiplier;
     [SerializeField] private float maxEbrezzaBlend;
     [SerializeField] private FullScreenPassRendererFeature ebrezzaScreenRenderer;
 
@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateEbrezza()
     {
-        float blend = GameManager.instance.GetAlcoolPower() / ebrezzaMultiplyer;
+        float blend = GameManager.instance.GetAlcoolPower() / ebrezzaMultiplier;
         if (blend > maxEbrezzaBlend)
             blend = maxEbrezzaBlend;
         Debug.Log("EBREZZA ATTUALE: " + blend);
