@@ -37,10 +37,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Amplitude: 1
+    - _Amplitude: 1.5
     - _Blend: 0
     - _NoiseScale: 10
     m_Colors:
-    - _PanSpeed: {r: 1, g: 1, b: 0, a: 0}
+    - _PanSpeed: {r: 0.5, g: 0.5, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

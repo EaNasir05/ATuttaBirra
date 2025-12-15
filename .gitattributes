@@ -1,0 +1,5 @@
+*.unity filter=lfs diff=lfs merge=lfs -text
+*.psv filter=lfs diff=lfs merge=lfs -text
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+*.fps filter=lfs diff=lfs merge=lfs -text
+*.fpx filter=lfs diff=lfs merge=lfs -text
