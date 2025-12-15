@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Jug Target
   - Beer Jug
+  - Car
   layers:
   - Default
   - TransparentFX
@@ -15,8 +16,8 @@ TagManager:
   - UI
   - JugTarget
   - Player
-  - 
-  - 
+  - Road
+  - Bottle
   - 
   - 
   - 

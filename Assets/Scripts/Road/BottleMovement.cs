@@ -15,6 +15,11 @@ public class BottleMovement : MonoBehaviour
 
     private float startY;
 
+    void Awake()
+    {
+        GetComponent<Rigidbody>().linearVelocity = new Vector3(0, 0, -30);
+    }
+
     void Start()
     {
         startY = transform.position.y;
