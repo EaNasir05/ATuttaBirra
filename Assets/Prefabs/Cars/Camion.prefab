@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8745471523358303634}
   - component: {fileID: 6837661286503414980}
   - component: {fileID: 7273277632744229378}
+  - component: {fileID: 8828251991539758057}
   m_Layer: 0
   m_Name: Camion
   m_TagString: Car
@@ -138,7 +139,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 100
   m_CollisionDetection: 0
 --- !u!114 &7273277632744229378
 MonoBehaviour:
@@ -154,3 +155,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CarMovement
   speed: 45
   startingMovementDuration: 2
+--- !u!114 &8828251991539758057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6451129089913983986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85458cd8cbe87b44b906007e579404e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PushOnCollision
+  objectPushForce: 10
+  playerPushForce: 5
+  playerPushSpeed: 5
+  objectPushSpeed: 3
