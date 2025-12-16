@@ -38,7 +38,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Amplitude: 1.5
-    - _Blend: 0
+    - _Blend: 0.0074562305
     - _NoiseScale: 10
     m_Colors:
     - _PanSpeed: {r: 0.5, g: 0.5, b: 0, a: 0}
