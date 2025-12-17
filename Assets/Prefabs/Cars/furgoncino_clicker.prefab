@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 3a1bf2b7bb5bb844b9d713c1f33d97b8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.17045245
+      value: -5.3988137
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3a1bf2b7bb5bb844b9d713c1f33d97b8, type: 3}
       propertyPath: m_LocalPosition.y
@@ -18,7 +18,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3a1bf2b7bb5bb844b9d713c1f33d97b8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 39.46811
+      value: -17.4882
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3a1bf2b7bb5bb844b9d713c1f33d97b8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: furgoncino_clicker
       objectReference: {fileID: 0}
+    - target: {fileID: 9144611697166423505, guid: 3a1bf2b7bb5bb844b9d713c1f33d97b8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: dc5ca2985e6bcdb43b26ad8979d02b95, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
