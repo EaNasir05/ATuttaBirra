@@ -117,9 +117,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9630863599923dd4688efcd0b9c4615f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6430621537210297694}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9630863599923dd4688efcd0b9c4615f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2277667851090830113}
   m_SourcePrefab: {fileID: 100100000, guid: 9630863599923dd4688efcd0b9c4615f, type: 3}
 --- !u!1 &2320718524089529678 stripped
 GameObject:
@@ -186,21 +183,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 974d833cec49f7f4fa8a3293a4d6fc96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarMovement
-  speed: 0
-  startingMovementDuration: 0
---- !u!114 &2277667851090830113
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2320718524089529678}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85458cd8cbe87b44b906007e579404e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PushOnCollision
-  objectPushForce: 10
-  playerPushForce: 5
-  playerPushSpeed: 5
-  objectPushSpeed: 3
+  speed: 10
+  startingMovementDuration: 1
+  accelerationMultiplier: 10

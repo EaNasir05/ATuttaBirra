@@ -8,16 +8,18 @@ public class BottleMovement : MonoBehaviour
 
     [Tooltip("Velocità del movimento principale")]
     public float moveSpeed = 2f;
+    public float accelerationMultiplier;
 
     [Header("Fluttuazione verticale")]
     public float floatAmplitude = 0.5f;  
     public float floatSpeed = 2f;        
 
+    private Rigidbody rb;
     private float startY;
 
     void Awake()
     {
-        GetComponent<Rigidbody>().linearVelocity = new Vector3(0, 0, -30);
+        rb = GetComponent<Rigidbody>();
     }
 
     void Start()
@@ -30,6 +32,7 @@ public class BottleMovement : MonoBehaviour
     {
         MoveLinear();
         FloatVertical();
+        rb.linearVelocity = new Vector3(0, 0, GameManager.instance.GetAlcoolPower() * -accelerationMultiplier);
     }
 
     void MoveLinear()

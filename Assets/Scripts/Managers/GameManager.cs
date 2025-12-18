@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
         totalBeerConsumed = 0;
-        alcoolPower = 0f;
+        alcoolPower = 1;
     }
 
     void Update()
