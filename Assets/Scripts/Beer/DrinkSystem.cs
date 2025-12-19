@@ -57,7 +57,7 @@ public class DrinkSystem : MonoBehaviour
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
+        //rb = GetComponent<Rigidbody>();
         inputMap = inputActions.FindActionMap("Player");
         holdT = inputMap.FindAction("Hold T");
         holdS = inputMap.FindAction("Hold S");
@@ -102,7 +102,7 @@ public class DrinkSystem : MonoBehaviour
         }
         UpdateHands(holdingGlass);
         UpdateWobble();
-        UpdateRotationFreezing();
+        //UpdateRotationFreezing();
         if (actionTest.WasPressedThisFrame())
         {
             StartCoroutine(GainBeer(0.05f));
@@ -260,10 +260,13 @@ public class DrinkSystem : MonoBehaviour
 
     private IEnumerator MoveRoutine()
     {
-        Vector3 currentVelocity = rb.linearVelocity;
+        int alcoolLevel = (int) totalBeerConsumed > 10 ? 10 : (int) totalBeerConsumed;
+        float speed = rightHandSpeed * (1 - (alcoolLevel * 0.25f));
+        //Vector3 currentVelocity = rb.linearVelocity;
         float moveX = Mathf.Abs(rightHandMovement.x) > inputDeadZone ? rightHandMovement.x : 0f;
         float moveY = Mathf.Abs(rightHandMovement.y) > inputDeadZone ? rightHandMovement.y : 0f;
-        rb.linearVelocity = new Vector3((moveX * rightHandSpeed) + randomHandMovement.x, currentVelocity.y, (moveY * rightHandSpeed) + randomHandMovement.y);
+        transform.position += new Vector3(((moveX * speed) + randomHandMovement.x) * Time.deltaTime, 0, ((moveY * speed) + randomHandMovement.y) * Time.deltaTime);
+        //rb.linearVelocity = new Vector3((moveX * rightHandSpeed) + randomHandMovement.x, currentVelocity.y, (moveY * rightHandSpeed) + randomHandMovement.y);
         if (transform.localPosition.y >= 0.318)
             transform.localPosition = new Vector3(transform.localPosition.x, 0.317f, transform.localPosition.z);
         else if (transform.localPosition.y <= 0.14)
@@ -412,11 +415,13 @@ public class DrinkSystem : MonoBehaviour
         GameManager.instance.UpdateAlcoolPower(beerConsumed * 4);
         beerConsumed = 0f;
         state = DrinkState.Idle;
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+        //rb.linearVelocity = Vector3.zero;
+        //rb.angularVelocity = Vector3.zero;
         if (beer.fillAmount > maxFill)
             beer.fillAmount = maxFill;
     }
+
+    public bool IsIdling() => state == DrinkState.Idle;
 
     public bool IsDrinking() => state == DrinkState.Drinking;
     public bool IsMoving() => state == DrinkState.Moving;
