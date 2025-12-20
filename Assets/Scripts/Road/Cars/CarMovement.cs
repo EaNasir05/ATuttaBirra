@@ -6,6 +6,7 @@ public class CarMovement : MonoBehaviour
     [SerializeField] private float startingMovementDuration;
     [SerializeField] private float accelerationMultiplier;
     private Rigidbody rb;
+    private BottleDetector bottleDetector;
     private float startingSpeed;
     private Vector3 startingSize;
     private float startingPosition;
@@ -16,6 +17,7 @@ public class CarMovement : MonoBehaviour
 
     private void Awake()
     {
+        /*
         originalPosition = transform.position.y;
         originalSize = transform.localScale;
         startingPosition = transform.position.y / 10;
@@ -23,13 +25,16 @@ public class CarMovement : MonoBehaviour
         startingSize = new Vector3(originalSize.x / 10, originalSize.y / 10, originalSize.z / 10);
         transform.localScale = startingSize;
         startingSpeed = speed / 10;
-        rb = GetComponent<Rigidbody>();
         elapsed = 0f;
         startingMovementRealDuration = startingMovementDuration / GameManager.instance.GetAlcoolPower();
+        */
+        rb = GetComponent<Rigidbody>();
+        bottleDetector = GetComponentInChildren<BottleDetector>();
     }
 
     private void Update()
     {
+        /*
         if (elapsed < startingMovementRealDuration)
         {
             elapsed += Time.deltaTime;
@@ -46,5 +51,8 @@ public class CarMovement : MonoBehaviour
             float extraSpeed = (GameManager.instance.GetAlcoolPower() - 1) * accelerationMultiplier > 0 ? (GameManager.instance.GetAlcoolPower() - 1) * accelerationMultiplier : 0;
             rb.linearVelocity = new Vector3(0, 0, -speed + extraSpeed);
         }
+        */
+        float extraSpeed = GameManager.instance.GetAlcoolPower() * -accelerationMultiplier < 0 ? GameManager.instance.GetAlcoolPower() * -accelerationMultiplier : 0;
+        rb.linearVelocity = new Vector3(0, 0, (-speed + extraSpeed) * bottleDetector.speedMultiplier);
     }
 }

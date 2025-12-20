@@ -23,9 +23,11 @@ public class UIManager : MonoBehaviour
 
     public void UpdateEbrezza()
     {
-        float blend = (GameManager.instance.GetAlcoolPower() - 1) / ebrezzaMultiplier;
+        float blend = (GameManager.instance.GetTotalBeerConsumed() - 1) / ebrezzaMultiplier;
         if (blend > maxEbrezzaBlend)
             blend = maxEbrezzaBlend;
+        else if (blend < 0)
+            blend = 0;
         Debug.Log("EBREZZA ATTUALE: " + blend);
         ebrezzaScreenRenderer.passMaterial.SetFloat("_Blend", blend);
     }

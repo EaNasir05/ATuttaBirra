@@ -192,7 +192,7 @@ GameObject:
   - component: {fileID: 8889953071445674123}
   m_Layer: 0
   m_Name: BottigliaIntera
-  m_TagString: Untagged
+  m_TagString: Bottle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -294,6 +294,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BottleMovement
   moveDirection: {x: 1, y: 0}
   moveSpeed: 2
+  accelerationMultiplier: 0
   floatAmplitude: 0.2
   floatSpeed: 9
 --- !u!1 &5165485195057398849

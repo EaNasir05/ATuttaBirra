@@ -29,11 +29,11 @@ public class GameManager : MonoBehaviour
     {
         totalBeerConsumed += beerConsumed;
         UIManager.instance.UpdateBeerConsumed(Mathf.Round(totalBeerConsumed * 100) / 100);
+        UIManager.instance.UpdateEbrezza();
     }
 
     public void UpdateAlcoolPower(float beerConsumed)
     {
         alcoolPower += beerConsumed;
-        UIManager.instance.UpdateEbrezza();
     }
 }

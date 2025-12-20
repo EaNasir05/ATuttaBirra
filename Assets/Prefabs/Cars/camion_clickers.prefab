@@ -1,5 +1,72 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &514874773237825603
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8740128489761310125}
+  - component: {fileID: 5578288756389061991}
+  - component: {fileID: 265530727019046143}
+  m_Layer: 9
+  m_Name: BottleDetector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8740128489761310125
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514874773237825603}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6117408932655132555}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!65 &5578288756389061991
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514874773237825603}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 36, y: 9, z: 18}
+  m_Center: {x: 0, y: 0, z: -9}
+--- !u!114 &265530727019046143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514874773237825603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e666ce631f1d23e4db9423bf1e076010, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BottleDetector
+  speedMultiplier: 1
 --- !u!1001 &6012268661216675936
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22,7 +89,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
       propertyPath: m_LocalRotation.x
@@ -30,7 +97,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
       propertyPath: m_LocalRotation.z
@@ -42,7 +109,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -104,6 +171,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: camion_clickers
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
+      propertyPath: m_TagString
+      value: Car
+      objectReference: {fileID: 0}
     - target: {fileID: 1089535609112436153, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -150,7 +221,10 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: de7311fa1b1498c4fb8be7a03019cf56, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 8740128489761310125}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
       insertIndex: -1
@@ -162,6 +236,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 9162145720796902646}
   m_SourcePrefab: {fileID: 100100000, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
+--- !u!4 &6117408932655132555 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
+  m_PrefabInstance: {fileID: 6012268661216675936}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6894650045321557297 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
