@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6172839999534448337}
   - component: {fileID: 4648123562492303645}
   - component: {fileID: 5907991473723227689}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: sottocorsia (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,7 +152,7 @@ GameObject:
   - component: {fileID: 9108365091229043613}
   - component: {fileID: 5767961959951876814}
   - component: {fileID: 8145257599377650558}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: sottocorsia (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -291,7 +291,7 @@ GameObject:
   - component: {fileID: 7103843229418063339}
   - component: {fileID: 2371758656636033880}
   - component: {fileID: 5780811006249566026}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: sottocorsia (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -437,7 +437,7 @@ GameObject:
   - component: {fileID: 1609440082714964734}
   - component: {fileID: 6742400368110630837}
   - component: {fileID: 4852371212428433598}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: sottocorsia (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -576,7 +576,7 @@ GameObject:
   - component: {fileID: 5495686715599117831}
   - component: {fileID: 2801844645216368679}
   - component: {fileID: 4688308698364032936}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: sottocorsia (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -715,7 +715,7 @@ GameObject:
   - component: {fileID: 236645424716896827}
   - component: {fileID: 8197408459591084326}
   - component: {fileID: 3919620801053554604}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: sottocorsia (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -854,7 +854,8 @@ GameObject:
   - component: {fileID: 5715419112380981306}
   - component: {fileID: 1860665483084518246}
   - component: {fileID: 5474679146447027544}
-  m_Layer: 8
+  - component: {fileID: -1739562517521311060}
+  m_Layer: 10
   m_Name: Strisce
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -979,8 +980,21 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 118
   m_CollisionDetection: 0
+--- !u!114 &-1739562517521311060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2004370914691540004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f50476a000680349845a8ab298f9a0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnvironmentMovement
+  accelerationMultiplier: 10
 --- !u!1 &2052351707273267141
 GameObject:
   m_ObjectHideFlags: 0
@@ -994,7 +1008,7 @@ GameObject:
   - component: {fileID: 6968298681098188767}
   - component: {fileID: 412025454747762974}
   - component: {fileID: 1597402062727790947}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: sottocorsia (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1133,7 +1147,7 @@ GameObject:
   - component: {fileID: 319980353709977471}
   - component: {fileID: 5231217772296870073}
   - component: {fileID: 497295832797773592}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: sottocorsia (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1272,7 +1286,7 @@ GameObject:
   - component: {fileID: 6565687498065200698}
   - component: {fileID: 9063502630680673525}
   - component: {fileID: 7579792007785154593}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: sottocorsia (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1411,7 +1425,7 @@ GameObject:
   - component: {fileID: 4387950207891495583}
   - component: {fileID: 5743021737613075041}
   - component: {fileID: 4196581308855703565}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: sottocorsia (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1550,7 +1564,7 @@ GameObject:
   - component: {fileID: 7071972736635886477}
   - component: {fileID: 7156597047718687448}
   - component: {fileID: 4183656629926641910}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: sottocorsia (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1689,7 +1703,7 @@ GameObject:
   - component: {fileID: 4380211866997281714}
   - component: {fileID: 5395771870266204680}
   - component: {fileID: 7052814309003112946}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: sottocorsia (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1828,7 +1842,7 @@ GameObject:
   - component: {fileID: 2531095027155087617}
   - component: {fileID: 5170653281029122531}
   - component: {fileID: 3026336523982362383}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: sottocorsia (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1967,7 +1981,7 @@ GameObject:
   - component: {fileID: 7235453003579165583}
   - component: {fileID: 819151802298678931}
   - component: {fileID: 5662586838214276116}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: sottocorsia (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2111,7 +2125,7 @@ GameObject:
   - component: {fileID: 5130727607246793535}
   - component: {fileID: 1642643116178646537}
   - component: {fileID: 8056383456642317572}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: sottocorsia (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2250,7 +2264,7 @@ GameObject:
   - component: {fileID: 1136514610730480552}
   - component: {fileID: 2766774457482051713}
   - component: {fileID: 7277953239535302674}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: sottocorsia (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2389,7 +2403,7 @@ GameObject:
   - component: {fileID: 1979134829507886338}
   - component: {fileID: 8470491950283619301}
   - component: {fileID: 8702817066167812020}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: sottocorsia (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2533,7 +2547,7 @@ GameObject:
   - component: {fileID: 7292659753153241966}
   - component: {fileID: 3254790333613228341}
   - component: {fileID: 1570453394677557518}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: sottocorsia (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

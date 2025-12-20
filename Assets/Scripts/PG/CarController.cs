@@ -16,6 +16,9 @@ public class CarController : MonoBehaviour
     public float sameDirectionDotThreshold = 0.6f;
 
     [Header("Car Rotation")]
+    [SerializeField] Transform carTransform;
+    public float startingRotX = -90f;
+    public float startingRotZ = -180f;
     public float rotationAngle = 10f;
     public float rotationSpeed = 5f;
 
@@ -30,6 +33,7 @@ public class CarController : MonoBehaviour
     public float vibrationDuration = 0.2f;
 
     private Rigidbody rb;
+    private DrinkSystem drinkSystem;
 
     
     private float moveTimer = 0f;
@@ -42,6 +46,7 @@ public class CarController : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        drinkSystem = transform.GetChild(1).GetChild(1).GetComponent<DrinkSystem>();
     }
 
     void OnEnable()
@@ -61,11 +66,11 @@ public class CarController : MonoBehaviour
     void FixedUpdate()
     {
         Vector2 move = moveAction.action != null ? moveAction.action.ReadValue<Vector2>() : Vector2.zero;
-        Vector2 speed = speedAction.action != null ? speedAction.action.ReadValue<Vector2>() : Vector2.zero;
+        Vector2 speed = speedAction.action != null && drinkSystem.IsIdling() ? speedAction.action.ReadValue<Vector2>() : Vector2.zero;
 
         float moveX = Mathf.Abs(move.x) > inputDeadzone ? move.x : 0f;
 
-       
+        
 
         bool rightActive = speed.magnitude > inputDeadzone;
         bool sameDirection = false;
@@ -117,7 +122,7 @@ public class CarController : MonoBehaviour
                 targetRotation += moveX * flipAngle;
             }
 
-            float currentRotation = transform.eulerAngles.y;
+            float currentRotation = carTransform.eulerAngles.y;
 
             float smoothRotation = Mathf.LerpAngle(
                 currentRotation,
@@ -125,7 +130,7 @@ public class CarController : MonoBehaviour
                 appliedRotationSpeed * Time.fixedDeltaTime
             );
 
-            transform.eulerAngles = new Vector3(0f, smoothRotation, 0f);
+            carTransform.eulerAngles = new Vector3(startingRotX, smoothRotation, startingRotZ);
         }
         else
         {
@@ -133,14 +138,14 @@ public class CarController : MonoBehaviour
             moveTimer = 0f;
             hasFlipped = false;
 
-            float currentRotation = transform.eulerAngles.y;
+            float currentRotation = carTransform.eulerAngles.y;
             float smoothRotation = Mathf.LerpAngle(
                 currentRotation,
                 0f,
                 rotationSpeed * Time.fixedDeltaTime
             );
 
-            transform.eulerAngles = new Vector3(0f, smoothRotation, 0f);
+            carTransform.eulerAngles = new Vector3(startingRotX, smoothRotation, startingRotZ);
         }
 
         UpdateVibration();
