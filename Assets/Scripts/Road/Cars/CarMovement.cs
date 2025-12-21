@@ -1,10 +1,17 @@
 using UnityEngine;
 
+public enum Direction { left, right };
+
 public class CarMovement : MonoBehaviour
 {
+    public float currentSpeed;
     [SerializeField] private float speed;
     [SerializeField] private float startingMovementDuration;
     [SerializeField] private float accelerationMultiplier;
+    private Transform skiddingLeftTarget;
+    private Transform skiddingRightTarget;
+    private bool skidding;
+    private Direction skiddingDirection;
     private Rigidbody rb;
     private BottleDetector bottleDetector;
     private float startingSpeed;
@@ -39,10 +46,10 @@ public class CarMovement : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             float t = elapsed / startingMovementDuration;
-            float currentSpeed = Mathf.Lerp(startingSpeed, speed, t);
+            float currentStandardSpeed = Mathf.Lerp(startingSpeed, speed, t);
             Vector3 currentSize = Vector3.Lerp(startingSize, originalSize, t);
             float currentPosition = Mathf.Lerp(startingPosition, originalPosition, t);
-            rb.linearVelocity = new Vector3(0, 0, currentSpeed * -1);
+            rb.linearVelocity = new Vector3(0, 0, currentStandardSpeed * -1);
             transform.localScale = currentSize;
             transform.position = new Vector3(transform.position.x, currentPosition, transform.position.z);
         }
@@ -52,7 +59,28 @@ public class CarMovement : MonoBehaviour
             rb.linearVelocity = new Vector3(0, 0, -speed + extraSpeed);
         }
         */
-        float extraSpeed = GameManager.instance.GetAlcoolPower() * -accelerationMultiplier < 0 ? GameManager.instance.GetAlcoolPower() * -accelerationMultiplier : 0;
-        rb.linearVelocity = new Vector3(0, 0, (-speed + extraSpeed) * bottleDetector.speedMultiplier);
+        if (!skidding)
+        {
+            float extraSpeed = GameManager.instance.GetAlcoolPower() * -accelerationMultiplier < 0 ? GameManager.instance.GetAlcoolPower() * -accelerationMultiplier : 0;
+            currentSpeed = (-speed + extraSpeed) * bottleDetector.speedMultiplier;
+            rb.linearVelocity = new Vector3(0, 0, (-speed + extraSpeed) * bottleDetector.speedMultiplier);
+        }
+        else
+        {
+            Transform skiddingTarget = skiddingDirection == Direction.left ? skiddingLeftTarget : skiddingRightTarget;
+        }
+    }
+
+    public void StartSkidding(Direction direction)
+    {
+        skiddingDirection = direction;
+        skidding = true;
+        rb.linearVelocity = Vector3.zero;
+    }
+
+    public void SetSkiddingTargets(Transform leftTarget, Transform rightTarget)
+    {
+        skiddingLeftTarget = leftTarget;
+        skiddingRightTarget = rightTarget;
     }
 }

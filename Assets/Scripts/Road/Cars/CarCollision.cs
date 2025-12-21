@@ -2,15 +2,21 @@ using UnityEngine;
 
 public class CarCollision : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void OnCollisionEnter(Collision collision)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (collision.transform.CompareTag("Car"))
+        {
+            CarMovement carMovement = collision.gameObject.GetComponent<CarMovement>();
+            ContactPoint contact = collision.GetContact(0);
+            Vector3 contactPointLocal = transform.InverseTransformPoint(contact.point);
+            if (contactPointLocal.x > 0)
+            {
+                Debug.Log("DESTRA");
+            }
+            else
+            {
+                Debug.Log("SINISTRA");
+            }
+        }
     }
 }
