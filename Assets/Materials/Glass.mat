@@ -44,14 +44,14 @@ Material:
     - Vector1_48BDE471: 0.312
     - Vector1_66425DE2: 0
     - Vector1_7C2E78E4: 0.726
-    - Vector1_A0DB3845: 0.971
+    - Vector1_A0DB3845: 1
     - Vector1_F1294C90: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
     - Color_9B881ED6: {r: 0.4037736, g: 0.4037736, b: 0.4037736, a: 1}
     - Color_BED8F987: {r: 0, g: 0, b: 0, a: 1}
-    - Color_CA4EAD0D: {r: 1, g: 1, b: 1, a: 0.4392157}
+    - Color_CA4EAD0D: {r: 1, g: 1, b: 1, a: 0}
     - Color_E9CFA916: {r: 0.73018867, g: 0.97590965, b: 1, a: 0.1647059}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
