@@ -11,11 +11,11 @@ public class CarCollision : MonoBehaviour
             Vector3 contactPointLocal = transform.InverseTransformPoint(contact.point);
             if (contactPointLocal.x > 0)
             {
-                Debug.Log("DESTRA");
+                //DESTRA
             }
             else
             {
-                Debug.Log("SINISTRA");
+                //SINISTRA
             }
         }
     }
