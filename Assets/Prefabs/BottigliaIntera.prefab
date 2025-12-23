@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5965724522743303595}
   - component: {fileID: 5338558697148192649}
   - component: {fileID: 2507833814746841782}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BottleLOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7598275482433402785}
   - component: {fileID: 5953963674489715629}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Reflection Probe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -190,7 +190,7 @@ GameObject:
   - component: {fileID: 6262906428012505685}
   - component: {fileID: 633965214717501703}
   - component: {fileID: 8889953071445674123}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BottigliaIntera
   m_TagString: Bottle
   m_Icon: {fileID: 0}
@@ -261,7 +261,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
@@ -294,7 +294,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BottleMovement
   moveDirection: {x: 1, y: 0}
   moveSpeed: 2
-  accelerationMultiplier: 0
+  accelerationMultiplier: 10
   floatAmplitude: 0.2
   floatSpeed: 9
 --- !u!1 &5165485195057398849
@@ -309,7 +309,7 @@ GameObject:
   - component: {fileID: 7074346199798742507}
   - component: {fileID: 5983799639898112060}
   - component: {fileID: 3213813664493547229}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BottleLOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -419,7 +419,7 @@ GameObject:
   m_Component:
   - component: {fileID: 854518027501112795}
   - component: {fileID: 7215473895077834003}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
