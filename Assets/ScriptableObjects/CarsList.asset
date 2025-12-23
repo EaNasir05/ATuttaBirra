@@ -19,7 +19,7 @@ MonoBehaviour:
     height: 2
   - prefab: {fileID: 5394486444882743845, guid: f789fe9943940a54c9d3f54b332a9626, type: 3}
     height: 0.9
-  - prefab: {fileID: 2094414472886603323, guid: 09714c8868f0d4c4ba48605dda151567, type: 3}
+  - prefab: {fileID: 3202089544926591401, guid: 5131867dc8b9b94448491fbf6527bd9a, type: 3}
     height: 1.25
   - prefab: {fileID: 6869089734541228707, guid: b99ae1d75cc395f45a3df570b655db4f, type: 3}
     height: 1
