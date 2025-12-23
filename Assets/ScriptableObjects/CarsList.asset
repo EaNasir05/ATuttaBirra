@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: CarsList
   m_EditorClassIdentifier: Assembly-CSharp::CarsList
   cars:
-  - prefab: {fileID: 325810591303186253, guid: cce52c6de0dbdac4fb07b87a36fd7dce, type: 3}
-    height: 5
-  - prefab: {fileID: 6894650045321557297, guid: aed7df3ad88e1a3428161759275d8f38, type: 3}
-    height: 5
-  - prefab: {fileID: 2320718524089529678, guid: 9671afe1cd7475a488dc462861cf7d93, type: 3}
-    height: 5
-  - prefab: {fileID: 491280418448928411, guid: 5131867dc8b9b94448491fbf6527bd9a, type: 3}
-    height: 5
-  - prefab: {fileID: 4192974549168590954, guid: a2b9ec79531f4c74f96025c4ab476a1e, type: 3}
-    height: 5
-  - prefab: {fileID: 7759642302221893824, guid: b0b685be5454d5f4bb60b38708f17d3e, type: 3}
-    height: 5
+  - prefab: {fileID: 5060046609583140968, guid: c6ee57362cd037648b1f57150c9dcfa9, type: 3}
+    height: 0.25
+  - prefab: {fileID: 2664137357268476001, guid: f3e0d5c4ed07a7e439d51c71c872d03d, type: 3}
+    height: 2
+  - prefab: {fileID: 5394486444882743845, guid: f789fe9943940a54c9d3f54b332a9626, type: 3}
+    height: 0.9
+  - prefab: {fileID: 2094414472886603323, guid: 09714c8868f0d4c4ba48605dda151567, type: 3}
+    height: 1.25
+  - prefab: {fileID: 6869089734541228707, guid: b99ae1d75cc395f45a3df570b655db4f, type: 3}
+    height: 1
+  - prefab: {fileID: 3719728359773063807, guid: fc81e0acd211168468945cb32cf81484, type: 3}
+    height: 0.75

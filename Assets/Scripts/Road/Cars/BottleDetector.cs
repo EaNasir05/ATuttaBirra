@@ -11,11 +11,14 @@ public class BottleDetector : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("ENTRATA");
         if (other.transform.CompareTag("Bottle"))
         {
+            Debug.Log("ENTRATA BOTTIGLIA");
             if (bottles.Count == 0)
                 nearestBottle = other.transform;
-            bottles.Add(other.transform);
+            if (!bottles.Contains(other.transform))
+                bottles.Add(other.transform);
         }
     }
 

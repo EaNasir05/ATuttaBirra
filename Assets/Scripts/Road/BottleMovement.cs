@@ -5,6 +5,7 @@ public class BottleMovement : MonoBehaviour
     [Header("Movimento principale")]
     [Tooltip("Direzione di movimento (es: 1,0 = destra | -1,0 = sinistra)")]
     public Vector2 moveDirection = Vector2.right;
+    public float zToStartMove;
 
     [Tooltip("Velocità del movimento principale")]
     public float moveSpeed = 2f;
@@ -30,8 +31,11 @@ public class BottleMovement : MonoBehaviour
 
     void Update()
     {
-        MoveLinear();
-        FloatVertical();
+        if (transform.position.z <= zToStartMove)
+        {
+            MoveLinear();
+            FloatVertical();
+        }
         rb.linearVelocity = new Vector3(0, 0, GameManager.instance.GetAlcoolPower() * -accelerationMultiplier);
     }
 

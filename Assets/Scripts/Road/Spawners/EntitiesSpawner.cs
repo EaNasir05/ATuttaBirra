@@ -30,11 +30,11 @@ public class EntitiesSpawner : MonoBehaviour
                 int direction = Random.Range(0, 2);
                 float speed = Random.Range(0, 3);
                 GameObject bottle = Instantiate(bottlePrefab);
-                float x = 19;
+                float x = 8;
                 if (direction == 0)
                 {
-                    x = -19;
-                    bottle.GetComponent<BottleMovement>().moveDirection = new Vector2(1, 0);
+                    x = -8;
+                    bottle.GetComponent<BottleMovement>().moveDirection = new Vector2(1f, 0);
                 }
                 bottle.transform.position = new Vector3(x, 1, spawnPositionZ);
                 switch (speed)
