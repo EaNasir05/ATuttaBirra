@@ -13,7 +13,9 @@ public class BottleMovement : MonoBehaviour
 
     [Header("Fluttuazione verticale")]
     public float floatAmplitude = 0.5f;  
-    public float floatSpeed = 2f;        
+    public float floatSpeed = 2f;
+
+    [SerializeField] private GameObject bottigliaRottaPrefab;
 
     private Rigidbody rb;
     private float startY;
@@ -55,5 +57,11 @@ public class BottleMovement : MonoBehaviour
             newY,
             transform.position.z
         );
+    }
+
+    public void Explode()
+    {
+        Instantiate(bottigliaRottaPrefab, transform.position, transform.rotation);
+        Destroy(gameObject);
     }
 }

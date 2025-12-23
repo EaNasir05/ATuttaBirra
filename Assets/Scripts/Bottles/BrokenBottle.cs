@@ -6,14 +6,22 @@ public class BrokenBottle : MonoBehaviour
 {
     [SerializeField] GameObject[] pieces;
     [SerializeField] float velMultiplier = 2f;
-    [SerializeField] float timeBeforeDestroying = 60f;
+    [SerializeField] float timeBeforeDestroying = 3;
+    private float seconds = 0;
 
-    void Start()
+    private void Start()
     {
-        Destroy(this.gameObject, timeBeforeDestroying);
+        RandomVelocities();
     }
-    
-    public void RandomVelocities()
+
+    private void Update()
+    {
+        seconds += Time.deltaTime;
+        if (seconds >= timeBeforeDestroying)
+            Destroy(gameObject);
+    }
+
+    private void RandomVelocities()
     {
         for(int i = 0; i <= pieces.Length - 1; i++)
         {

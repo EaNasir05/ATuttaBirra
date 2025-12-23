@@ -326,7 +326,7 @@ MonoBehaviour:
   - {fileID: 5207139098819200932}
   - {fileID: 8370791730796685517}
   velMultiplier: 2
-  timeBeforeDestroying: 60
+  timeBeforeDestroying: 5
 --- !u!1 &2920794443656023427
 GameObject:
   m_ObjectHideFlags: 0
