@@ -43,15 +43,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Explode",
-                    "type": "Button",
-                    "id": "c55c81c4-8e0c-453f-9dd8-337b36da48cd",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Hold T",
                     "type": "Button",
                     "id": "327efb72-c059-4248-a6d9-ea85601072fb",
@@ -291,17 +282,6 @@
                 },
                 {
                     "name": "",
-                    "id": "ca65627d-412e-4e3a-a7a1-c41db003132f",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Explode",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "4d4aa496-0b83-4bca-b94e-a9f8358a08ba",
                     "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
@@ -325,10 +305,10 @@
                 {
                     "name": "",
                     "id": "e3c5d78e-62fb-4517-b2a8-6f7d78c925e2",
-                    "path": "<Gamepad>/leftShoulder",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Test",
                     "isComposite": false,
                     "isPartOfComposite": false

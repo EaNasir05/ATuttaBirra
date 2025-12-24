@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Glass
+  m_Name: JugGlass
   m_Shader: {fileID: -6465566751694194690, guid: f6ef98393b56eff4689ba83af396b824, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -52,7 +52,7 @@ Material:
     - Color_9B881ED6: {r: 0.4037736, g: 0.4037736, b: 0.4037736, a: 1}
     - Color_BED8F987: {r: 0, g: 0, b: 0, a: 1}
     - Color_CA4EAD0D: {r: 1, g: 1, b: 1, a: 0}
-    - Color_E9CFA916: {r: 0.73018867, g: 0.97590965, b: 1, a: 0.1647059}
+    - Color_E9CFA916: {r: 0.73018867, g: 0.97590965, b: 1, a: 0.46666667}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &991022894745434609
