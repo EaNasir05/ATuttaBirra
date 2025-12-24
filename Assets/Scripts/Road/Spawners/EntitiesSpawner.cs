@@ -3,70 +3,39 @@ using UnityEngine;
 public class EntitiesSpawner : MonoBehaviour
 {
     [SerializeField] private CarsList carsList;
-    [SerializeField] private GameObject bottlePrefab;
     [SerializeField] private float spawnTime;
     [SerializeField] private float spawnPositionZ;
     [SerializeField] private float[] spawnPositionsX;
     private int previousLane;
     private float timePassed;
     private int spawnCount;
-    private int spawnCarCount;
 
     void Awake()
     {
         timePassed = spawnTime;
         spawnCount = 0;
-        spawnCarCount = 0;
         previousLane = -1;
     }
 
     void Update()
     {
         timePassed += Time.deltaTime;
-        if (timePassed >= spawnTime)
+        if (timePassed >= spawnTime) //modificare lo spawntime in base all'accelerazione
         {
-            if (spawnCount % 5 == 0 && spawnCount != 0)
+            int i = ChooseLane();
+            previousLane = i;
+            float randomX = spawnPositionsX[i];
+            i = Random.Range(0, carsList.cars.Length);
+            GameObject car = Instantiate(carsList.cars[i].GetPrefab());
+            car.transform.position = new Vector3(randomX, carsList.cars[i].GetHeight(), spawnPositionZ);
+            if (spawnCount % 3 == 0 && spawnCount != 0)
             {
-                int direction = Random.Range(0, 2);
-                float speed = Random.Range(0, 3);
-                GameObject bottle = Instantiate(bottlePrefab);
-                float x = 8;
-                if (direction == 0)
-                {
-                    x = -8;
-                    bottle.GetComponent<BottleMovement>().moveDirection = new Vector2(1f, 0);
-                }
-                bottle.transform.position = new Vector3(x, 1, spawnPositionZ);
-                switch (speed)
-                {
-                    case 0:
-                        bottle.GetComponent<BottleMovement>().moveSpeed -= 1f;
-                        break;
-                    case 1:
-                        bottle.GetComponent<BottleMovement>().moveSpeed += 1f;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                int i = ChooseLane();
+                i = ChooseLane();
                 previousLane = i;
-                float randomX = spawnPositionsX[i];
+                randomX = spawnPositionsX[i];
                 i = Random.Range(0, carsList.cars.Length);
-                GameObject car = Instantiate(carsList.cars[i].GetPrefab());
-                car.transform.position = new Vector3(randomX, carsList.cars[i].GetHeight(), spawnPositionZ);
-                if (spawnCarCount % 3 == 0 && spawnCarCount != 0)
-                {
-                    i = ChooseLane();
-                    previousLane = i;
-                    randomX = spawnPositionsX[i];
-                    i = Random.Range(0, carsList.cars.Length);
-                    GameObject secondCar = Instantiate(carsList.cars[i].GetPrefab());
-                    secondCar.transform.position = new Vector3(randomX, carsList.cars[i].GetHeight(), spawnPositionZ);
-                }
-                spawnCarCount++;
+                GameObject secondCar = Instantiate(carsList.cars[i].GetPrefab());
+                secondCar.transform.position = new Vector3(randomX, carsList.cars[i].GetHeight(), spawnPositionZ);
             }
             spawnCount++;
             timePassed = 0;
