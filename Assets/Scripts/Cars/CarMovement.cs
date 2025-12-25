@@ -47,7 +47,7 @@ public class CarMovement : MonoBehaviour
             Transform skiddingTarget = skiddingDirection == Direction.left ? skiddingLeftTarget : skiddingRightTarget;
             float rotY = skiddingDirection == Direction.left ? -skiddingRotationSpeed : skiddingRotationSpeed;
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + rotY * Time.deltaTime, transform.rotation.eulerAngles.z);
-            transform.position = Vector3.MoveTowards(transform.position, skiddingTarget.position, skiddingMovementSpeed * GameManager.instance.GetAlcoolPower() * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, skiddingTarget.position, skiddingMovementSpeed * Time.deltaTime);
         }
     }
 
