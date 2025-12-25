@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5965724522743303595}
   - component: {fileID: 5338558697148192649}
   - component: {fileID: 2507833814746841782}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BottleLOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7598275482433402785}
   - component: {fileID: 5953963674489715629}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Reflection Probe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -188,11 +188,11 @@ GameObject:
   - component: {fileID: 667511004070216071}
   - component: {fileID: 4201489000398483385}
   - component: {fileID: 6262906428012505685}
-  - component: {fileID: 633965214717501703}
+  - component: {fileID: 6086145182295616047}
   - component: {fileID: 8889953071445674123}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BottigliaIntera
-  m_TagString: Untagged
+  m_TagString: Bottle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -213,7 +213,6 @@ Transform:
   - {fileID: 4546850318999438078}
   - {fileID: 3720147302218094381}
   - {fileID: 7598275482433402785}
-  - {fileID: 854518027501112795}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!205 &4201489000398483385
@@ -261,25 +260,32 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &633965214717501703
-MonoBehaviour:
+--- !u!65 &6086145182295616047
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4469719149522647325}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 566fdfbe885bed74b99d957c49dad93c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  bottigliaRottaPrefab: {fileID: 1332387449064719453, guid: df110fea3dadbc140913764dac778b50, type: 3}
-  tempoPrimaDistruggere: 60
+  serializedVersion: 3
+  m_Size: {x: 0.3, y: 1.25, z: 0.3}
+  m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!114 &8889953071445674123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -292,10 +298,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 299a00d4402b83e4cb4f98aa5e75f37e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BottleMovement
-  moveDirection: {x: 1, y: 0}
-  moveSpeed: 2
+  moveDirection: {x: -1, y: 0}
+  zToStartMove: 60
+  moveSpeed: 1
+  accelerationMultiplier: 10
   floatAmplitude: 0.2
   floatSpeed: 9
+  bottigliaRottaPrefab: {fileID: 1332387449064719453, guid: df110fea3dadbc140913764dac778b50, type: 3}
 --- !u!1 &5165485195057398849
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,7 +317,7 @@ GameObject:
   - component: {fileID: 7074346199798742507}
   - component: {fileID: 5983799639898112060}
   - component: {fileID: 3213813664493547229}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BottleLOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -408,56 +417,3 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 26
   m_Mesh: {fileID: 4050953455078587365, guid: 88a3aae37a7c3ed4ab7aeb2e1d952f31, type: 3}
---- !u!1 &7312516695157856641
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 854518027501112795}
-  - component: {fileID: 7215473895077834003}
-  m_Layer: 0
-  m_Name: collider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &854518027501112795
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7312516695157856641}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.35, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.7, z: 0.2}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 667511004070216071}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &7215473895077834003
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7312516695157856641}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}

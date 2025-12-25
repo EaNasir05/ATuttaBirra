@@ -12,6 +12,7 @@ public class EnvironmentMovement : MonoBehaviour
 
     private void Update()
     {
-        rb.linearVelocity = new Vector3(0, 0, -accelerationMultiplier * GameManager.instance.GetAlcoolPower());
+        float speed = -accelerationMultiplier * GameManager.instance.GetAlcoolPower() < 0 ? -accelerationMultiplier * GameManager.instance.GetAlcoolPower() : 0;
+        rb.linearVelocity = new Vector3(0, 0, speed);
     }
 }

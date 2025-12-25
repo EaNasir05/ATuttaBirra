@@ -53,6 +53,8 @@ public class DrinkSystem : MonoBehaviour
     private Vector3 startPos;
     private Quaternion startRot;
     private bool iHateJews;
+    private bool readyToGainBeer = true;
+    private bool readyToLoseBeer = true;
     private bool stunned;
 
     private void Awake()
@@ -215,8 +217,11 @@ public class DrinkSystem : MonoBehaviour
         routine = StartCoroutine(newRoutine);
     }
 
-    private IEnumerator LoseBeer(float fillGain)
+    public IEnumerator LoseBeer(float fillGain)
     {
+        if (!readyToLoseBeer)
+            yield break;
+        readyToLoseBeer = false;
         float elapsed = 0f;
         float previousFill = 0f;
         while (elapsed < beerLossDuration)
@@ -231,10 +236,14 @@ public class DrinkSystem : MonoBehaviour
             previousFill = currentFill;
             yield return null;
         }
+        readyToLoseBeer = true;
     }
 
-    private IEnumerator GainBeer(float fillLoss)
+    public IEnumerator GainBeer(float fillLoss)
     {
+        if (!readyToGainBeer)
+            yield break;
+        readyToGainBeer = false;
         float tot = 0;
         if (iHateJews)
         {
@@ -250,12 +259,13 @@ public class DrinkSystem : MonoBehaviour
             float currentFill = fillLoss * t;
             float decrement = currentFill - previousFill;
             if (beer.fillAmount - decrement < minFill)
-                decrement = minFill - beer.fillAmount;
+                decrement = beer.fillAmount - minFill;
             beer.fillAmount -= decrement;
             tot += decrement;
             previousFill = currentFill;
             yield return null;
         };
+        readyToGainBeer = true;
     }
 
     private IEnumerator MoveRoutine()
@@ -357,7 +367,7 @@ public class DrinkSystem : MonoBehaviour
     {
         bool needToGainExtra = true;
         float elapsed = 0f;
-        if (beerConsumed * 100 >= 24)
+        if (beerConsumed * 100 >= 23.5)
         {
             GameManager.instance.UpdateTotalBeerConsumed(1 - (beerConsumed * 4));
             beerConsumed = 0.25f;

@@ -14,7 +14,7 @@ public class EntitiesSpawner : MonoBehaviour
 
     void Awake()
     {
-        timePassed = 0;
+        timePassed = spawnTime;
         spawnCount = 0;
         spawnCarCount = 0;
         previousLane = -1;
@@ -25,16 +25,16 @@ public class EntitiesSpawner : MonoBehaviour
         timePassed += Time.deltaTime;
         if (timePassed >= spawnTime)
         {
-            if (spawnCount % 5 == 0)
+            if (spawnCount % 5 == 0 && spawnCount != 0)
             {
                 int direction = Random.Range(0, 2);
                 float speed = Random.Range(0, 3);
                 GameObject bottle = Instantiate(bottlePrefab);
-                float x = 19;
+                float x = 8;
                 if (direction == 0)
                 {
-                    x = -19;
-                    bottle.GetComponent<BottleMovement>().moveDirection = new Vector2(1, 0);
+                    x = -8;
+                    bottle.GetComponent<BottleMovement>().moveDirection = new Vector2(1f, 0);
                 }
                 bottle.transform.position = new Vector3(x, 1, spawnPositionZ);
                 switch (speed)
@@ -57,8 +57,7 @@ public class EntitiesSpawner : MonoBehaviour
                 i = Random.Range(0, carsList.cars.Length);
                 GameObject car = Instantiate(carsList.cars[i].GetPrefab());
                 car.transform.position = new Vector3(randomX, carsList.cars[i].GetHeight(), spawnPositionZ);
-                car.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                if (spawnCarCount % 3 == 0)
+                if (spawnCarCount % 3 == 0 && spawnCarCount != 0)
                 {
                     i = ChooseLane();
                     previousLane = i;
@@ -66,7 +65,6 @@ public class EntitiesSpawner : MonoBehaviour
                     i = Random.Range(0, carsList.cars.Length);
                     GameObject secondCar = Instantiate(carsList.cars[i].GetPrefab());
                     secondCar.transform.position = new Vector3(randomX, carsList.cars[i].GetHeight(), spawnPositionZ);
-                    secondCar.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                 }
                 spawnCarCount++;
             }
