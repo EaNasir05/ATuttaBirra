@@ -45,7 +45,6 @@ public class Liquid : MonoBehaviour
     float originalWobbleSpeed;
     float originalRecovery;
     DrinkSystem drinkSystem;
-    float minWabble;
 
     // Use this for initialization
     void Start()
@@ -54,7 +53,6 @@ public class Liquid : MonoBehaviour
         originalRecovery = Recovery;
         originalWobbleSpeed = WobbleSpeedMove;
         drinkSystem = transform.parent.GetComponent<DrinkSystem>();
-        minWabble = 0.01f;
     }
 
     private void OnValidate()
