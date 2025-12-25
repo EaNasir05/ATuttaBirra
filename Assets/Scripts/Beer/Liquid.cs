@@ -9,11 +9,13 @@ public class Liquid : MonoBehaviour
     public UpdateMode updateMode;
 
     [SerializeField]
-    public float MaxWobble = 0.03f;
+    public float MaxWobble = 0.01f;
     [SerializeField]
     public float WobbleSpeedMove = 1f;
     [SerializeField]
     public float fillAmount = 0.5f;
+    [SerializeField]
+    private float ImpulseWobble = 0.03f;
     [SerializeField]
     public float Recovery = 1f;
     [SerializeField]
@@ -37,11 +39,13 @@ public class Liquid : MonoBehaviour
     float sinewave;
     float time = 0.5f;
     Vector3 comp;
+
     Vector3 externalVelocity = Vector3.zero;
     Vector3 externalAngularVelocity = Vector3.zero;
     float originalWobbleSpeed;
     float originalRecovery;
     DrinkSystem drinkSystem;
+    float minWabble;
 
     // Use this for initialization
     void Start()
@@ -50,6 +54,7 @@ public class Liquid : MonoBehaviour
         originalRecovery = Recovery;
         originalWobbleSpeed = WobbleSpeedMove;
         drinkSystem = transform.parent.GetComponent<DrinkSystem>();
+        minWabble = 0.01f;
     }
 
     private void OnValidate()
@@ -82,7 +87,7 @@ public class Liquid : MonoBehaviour
             0f,
             impulse.y
         ) * intensity;
-        MaxWobble = 0.05f;
+        MaxWobble = ImpulseWobble;
         StartCoroutine(UpdateWobbleDuringImpulse());
     }
 
@@ -90,7 +95,7 @@ public class Liquid : MonoBehaviour
     {
         WobbleSpeedMove /= 2;
         Recovery /= 2;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.3f);
         WobbleSpeedMove = originalWobbleSpeed;
         Recovery = originalRecovery;
         drinkSystem.shakingBeer = false;
@@ -160,7 +165,6 @@ public class Liquid : MonoBehaviour
         Vector3 worldPos = transform.TransformPoint(new Vector3(mesh.bounds.center.x, mesh.bounds.center.y, mesh.bounds.center.z));
         if (CompensateShapeAmount > 0)
         {
-            // only lerp if not paused/normal update
             if (deltaTime != 0)
             {
                 comp = Vector3.Lerp(comp, (worldPos - new Vector3(0, GetLowestPoint(), 0)), deltaTime * 10);
