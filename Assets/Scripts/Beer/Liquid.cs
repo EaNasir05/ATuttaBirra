@@ -37,11 +37,19 @@ public class Liquid : MonoBehaviour
     float sinewave;
     float time = 0.5f;
     Vector3 comp;
+    Vector3 externalVelocity = Vector3.zero;
+    Vector3 externalAngularVelocity = Vector3.zero;
+    float originalWobbleSpeed;
+    float originalRecovery;
+    DrinkSystem drinkSystem;
 
     // Use this for initialization
     void Start()
     {
         GetMeshAndRend();
+        originalRecovery = Recovery;
+        originalWobbleSpeed = WobbleSpeedMove;
+        drinkSystem = transform.parent.GetComponent<DrinkSystem>();
     }
 
     private void OnValidate()
@@ -60,6 +68,34 @@ public class Liquid : MonoBehaviour
             rend = GetComponent<Renderer>();
         }
     }
+
+    public void AddImpulse(Vector2 impulse, float intensity)
+    {
+        externalVelocity += new Vector3(
+            impulse.x,
+            0f,
+            impulse.y
+        ) * intensity;
+
+        externalAngularVelocity += new Vector3(
+            impulse.x,
+            0f,
+            impulse.y
+        ) * intensity;
+        MaxWobble = 0.05f;
+        StartCoroutine(UpdateWobbleDuringImpulse());
+    }
+
+    private IEnumerator UpdateWobbleDuringImpulse()
+    {
+        WobbleSpeedMove /= 2;
+        Recovery /= 2;
+        yield return new WaitForSeconds(0.5f);
+        WobbleSpeedMove = originalWobbleSpeed;
+        Recovery = originalRecovery;
+        drinkSystem.shakingBeer = false;
+    }
+
     void Update()
     {
         float deltaTime = 0;
@@ -84,7 +120,15 @@ public class Liquid : MonoBehaviour
             wobbleAmountToAddX = Mathf.Lerp(wobbleAmountToAddX, 0, (deltaTime * Recovery));
             wobbleAmountToAddZ = Mathf.Lerp(wobbleAmountToAddZ, 0, (deltaTime * Recovery));
 
+            // velocity
+            velocity = (lastPos - transform.position) / deltaTime;
+            angularVelocity = GetAngularVelocity(lastRot, transform.rotation);
 
+            velocity += externalVelocity;
+            angularVelocity += externalAngularVelocity;
+
+            externalVelocity = Vector3.Lerp(externalVelocity, Vector3.zero, deltaTime * 5f);
+            externalAngularVelocity = Vector3.Lerp(externalAngularVelocity, Vector3.zero, deltaTime * 5f);
 
             // make a sine wave of the decreasing wobble
             pulse = 2 * Mathf.PI * WobbleSpeedMove;
@@ -92,13 +136,6 @@ public class Liquid : MonoBehaviour
 
             wobbleAmountX = wobbleAmountToAddX * sinewave;
             wobbleAmountZ = wobbleAmountToAddZ * sinewave;
-
-
-
-            // velocity
-            velocity = (lastPos - transform.position) / deltaTime;
-
-            angularVelocity = GetAngularVelocity(lastRot, transform.rotation);
 
             // add clamped velocity to wobble
             wobbleAmountToAddX += Mathf.Clamp((velocity.x + (velocity.y * 0.2f) + angularVelocity.z + angularVelocity.y) * MaxWobble, -MaxWobble, MaxWobble);

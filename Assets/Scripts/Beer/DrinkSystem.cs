@@ -35,6 +35,7 @@ public class DrinkSystem : MonoBehaviour
     private float extraFillWhileMoving;
     private float startingFill;
     private float beerConsumed;
+    private float originalMaxWobble;
 
     [Header ("Durate e velocità")]
     [SerializeField] private float rightHandSpeed;
@@ -55,6 +56,7 @@ public class DrinkSystem : MonoBehaviour
     private bool iHateJews;
     private bool readyToGainBeer = true;
     private bool readyToLoseBeer = true;
+    public bool shakingBeer = false;
     private bool stunned;
 
     private void Awake()
@@ -72,6 +74,7 @@ public class DrinkSystem : MonoBehaviour
         iHateJews = false;
         stunned = false;
         readyToRandomlyMove = true;
+        originalMaxWobble = beer.MaxWobble;
     }
 
     private void OnEnable() => inputMap.Enable();
@@ -178,10 +181,9 @@ public class DrinkSystem : MonoBehaviour
         {
             beer.MaxWobble = 0;
         }
-        else
+        else if (!shakingBeer)
         {
-            bool stable = state == DrinkState.Drinking;
-            beer.MaxWobble = stable ? 0.001f : 0.03f;
+            beer.MaxWobble = state == DrinkState.Drinking ? 0.001f : originalMaxWobble;
         }
     }
 
@@ -429,6 +431,15 @@ public class DrinkSystem : MonoBehaviour
         //rb.angularVelocity = Vector3.zero;
         if (beer.fillAmount > maxFill)
             beer.fillAmount = maxFill;
+    }
+
+    public void ShakeBeer()
+    {
+        if (beer.fillAmount < maxFill)
+        {
+            shakingBeer = true;
+            beer.AddImpulse(new Vector2(1, 0), 5);
+        }
     }
 
     public bool IsIdling() => state == DrinkState.Idle;

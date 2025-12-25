@@ -20,6 +20,7 @@ public class CarCollision : MonoBehaviour
                 carMovement.StartSkidding(Direction.right);
             else
                 carMovement.StartSkidding(Direction.left);
+            drinkSystem.ShakeBeer();
             //StartCoroutine(drinkSystem.LoseBeer(0.5f));
         }
         else if (collision.transform.CompareTag("Bottle"))
