@@ -135,6 +135,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 974d833cec49f7f4fa8a3293a4d6fc96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarMovement
+  currentSpeed: 0
   speed: 10
   startingMovementDuration: 1
-  accelerationMultiplier: 10
+  accelerationMultiplier: 15
+  skiddingMovementSpeed: 30
+  skiddingRotationSpeed: 600

@@ -994,7 +994,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f50476a000680349845a8ab298f9a0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnvironmentMovement
-  accelerationMultiplier: 10
+  accelerationMultiplier: 15
 --- !u!1 &2052351707273267141
 GameObject:
   m_ObjectHideFlags: 0

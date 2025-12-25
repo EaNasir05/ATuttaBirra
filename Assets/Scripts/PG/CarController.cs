@@ -46,7 +46,7 @@ public class CarController : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        drinkSystem = transform.GetChild(1).GetChild(1).GetComponent<DrinkSystem>();
+        drinkSystem = GetComponentInChildren<DrinkSystem>();
     }
 
     void OnEnable()

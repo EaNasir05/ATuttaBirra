@@ -17,19 +17,15 @@ public class CarCollision : MonoBehaviour
             ContactPoint contact = collision.GetContact(0);
             Vector3 contactPointLocal = transform.InverseTransformPoint(contact.point);
             if (contactPointLocal.x > 0)
-            {
-                //DESTRA
-            }
+                carMovement.StartSkidding(Direction.right);
             else
-            {
-                //SINISTRA
-            }
+                carMovement.StartSkidding(Direction.left);
             //StartCoroutine(drinkSystem.LoseBeer(0.5f));
         }
         else if (collision.transform.CompareTag("Bottle"))
         {
             collision.gameObject.GetComponent<BottleMovement>().Explode();
-            //StartCoroutine(drinkSystem.GainBeer(0.5f));
+            //Ottieni alcoolPower e birra bevuta
         }
     }
 }

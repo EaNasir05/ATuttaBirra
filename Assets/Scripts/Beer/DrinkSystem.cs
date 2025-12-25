@@ -107,7 +107,7 @@ public class DrinkSystem : MonoBehaviour
         //UpdateRotationFreezing();
         if (actionTest.WasPressedThisFrame())
         {
-            StartCoroutine(GainBeer(0.05f));
+            StartCoroutine(LoseBeer(0.05f));
         }
     }
 

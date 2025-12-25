@@ -272,7 +272,9 @@ MonoBehaviour:
   currentSpeed: 0
   speed: 10
   startingMovementDuration: 1
-  accelerationMultiplier: 10
+  accelerationMultiplier: 15
+  skiddingMovementSpeed: 30
+  skiddingRotationSpeed: 300
 --- !u!4 &5580862884817087186 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6e3c0e3c8f7501d4e9142824425f1aac, type: 3}

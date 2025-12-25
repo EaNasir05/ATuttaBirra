@@ -8,6 +8,8 @@ TagManager:
   - Beer Jug
   - Car
   - Bottle
+  - LeftSkiddingTarget
+  - RightSkiddingTarget
   layers:
   - Default
   - TransparentFX
