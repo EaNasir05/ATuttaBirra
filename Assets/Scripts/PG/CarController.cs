@@ -70,7 +70,11 @@ public class CarController : MonoBehaviour
 
         float moveX = Mathf.Abs(move.x) > inputDeadzone ? move.x : 0f;
 
-        
+        if (moveX == 0f && speed != Vector2.zero)
+        {
+            moveX = Mathf.Abs(speed.x) > inputDeadzone ? speed.x : 0f; ;
+            speed = move;
+        }
 
         bool rightActive = speed.magnitude > inputDeadzone;
         bool sameDirection = false;

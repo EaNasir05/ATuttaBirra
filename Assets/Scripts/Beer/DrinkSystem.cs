@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using NUnit.Framework;
+using System.Collections;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,8 +21,6 @@ public class DrinkSystem : MonoBehaviour
     [SerializeField] private GameObject handOnSteering;
     [SerializeField] private GameObject handOnGlass;
     [SerializeField] private Transform targetTransform;
-    [SerializeField] private GameObject[] beerParticles;
-    private Rigidbody rb;
 
     [Header("Birra")]
     [SerializeField] private Liquid beer;
@@ -61,7 +60,6 @@ public class DrinkSystem : MonoBehaviour
 
     private void Awake()
     {
-        //rb = GetComponent<Rigidbody>();
         inputMap = inputActions.FindActionMap("Player");
         holdT = inputMap.FindAction("Hold T");
         holdS = inputMap.FindAction("Hold S");
@@ -107,7 +105,6 @@ public class DrinkSystem : MonoBehaviour
         }
         UpdateHands(holdingGlass);
         UpdateWobble();
-        //UpdateRotationFreezing();
         if (actionTest.WasPressedThisFrame())
         {
             StartCoroutine(LoseBeer(0.05f));
@@ -159,20 +156,6 @@ public class DrinkSystem : MonoBehaviour
         bool handShouldHold = state == DrinkState.Drinking || state == DrinkState.Returning || state == DrinkState.Moving;
         handOnGlass.SetActive(handShouldHold);
         handOnSteering.SetActive(!handShouldHold);
-    }
-
-    private void UpdateRotationFreezing()
-    {
-        if (state == DrinkState.Moving)
-        {
-            rb.constraints |= RigidbodyConstraints.FreezeRotationX;
-            rb.constraints |= RigidbodyConstraints.FreezePositionY;
-        }
-        else
-        {
-            rb.constraints &= ~RigidbodyConstraints.FreezeRotationX;
-            rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
-        }
     }
 
     private void UpdateWobble()
@@ -274,11 +257,9 @@ public class DrinkSystem : MonoBehaviour
     {
         int alcoolLevel = (int) totalBeerConsumed > 10 ? 10 : (int) totalBeerConsumed;
         float speed = rightHandSpeed * (1 - (alcoolLevel * 0.25f));
-        //Vector3 currentVelocity = rb.linearVelocity;
         float moveX = Mathf.Abs(rightHandMovement.x) > inputDeadZone ? rightHandMovement.x : 0f;
         float moveY = Mathf.Abs(rightHandMovement.y) > inputDeadZone ? rightHandMovement.y : 0f;
         transform.position += new Vector3(((moveX * speed) + randomHandMovement.x) * Time.deltaTime, 0, ((moveY * speed) + randomHandMovement.y) * Time.deltaTime);
-        //rb.linearVelocity = new Vector3((moveX * rightHandSpeed) + randomHandMovement.x, currentVelocity.y, (moveY * rightHandSpeed) + randomHandMovement.y);
         if (transform.localPosition.y >= 0.318)
             transform.localPosition = new Vector3(transform.localPosition.x, 0.317f, transform.localPosition.z);
         else if (transform.localPosition.y <= 0.14)
@@ -435,10 +416,37 @@ public class DrinkSystem : MonoBehaviour
 
     public void ShakeBeer()
     {
-        if (beer.fillAmount < maxFill)
+        if (state == DrinkState.Drinking)
         {
-            shakingBeer = true;
-            beer.AddImpulse(new Vector2(1, 0), 5);
+            StartReturning();
+            //StartCoroutine(ShakeJar());
+        }
+        else
+        {
+            if (beer.fillAmount < maxFill)
+            {
+                shakingBeer = true;
+                beer.AddImpulse(new Vector2(1, 0), 5);
+            }
+        }
+    }
+
+    private IEnumerator ShakeJar()
+    {
+        float movementLength = 0;
+        while (movementLength < 0.75f)
+        {
+            float y = 2 * Time.deltaTime;
+            movementLength += y;
+            transform.position += new Vector3(0, y, 0);
+            yield return null;
+        }
+        while (movementLength > 0)
+        {
+            float y = -2 * Time.deltaTime;
+            movementLength += y;
+            transform.position += new Vector3(0, y, 0);
+            yield return null;
         }
     }
 
