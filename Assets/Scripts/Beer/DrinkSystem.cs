@@ -352,7 +352,7 @@ public class DrinkSystem : MonoBehaviour
         float elapsed = 0f;
         if (beerConsumed * 100 >= 23.5)
         {
-            GameManager.instance.UpdateTotalBeerConsumed(1 - (beerConsumed * 4));
+            GameManager.instance.UpdateTotalBeerConsumed(1 - (beerConsumed * 2));
             beerConsumed = 0.25f;
         }
         if (beer.fillAmount + extraFillWhileMoving >= maxFill - 0.01)
@@ -405,7 +405,7 @@ public class DrinkSystem : MonoBehaviour
         transform.localRotation = startRot;
         extraFillWhileMoving = 0f;
         totalBeerConsumed += beerConsumed;
-        GameManager.instance.UpdateAlcoolPower(beerConsumed * 4);
+        GameManager.instance.UpdateAlcoolPower(beerConsumed * 2);
         beerConsumed = 0f;
         state = DrinkState.Idle;
         //rb.linearVelocity = Vector3.zero;

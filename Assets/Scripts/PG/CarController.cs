@@ -17,15 +17,11 @@ public class CarController : MonoBehaviour
 
     [Header("Car Rotation")]
     [SerializeField] Transform carTransform;
-    public float startingRotX = -90f;
-    public float startingRotZ = -180f;
     public float rotationAngle = 10f;
     public float rotationSpeed = 5f;
-
-    [Header("Auto Flip Rotation")]
-    public float delayBeforeFlip = 1f;   
-    public float flipAngle = 20f;        
-    public float flipRotationSpeed = 8f; 
+    private Quaternion startingLocalRot;
+    private float currentRotation;
+    private Vector3 localUpAxis;
 
     [Header("Gamepad Vibration")]
     public float vibrationLow = 0.2f;
@@ -35,10 +31,6 @@ public class CarController : MonoBehaviour
     private Rigidbody rb;
     private DrinkSystem drinkSystem;
 
-    
-    private float moveTimer = 0f;
-    private bool hasFlipped = false;
-
     private float vibrationTimer = 0f;
     private bool vibrating = false;
 
@@ -47,6 +39,8 @@ public class CarController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         drinkSystem = GetComponentInChildren<DrinkSystem>();
+        startingLocalRot = carTransform.localRotation;
+        localUpAxis = startingLocalRot * Vector3.up;
     }
 
     void OnEnable()
@@ -64,6 +58,13 @@ public class CarController : MonoBehaviour
 
 
     void FixedUpdate()
+    {
+        float movement = Move();
+        Rotate(movement);
+        UpdateVibration();
+    }
+
+    private float Move()
     {
         Vector2 move = moveAction.action != null ? moveAction.action.ReadValue<Vector2>() : Vector2.zero;
         Vector2 speed = speedAction.action != null && drinkSystem.IsIdling() ? speedAction.action.ReadValue<Vector2>() : Vector2.zero;
@@ -103,59 +104,24 @@ public class CarController : MonoBehaviour
 
         rb.linearVelocity = new Vector3(newVelX, currentVel.y, currentVel.z);
 
-
-        
-        if (moveX != 0f)
-        {
-            moveTimer += Time.fixedDeltaTime;
-
-            
-            if (!hasFlipped && moveTimer >= delayBeforeFlip)
-            {
-                hasFlipped = true;
-                StartVibration();
-            }
-
-            float targetRotation = -moveX * rotationAngle;
-
-            
-            float appliedRotationSpeed = hasFlipped ? flipRotationSpeed : rotationSpeed;
-
-            if (hasFlipped)
-            {
-                targetRotation += moveX * flipAngle;
-            }
-
-            float currentRotation = carTransform.eulerAngles.y;
-
-            float smoothRotation = Mathf.LerpAngle(
-                currentRotation,
-                targetRotation,
-                appliedRotationSpeed * Time.fixedDeltaTime
-            );
-
-            carTransform.eulerAngles = new Vector3(startingRotX, smoothRotation, startingRotZ);
-        }
-        else
-        {
-            
-            moveTimer = 0f;
-            hasFlipped = false;
-
-            float currentRotation = carTransform.eulerAngles.y;
-            float smoothRotation = Mathf.LerpAngle(
-                currentRotation,
-                0f,
-                rotationSpeed * Time.fixedDeltaTime
-            );
-
-            carTransform.eulerAngles = new Vector3(startingRotX, smoothRotation, startingRotZ);
-        }
-
-        UpdateVibration();
+        return moveX;
     }
 
-   
+    private void Rotate(float movement)
+    {
+        float targetOffset = movement * rotationAngle;
+        float speed = movement != 0 ? rotationSpeed : rotationSpeed / 2;
+
+        currentRotation = Mathf.MoveTowards(
+            currentRotation,
+            targetOffset,
+            speed * Time.fixedDeltaTime
+        );
+
+        Quaternion yawOffset = Quaternion.AngleAxis(currentRotation, localUpAxis);
+
+        carTransform.localRotation = startingLocalRot * yawOffset;
+    }
 
     void StartVibration()
     {
