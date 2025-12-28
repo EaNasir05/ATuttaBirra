@@ -21,7 +21,6 @@ public class CarCollision : MonoBehaviour
             else
                 carMovement.StartSkidding(Direction.left);
             drinkSystem.ShakeBeer();
-            Debug.Log("SIUM");
             StartCoroutine(drinkSystem.LoseBeer(0.05f));
         }
         else if (collision.transform.CompareTag("Bottle"))

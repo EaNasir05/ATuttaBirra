@@ -93,10 +93,12 @@ public class Liquid : MonoBehaviour
     {
         WobbleSpeedMove /= 2;
         Recovery /= 2;
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.2f);
         WobbleSpeedMove = originalWobbleSpeed;
-        Recovery = originalRecovery;
+        Recovery = originalRecovery * 2;
         drinkSystem.shakingBeer = false;
+        yield return new WaitForSeconds(0.2f);
+        Recovery = originalRecovery;
     }
 
     void Update()
