@@ -1103,59 +1103,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 043c94d258f98a447902708f7c5483fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMoveVelocity
-  moveAction:
-    m_UseReference: 0
-    m_Action:
-      m_Name: Move
-      m_Type: 0
-      m_ExpectedControlType: Vector2
-      m_Id: cece4f16-a58c-4e52-aa93-50332ebcdf9a
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings:
-      - m_Name: 
-        m_Id: be52517e-0348-4350-aa53-4ceb09e08260
-        m_Path: <Gamepad>/leftStick
-        m_Interactions: 
-        m_Processors: 
-        m_Groups: 
-        m_Action: Move
-        m_Flags: 0
-      m_Flags: 0
-    m_Reference: {fileID: 0}
-  speedAction:
-    m_UseReference: 0
-    m_Action:
-      m_Name: Speed
-      m_Type: 0
-      m_ExpectedControlType: Vector2
-      m_Id: 5a834ebe-802c-4719-9014-26a069b88bd5
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings:
-      - m_Name: 
-        m_Id: 37026f55-3fdb-4134-90cc-4552c626a4cb
-        m_Path: <Gamepad>/rightStick
-        m_Interactions: 
-        m_Processors: 
-        m_Groups: 
-        m_Action: Speed
-        m_Flags: 0
-      m_Flags: 0
-    m_Reference: {fileID: 0}
+  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   baseSpeed: 4
   accelMultiplier: 1.5
   accelSmoothing: 10
   inputDeadzone: 0.15
   sameDirectionDotThreshold: 0.6
   carTransform: {fileID: 2393103901660703148}
-  startingRotX: 0
-  startingRotZ: 0
   rotationAngle: 0
   rotationSpeed: 3
-  delayBeforeFlip: 0
-  flipAngle: 0
-  flipRotationSpeed: 0
   vibrationLow: 0
   vibrationHigh: 0
   vibrationDuration: 0

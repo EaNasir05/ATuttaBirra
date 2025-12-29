@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class UIManager : MonoBehaviour
 
     [Header("UI elements")]
     [SerializeField] private TMP_Text beerConsumed;
+    [SerializeField] private GameObject gameOverTab;
 
     [Header("VFX")]
     [SerializeField] private int ebrezzaMultiplier;
@@ -28,12 +30,17 @@ public class UIManager : MonoBehaviour
             blend = maxEbrezzaBlend;
         else if (blend < 0)
             blend = 0;
-        Debug.Log("EBREZZA ATTUALE: " + blend);
         ebrezzaScreenRenderer.passMaterial.SetFloat("_Blend", blend);
     }
 
     public void UpdateBeerConsumed(float value)
     {
         beerConsumed.text = value + " L";
+    }
+
+    public void GameOver()
+    {
+        if (gameOverTab != null)
+            gameOverTab.SetActive(true);
     }
 }

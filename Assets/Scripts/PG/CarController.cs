@@ -5,15 +5,20 @@ using UnityEngine.InputSystem;
 public class CarController : MonoBehaviour
 {
     [Header("Input Actions")]
-    public InputActionProperty moveAction;
-    public InputActionProperty speedAction;
+    [SerializeField] private InputActionAsset inputActions;
+    private InputAction moveAction;
+    private InputAction speedAction;
+    private InputActionMap inputMap;
 
     [Header("Movement")]
-    public float baseSpeed = 5f;
-    public float accelMultiplier = 1.5f;
+    public float baseSpeed = 6f;
+    public float accelMultiplier = 1.3f;
     public float accelSmoothing = 10f;
+    public float smoothingLossMultiplier = 0.5f;
+    public float minAccelSmoothing = 2.5f;
     public float inputDeadzone = 0.15f;
     public float sameDirectionDotThreshold = 0.6f;
+    private float startingSmoothing;
 
     [Header("Car Rotation")]
     [SerializeField] Transform carTransform;
@@ -37,22 +42,24 @@ public class CarController : MonoBehaviour
 
     void Awake()
     {
+        inputMap = inputActions.FindActionMap("Player");
+        moveAction = inputMap.FindAction("Move");
+        speedAction = inputMap.FindAction("Speed");
         rb = GetComponent<Rigidbody>();
         drinkSystem = GetComponentInChildren<DrinkSystem>();
         startingLocalRot = carTransform.localRotation;
         localUpAxis = startingLocalRot * Vector3.up;
+        startingSmoothing = accelSmoothing;
     }
 
     void OnEnable()
     {
-        moveAction.action?.Enable();
-        speedAction.action?.Enable();
+        inputMap.Enable();
     }
 
     void OnDisable()
     {
-        moveAction.action?.Disable();
-        speedAction.action?.Disable();
+        inputMap?.Disable();
         StopVibration();
     }
 
@@ -62,12 +69,13 @@ public class CarController : MonoBehaviour
         float movement = Move();
         Rotate(movement);
         UpdateVibration();
+        UpdateAccelSmoothing();
     }
 
     private float Move()
     {
-        Vector2 move = moveAction.action != null ? moveAction.action.ReadValue<Vector2>() : Vector2.zero;
-        Vector2 speed = speedAction.action != null && drinkSystem.IsIdling() ? speedAction.action.ReadValue<Vector2>() : Vector2.zero;
+        Vector2 move = moveAction != null ? moveAction.ReadValue<Vector2>() : Vector2.zero;
+        Vector2 speed = speedAction != null && drinkSystem.IsIdling() ? speedAction.ReadValue<Vector2>() : Vector2.zero;
 
         float moveX = Mathf.Abs(move.x) > inputDeadzone ? move.x : 0f;
 
@@ -121,6 +129,14 @@ public class CarController : MonoBehaviour
         Quaternion yawOffset = Quaternion.AngleAxis(currentRotation, localUpAxis);
 
         carTransform.localRotation = startingLocalRot * yawOffset;
+    }
+
+    private void UpdateAccelSmoothing()
+    {
+        if (startingSmoothing - (GameManager.instance.GetTotalBeerConsumed() * smoothingLossMultiplier) < minAccelSmoothing)
+            accelSmoothing = minAccelSmoothing;
+        else
+            accelSmoothing = startingSmoothing - (GameManager.instance.GetTotalBeerConsumed() * smoothingLossMultiplier);
     }
 
     void StartVibration()
