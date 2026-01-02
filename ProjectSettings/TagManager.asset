@@ -26,7 +26,7 @@ TagManager:
   - Ground
   - Destroyer
   - Environment
-  - 
+  - Particles
   - 
   - 
   - 
@@ -46,6 +46,12 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Particles
+    uniqueID: 1875304265
+    locked: 0
+  - name: BeerJug
+    uniqueID: 3591465363
     locked: 0
   m_RenderingLayers:
   - Default

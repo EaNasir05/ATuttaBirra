@@ -11,7 +11,7 @@ public class LeverInteraction_InputSystem : MonoBehaviour
     public LiquidStreamToggle liquidStream;
 
     [Header("Player Movement")]
-    public MonoBehaviour playerMovementScript;   // 🔥 script movimento player
+    public MonoBehaviour playerMovementScript;  
 
     [Header("Hand")]
     public float handMoveSpeed = 6f;
@@ -45,7 +45,7 @@ public class LeverInteraction_InputSystem : MonoBehaviour
             gamepad.leftShoulder.isPressed &&
             gamepad.leftTrigger.isPressed;
 
-        // 🔥 cambio stato grab
+        
         if (grabbingNow != isGrabbing)
         {
             isGrabbing = grabbingNow;
@@ -67,7 +67,7 @@ public class LeverInteraction_InputSystem : MonoBehaviour
         UpdateFlow();
     }
 
-    // ---------------- PLAYER MOVEMENT ----------------
+   
 
     void SetPlayerMovement(bool enabled)
     {
@@ -75,7 +75,7 @@ public class LeverInteraction_InputSystem : MonoBehaviour
             playerMovementScript.enabled = enabled;
     }
 
-    // ---------------- HAND ----------------
+    
 
     void MoveHandToLever()
     {
@@ -110,7 +110,7 @@ public class LeverInteraction_InputSystem : MonoBehaviour
         );
     }
 
-    // ---------------- LEVER ----------------
+    
 
     void HandleLeverInput(Gamepad gamepad)
     {
@@ -138,7 +138,7 @@ public class LeverInteraction_InputSystem : MonoBehaviour
             Quaternion.AngleAxis(currentAngle, Vector3.forward);
     }
 
-    // ---------------- FLOW ----------------
+    
 
     void UpdateFlow()
     {
