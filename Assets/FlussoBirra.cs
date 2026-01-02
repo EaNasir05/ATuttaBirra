@@ -1,5 +1,4 @@
-using UnityEngine;
-using UnityEngine.InputSystem;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
 public class LiquidStreamToggle : MonoBehaviour
@@ -9,7 +8,7 @@ public class LiquidStreamToggle : MonoBehaviour
     public float maxDistance = 5f;
     public int segments = 20;
     public float gravityCurve = 0.1f;
-    public float flowSpeed = 5f; 
+    public float flowSpeed = 5f;
 
     [Header("Collision")]
     public LayerMask collisionMask;
@@ -33,21 +32,20 @@ public class LiquidStreamToggle : MonoBehaviour
 
     void Update()
     {
-        if (Keyboard.current != null && Keyboard.current.digit8Key.wasPressedThisFrame)
-        {
-            isFlowing = !isFlowing;
-            SetFlow(isFlowing);
-        }
+        if (!isFlowing)
+            return;
 
-        if (isFlowing)
-        {
-            currentLength += flowSpeed * Time.deltaTime;
-            DrawStream();
-        }
+        currentLength += flowSpeed * Time.deltaTime;
+        DrawStream();
     }
 
-    void SetFlow(bool active)
+    
+    public void SetFlow(bool active)
     {
+        if (isFlowing == active)
+            return;
+
+        isFlowing = active;
         line.enabled = active;
 
         if (!active)
@@ -81,15 +79,11 @@ public class LiquidStreamToggle : MonoBehaviour
             line.SetPosition(i, pos);
         }
 
-        
-        if (splashParticles != null)
+        if (splashParticles != null && length >= targetLength)
         {
-            if (length >= targetLength)
-            {
-                splashParticles.transform.position = end;
-                if (!splashParticles.isPlaying)
-                    splashParticles.Play();
-            }
+            splashParticles.transform.position = end;
+            if (!splashParticles.isPlaying)
+                splashParticles.Play();
         }
     }
 }
