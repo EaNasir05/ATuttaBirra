@@ -9,6 +9,10 @@ public class DrinkSystem : MonoBehaviour
     [Header ("Input system")]
     [SerializeField] private InputActionAsset inputActions;
     [SerializeField] private float inputDeadZone;
+    [SerializeField] private float maxXRightHand = 0.106f;
+    [SerializeField] private float minXRightHand = -0.1f;
+    [SerializeField] private float maxYRightHand = 0.318f;
+    [SerializeField] private float minYRightHand = 0.14f;
     private InputActionMap inputMap;
     private InputAction holdT, holdS, rightHand, actionTest;
     private Vector2 rightHandMovement;
@@ -201,7 +205,7 @@ public class DrinkSystem : MonoBehaviour
 
     public IEnumerator LoseBeer(float fillGain)
     {
-        if (!readyToLoseBeer)
+        if (!readyToLoseBeer || beer.fillAmount >= maxFill - 0.01f)
             yield break;
         readyToLoseBeer = false;
         float elapsed = 0f;
@@ -257,14 +261,14 @@ public class DrinkSystem : MonoBehaviour
         float moveX = Mathf.Abs(rightHandMovement.x) > inputDeadZone ? rightHandMovement.x : 0f;
         float moveY = Mathf.Abs(rightHandMovement.y) > inputDeadZone ? rightHandMovement.y : 0f;
         transform.position += new Vector3(((moveX * speed) + randomHandMovement.x) * Time.deltaTime, 0, ((moveY * speed) + randomHandMovement.y) * Time.deltaTime);
-        if (transform.localPosition.y >= 0.318)
-            transform.localPosition = new Vector3(transform.localPosition.x, 0.317f, transform.localPosition.z);
-        else if (transform.localPosition.y <= 0.14)
-            transform.localPosition = new Vector3(transform.localPosition.x, 0.141f, transform.localPosition.z);
-        if (transform.localPosition.x >= 0.106)
-            transform.localPosition = new Vector3(0.105f, transform.localPosition.y, transform.localPosition.z);
-        else if (transform.localPosition.x <= -0.1)
-            transform.localPosition = new Vector3(-0.101f, transform.localPosition.y, transform.localPosition.z);
+        if (transform.localPosition.y >= maxYRightHand)
+            transform.localPosition = new Vector3(transform.localPosition.x, maxYRightHand - 0.001f, transform.localPosition.z);
+        else if (transform.localPosition.y <= minYRightHand)
+            transform.localPosition = new Vector3(transform.localPosition.x, minYRightHand + 0.001f, transform.localPosition.z);
+        if (transform.localPosition.x >= maxXRightHand)
+            transform.localPosition = new Vector3(maxXRightHand - 0.001f, transform.localPosition.y, transform.localPosition.z);
+        else if (transform.localPosition.x <= minXRightHand)
+            transform.localPosition = new Vector3(minXRightHand + 0.001f, transform.localPosition.y, transform.localPosition.z);
         yield return null;
     }
 

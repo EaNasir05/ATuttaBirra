@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class LeverInteraction_InputSystem : MonoBehaviour
@@ -6,12 +7,10 @@ public class LeverInteraction_InputSystem : MonoBehaviour
     [Header("References")]
     public Transform playerRoot;
     public Transform leftHand;
+    public GameObject leftHandOnSteering;
     public Transform handTargetOnLever;
     public Transform leverPivot;
     public LiquidStreamToggle liquidStream;
-
-    [Header("Player Movement")]
-    public MonoBehaviour playerMovementScript;   // 🔥 script movimento player
 
     [Header("Hand")]
     public float handMoveSpeed = 6f;
@@ -26,11 +25,14 @@ public class LeverInteraction_InputSystem : MonoBehaviour
     private float currentAngle = 0f;
     private bool isGrabbing = false;
 
+    private Vector3 handOriginalLocalPos;
     private Vector3 handStartLocalPos;
     private Quaternion handStartLocalRot;
+    private bool handOnSteering = true;
 
     void Start()
     {
+        handOriginalLocalPos = leftHand.localPosition;
         handStartLocalPos = playerRoot.InverseTransformPoint(leftHand.position);
         handStartLocalRot = Quaternion.Inverse(playerRoot.rotation) * leftHand.rotation;
     }
@@ -45,11 +47,20 @@ public class LeverInteraction_InputSystem : MonoBehaviour
             gamepad.leftShoulder.isPressed &&
             gamepad.leftTrigger.isPressed;
 
-        // 🔥 cambio stato grab
+        if (Vector3.Distance(handOriginalLocalPos, leftHand.localPosition) < 0.1f)
+        {
+            leftHand.gameObject.SetActive(false);
+            leftHandOnSteering.SetActive(true);
+        }
+        else
+        {
+            leftHand.gameObject.SetActive(true);
+            leftHandOnSteering.SetActive(false);
+        }
+
         if (grabbingNow != isGrabbing)
         {
             isGrabbing = grabbingNow;
-            SetPlayerMovement(!isGrabbing);
         }
 
         if (isGrabbing)
@@ -65,14 +76,6 @@ public class LeverInteraction_InputSystem : MonoBehaviour
 
         UpdateLeverRotation();
         UpdateFlow();
-    }
-
-    // ---------------- PLAYER MOVEMENT ----------------
-
-    void SetPlayerMovement(bool enabled)
-    {
-        if (playerMovementScript != null)
-            playerMovementScript.enabled = enabled;
     }
 
     // ---------------- HAND ----------------
@@ -114,7 +117,7 @@ public class LeverInteraction_InputSystem : MonoBehaviour
 
     void HandleLeverInput(Gamepad gamepad)
     {
-        float stickY = gamepad.leftStick.y.ReadValue();
+        float stickY = Vector3.Distance(leftHand.position, handTargetOnLever.position) < 0.1f ? gamepad.leftStick.y.ReadValue() : 0;
 
         if (stickY < -0.2f)
         {
@@ -150,5 +153,7 @@ public class LeverInteraction_InputSystem : MonoBehaviour
 
         liquidStream.SetFlow(leverAtBottom);
     }
+
+    public bool IsGrabbingTheLever() => isGrabbing;
 }
 

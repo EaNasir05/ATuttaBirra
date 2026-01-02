@@ -33,12 +33,23 @@ public class CarController : MonoBehaviour
     public float vibrationHigh = 0.5f;
     public float vibrationDuration = 0.2f;
 
+    [Header("Steering Wheel")]
+    public Transform steeringWheel;
+    public float partialMaxTiltSteeringWheel;
+    public float maxTiltSteeringWheel;
+    public float steeringWheelRotationSpeed;
+    private Quaternion startingSteeringWheelRot;
+    private Vector3 steeringLocalAxis;
+    private Vector3 steeringCustomizedAxis = Vector3.up;
+
     private Rigidbody rb;
+    private LeverInteraction_InputSystem leverHandler;
     private DrinkSystem drinkSystem;
 
     private float vibrationTimer = 0f;
     private bool vibrating = false;
-
+    private float lastMoveX;
+    private bool bothSticksActive;
 
     void Awake()
     {
@@ -46,10 +57,13 @@ public class CarController : MonoBehaviour
         moveAction = inputMap.FindAction("Move");
         speedAction = inputMap.FindAction("Speed");
         rb = GetComponent<Rigidbody>();
+        leverHandler = GetComponentInChildren<LeverInteraction_InputSystem>();
         drinkSystem = GetComponentInChildren<DrinkSystem>();
         startingLocalRot = carTransform.localRotation;
         localUpAxis = startingLocalRot * Vector3.up;
         startingSmoothing = accelSmoothing;
+        startingSteeringWheelRot = steeringWheel.localRotation;
+        steeringLocalAxis = steeringWheel.TransformDirection(steeringCustomizedAxis.normalized);
     }
 
     void OnEnable()
@@ -70,11 +84,12 @@ public class CarController : MonoBehaviour
         Rotate(movement);
         UpdateVibration();
         UpdateAccelSmoothing();
+        RotateSteeringWheel();
     }
 
     private float Move()
     {
-        Vector2 move = moveAction != null ? moveAction.ReadValue<Vector2>() : Vector2.zero;
+        Vector2 move = moveAction != null && !leverHandler.IsGrabbingTheLever() ? moveAction.ReadValue<Vector2>() : Vector2.zero;
         Vector2 speed = speedAction != null && drinkSystem.IsIdling() ? speedAction.ReadValue<Vector2>() : Vector2.zero;
 
         float moveX = Mathf.Abs(move.x) > inputDeadzone ? move.x : 0f;
@@ -112,6 +127,8 @@ public class CarController : MonoBehaviour
 
         rb.linearVelocity = new Vector3(newVelX, currentVel.y, currentVel.z);
 
+        bothSticksActive = moveX != 0f && speed.magnitude > inputDeadzone;
+        lastMoveX = moveX;
         return moveX;
     }
 
@@ -129,6 +146,30 @@ public class CarController : MonoBehaviour
         Quaternion yawOffset = Quaternion.AngleAxis(currentRotation, localUpAxis);
 
         carTransform.localRotation = startingLocalRot * yawOffset;
+    }
+
+    private void RotateSteeringWheel()
+    {
+        float targetAngle = 0f;
+
+        if (lastMoveX != 0f)
+        {
+            float maxTilt = bothSticksActive ? maxTiltSteeringWheel : partialMaxTiltSteeringWheel;
+            targetAngle = Mathf.Sign(lastMoveX) * maxTilt;
+        }
+
+        float lerpSpeed = accelSmoothing * Time.fixedDeltaTime;
+
+        Quaternion rotationOffset =
+            Quaternion.AngleAxis(-targetAngle, steeringLocalAxis);
+
+        Quaternion targetRot = startingSteeringWheelRot * rotationOffset;
+
+        steeringWheel.localRotation = Quaternion.Slerp(
+            steeringWheel.localRotation,
+            targetRot,
+            lerpSpeed
+        );
     }
 
     private void UpdateAccelSmoothing()

@@ -10,6 +10,7 @@ TagManager:
   - Bottle
   - LeftSkiddingTarget
   - RightSkiddingTarget
+  - StreamTarget
   layers:
   - Default
   - TransparentFX
@@ -26,7 +27,7 @@ TagManager:
   - Ground
   - Destroyer
   - Environment
-  - 
+  - Stream
   - 
   - 
   - 

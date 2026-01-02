@@ -68,9 +68,8 @@ public class CameraMovement : MonoBehaviour
         
         HandleBackwardHold();
     }
-
     
-    IEnumerator HeadHitMovement()
+    public IEnumerator HeadHitMovement()
     {
         isHeadHitPlaying = true;
 

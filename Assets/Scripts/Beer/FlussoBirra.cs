@@ -10,8 +10,9 @@ public class LiquidStreamToggle : MonoBehaviour
     public float gravityCurve = 0.1f;
     public float flowSpeed = 5f;
 
-    [Header("Collision")]
+    [Header("Collision and DrinkSystem")]
     public LayerMask collisionMask;
+    public DrinkSystem drinkSystem;
 
     [Header("Optional")]
     public ParticleSystem splashParticles;
@@ -67,6 +68,8 @@ public class LiquidStreamToggle : MonoBehaviour
         {
             targetLength = hit.distance;
             end = hit.point;
+            if (hit.collider.CompareTag("StreamTarget"))
+                Debug.Log("BIRRA!");
         }
 
         float length = Mathf.Min(currentLength, targetLength);
