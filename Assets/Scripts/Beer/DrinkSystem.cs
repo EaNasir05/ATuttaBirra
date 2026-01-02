@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public enum DrinkState { Idle, Moving, Drinking, Returning }
 
@@ -175,7 +176,7 @@ public class DrinkSystem : MonoBehaviour
     {
         StartCoroutine(CreateRandomMovement());
         state = DrinkState.Moving;
-        RestartRoutine(MoveRoutine());
+        MoveRoutine();
     }
 
     public void StartDrinking()
@@ -225,6 +226,14 @@ public class DrinkSystem : MonoBehaviour
         readyToLoseBeer = true;
     }
 
+    public void AddBeer(float fillLoss)
+    {
+        if (beer.fillAmount - fillLoss < minFill)
+            beer.fillAmount -= beer.fillAmount - minFill;
+        else
+            beer.fillAmount -= fillLoss;
+    }
+
     public IEnumerator GainBeer(float fillLoss)
     {
         if (!readyToGainBeer)
@@ -254,22 +263,17 @@ public class DrinkSystem : MonoBehaviour
         readyToGainBeer = true;
     }
 
-    private IEnumerator MoveRoutine()
+    private void MoveRoutine()
     {
         int alcoolLevel = (int) totalBeerConsumed > 5 ? 5 : (int) totalBeerConsumed;
         float speed = rightHandSpeed * (1 - (alcoolLevel * 0.05f));
         float moveX = Mathf.Abs(rightHandMovement.x) > inputDeadZone ? rightHandMovement.x : 0f;
         float moveY = Mathf.Abs(rightHandMovement.y) > inputDeadZone ? rightHandMovement.y : 0f;
-        transform.position += new Vector3(((moveX * speed) + randomHandMovement.x) * Time.deltaTime, 0, ((moveY * speed) + randomHandMovement.y) * Time.deltaTime);
-        if (transform.localPosition.y >= maxYRightHand)
-            transform.localPosition = new Vector3(transform.localPosition.x, maxYRightHand - 0.001f, transform.localPosition.z);
-        else if (transform.localPosition.y <= minYRightHand)
-            transform.localPosition = new Vector3(transform.localPosition.x, minYRightHand + 0.001f, transform.localPosition.z);
-        if (transform.localPosition.x >= maxXRightHand)
-            transform.localPosition = new Vector3(maxXRightHand - 0.001f, transform.localPosition.y, transform.localPosition.z);
-        else if (transform.localPosition.x <= minXRightHand)
-            transform.localPosition = new Vector3(minXRightHand + 0.001f, transform.localPosition.y, transform.localPosition.z);
-        yield return null;
+        Vector3 newPos = transform.position + new Vector3(((moveX * speed) + randomHandMovement.x) * Time.deltaTime, 0, ((moveY * speed) + randomHandMovement.y) * Time.deltaTime);
+        Vector3 localPos = transform.parent.InverseTransformPoint(newPos);
+        localPos.x = Mathf.Clamp(localPos.x, minXRightHand, maxXRightHand);
+        localPos.y = Mathf.Clamp(localPos.y, minYRightHand, maxYRightHand);
+        transform.position = transform.parent.TransformPoint(localPos);
     }
 
     private IEnumerator DrinkRoutine()
