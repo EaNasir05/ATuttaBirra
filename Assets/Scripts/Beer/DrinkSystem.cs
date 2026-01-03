@@ -334,11 +334,11 @@ public class DrinkSystem : MonoBehaviour
                 float currentFill = Mathf.Lerp(startingFill, maxFill - shaderBugExtraFill, t);
                 float deltaFill = previousFill - currentFill;
                 beer.fillAmount -= deltaFill;
-                GameManager.instance.UpdateTotalBeerConsumed(-(deltaFill * 2));
+                GameManager.instance.UpdateTotalBeerConsumed(-(deltaFill * 4));
                 beerConsumed -= deltaFill;
                 previousFill = currentFill;
 
-                if (beer.fillAmount + 0.01 >= maxFill - shaderBugExtraFill)
+                if (beer.fillAmount >= maxFill - shaderBugExtraFill)
                 {
                     StartReturning();
                     yield break;
@@ -354,7 +354,7 @@ public class DrinkSystem : MonoBehaviour
         float elapsed = 0f;
         if (beerConsumed * 100 >= 23.5)
         {
-            GameManager.instance.UpdateTotalBeerConsumed(0.5f - (beerConsumed * 2));
+            GameManager.instance.UpdateTotalBeerConsumed(1f - (beerConsumed * 4));
             beerConsumed = 0.25f;
         }
         if (beer.fillAmount + extraFillWhileMoving >= maxFill - 0.01)
@@ -406,7 +406,7 @@ public class DrinkSystem : MonoBehaviour
         }
         transform.localRotation = startRot;
         extraFillWhileMoving = 0f;
-        totalBeerConsumed += beerConsumed * 2;
+        totalBeerConsumed += beerConsumed * 4;
         GameManager.instance.UpdateAlcoolPower(beerConsumed * 2);
         beerConsumed = 0f;
         state = DrinkState.Idle;

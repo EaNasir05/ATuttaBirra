@@ -16,11 +16,31 @@ public class UIManager : MonoBehaviour
     [SerializeField] private int ebrezzaMultiplier;
     [SerializeField] private float maxEbrezzaBlend;
     [SerializeField] private FullScreenPassRendererFeature ebrezzaScreenRenderer;
+    [SerializeField] private ParticleSystem speedEffect;
+    [SerializeField] private float speedEffectMultiplier;
+    [SerializeField] private CameraMovement cameraHandler;
+    [SerializeField] private float maxCameraDistance = 1f;
+    [SerializeField] private float cameraMovementMultiplier;
+    private ParticleSystem.ShapeModule shape;
 
     private void Awake()
     {
         instance = this;
         ebrezzaScreenRenderer.passMaterial.SetFloat("_Blend", 0);
+    }
+
+    private void Update()
+    {
+        UpdateSpeedEffect();
+    }
+
+    private void UpdateSpeedEffect()
+    {
+        int increment = (int) ((GameManager.instance.GetAlcoolPower() - 1) * speedEffectMultiplier);
+        float cameraDistance = Mathf.Clamp((GameManager.instance.GetAlcoolPower() - 1) * cameraMovementMultiplier, 0, maxCameraDistance);
+        shape = speedEffect.shape;
+        shape.radius = 25 - increment;
+        cameraHandler.backwardDistance = cameraDistance;
     }
 
     public void UpdateEbrezza()
