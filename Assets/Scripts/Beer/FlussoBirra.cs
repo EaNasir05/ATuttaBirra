@@ -21,6 +21,8 @@ public class LiquidStreamToggle : MonoBehaviour
     private LineRenderer line;
     private bool isFlowing = false;
     private float currentLength = 0f;
+    private bool wasFillingTheJug = false;
+    private bool isFillingTheJug = false;
 
     void Awake()
     {
@@ -34,13 +36,29 @@ public class LiquidStreamToggle : MonoBehaviour
 
     void Update()
     {
-        if (!isFlowing)
-            return;
-
-        currentLength += flowSpeed * Time.deltaTime;
-        DrawStream();
+        if (isFlowing)
+        {
+            currentLength += flowSpeed * Time.deltaTime;
+            DrawStream();
+        }
+        else
+            isFillingTheJug = false;
+        CheckFillingTheJug();
     }
 
+    private void CheckFillingTheJug()
+    {
+        if (!wasFillingTheJug && isFillingTheJug)
+        {
+            drinkSystem.receivingBeer = true;
+            wasFillingTheJug = true;
+        }
+        else if (wasFillingTheJug && !isFillingTheJug)
+        {
+            drinkSystem.receivingBeer = false;
+            wasFillingTheJug = false;
+        }
+    }
     
     public void SetFlow(bool active)
     {
@@ -64,13 +82,18 @@ public class LiquidStreamToggle : MonoBehaviour
 
         float targetLength = maxDistance;
         Vector3 end = start + Vector3.down * maxDistance;
+        isFillingTheJug = false;
 
         if (Physics.Raycast(start, Vector3.down, out RaycastHit hit, maxDistance, collisionMask))
         {
             targetLength = hit.distance;
             end = hit.point;
+
             if (hit.collider.CompareTag("StreamTarget"))
-                drinkSystem.AddBeer(beerGainRate * Time.deltaTime);
+            {
+                drinkSystem.GainBeer(beerGainRate * Time.deltaTime);
+                isFillingTheJug = true;
+            }
         }
 
         float length = Mathf.Min(currentLength, targetLength);

@@ -155,7 +155,7 @@ public class CarController : MonoBehaviour
         if (lastMoveX != 0f)
         {
             float maxTilt = bothSticksActive ? maxTiltSteeringWheel : partialMaxTiltSteeringWheel;
-            targetAngle = Mathf.Sign(lastMoveX) * maxTilt;
+            targetAngle = lastMoveX * maxTilt;
         }
 
         float lerpSpeed = accelSmoothing * Time.fixedDeltaTime;

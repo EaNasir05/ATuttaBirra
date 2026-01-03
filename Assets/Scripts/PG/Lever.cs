@@ -137,8 +137,7 @@ public class LeverInteraction_InputSystem : MonoBehaviour
 
     void UpdateLeverRotation()
     {
-        leverPivot.localRotation =
-            Quaternion.AngleAxis(currentAngle, Vector3.forward);
+        leverPivot.localRotation = Quaternion.AngleAxis(currentAngle, Vector3.forward);
     }
 
     // ---------------- FLOW ----------------

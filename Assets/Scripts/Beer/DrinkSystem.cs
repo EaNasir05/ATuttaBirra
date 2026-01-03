@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public enum DrinkState { Idle, Moving, Drinking, Returning }
 
@@ -28,6 +29,7 @@ public class DrinkSystem : MonoBehaviour
     [Header("Birra")]
     [SerializeField] private Liquid beer;
     [SerializeField] private float shaderBugExtraFill;
+    [SerializeField] private float beerOverflowExtraFill;
     [SerializeField] private float minFill;
     [SerializeField] private float maxFill;
     [SerializeField] private float maxTilt;
@@ -58,7 +60,9 @@ public class DrinkSystem : MonoBehaviour
     private bool iHateJews;
     private bool readyToGainBeer = true;
     private bool readyToLoseBeer = true;
+    private bool readyToUpdateFill = true;
     public bool shakingBeer = false;
+    public bool receivingBeer = false;
 
     private void Awake()
     {
@@ -106,15 +110,38 @@ public class DrinkSystem : MonoBehaviour
         }
         UpdateHands(holdingGlass);
         UpdateWobble();
-        if (actionTest.WasPressedThisFrame())
-        {
-            StartCoroutine(GainBeer(0.05f));
-        }
+        UpdateFillWhileNotReceivingBeer();
     }
 
     private void UpdateLocalPosition()
     {
         transform.localPosition = startPos;
+    }
+
+    private void UpdateFillWhileNotReceivingBeer()
+    {
+        if (!receivingBeer && beer.fillAmount < minFill && readyToUpdateFill)
+        {
+            StartCoroutine(UpdateMaxFillAmount(minFill - beer.fillAmount));
+        }
+    }
+
+    private IEnumerator UpdateMaxFillAmount(float fillGain)
+    {
+        readyToUpdateFill = false;
+        float elapsed = 0f;
+        float previousFill = 0f;
+        while (elapsed < 0.2f)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / 0.2f);
+            float currentFill = fillGain * t;
+            float increment = currentFill - previousFill;
+            beer.fillAmount += increment;
+            previousFill = currentFill;
+            yield return null;
+        }
+        readyToUpdateFill = true;
     }
 
     private IEnumerator CreateRandomMovement()
@@ -126,7 +153,6 @@ public class DrinkSystem : MonoBehaviour
             float extraMovement = Mathf.Round(totalBeerConsumed) * randomMovementMultiplier;
             if (extraMovement > maxRandomMovement)
                 extraMovement = maxRandomMovement;
-            Debug.Log(extraMovement);
             switch (index)
             {
                 case 1:
@@ -226,41 +252,12 @@ public class DrinkSystem : MonoBehaviour
         readyToLoseBeer = true;
     }
 
-    public void AddBeer(float fillLoss)
+    public void GainBeer(float fillLoss)
     {
-        if (beer.fillAmount - fillLoss < minFill)
-            beer.fillAmount -= beer.fillAmount - minFill;
+        if (beer.fillAmount - fillLoss <= minFill - beerOverflowExtraFill)
+            beer.fillAmount -= beer.fillAmount - (minFill - beerOverflowExtraFill);
         else
             beer.fillAmount -= fillLoss;
-    }
-
-    public IEnumerator GainBeer(float fillLoss)
-    {
-        if (!readyToGainBeer)
-            yield break;
-        readyToGainBeer = false;
-        float tot = 0;
-        if (iHateJews)
-        {
-            iHateJews = false;
-            beer.fillAmount -= 2;
-        }
-        float elapsed = 0f;
-        float previousFill = 0f;
-        while (elapsed < beerLossDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / beerLossDuration);
-            float currentFill = fillLoss * t;
-            float decrement = currentFill - previousFill;
-            if (beer.fillAmount - decrement < minFill)
-                decrement = beer.fillAmount - minFill;
-            beer.fillAmount -= decrement;
-            tot += decrement;
-            previousFill = currentFill;
-            yield return null;
-        };
-        readyToGainBeer = true;
     }
 
     private void MoveRoutine()
