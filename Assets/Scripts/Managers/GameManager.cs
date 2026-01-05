@@ -1,5 +1,7 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +10,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Player inputs")]
     [SerializeField] private InputActionAsset actionAsset;
+    [SerializeField] private CarController carController;
     private InputActionMap actionMap;
 
     [Header("Alcool")]
@@ -16,34 +19,43 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float secondsWithDecelerationImmunity;
     private float totalBeerConsumed;
     private float alcoolPower;
-    private float timePassedWithImmunity;
 
     void Awake()
     {
         instance = this;
+        gameStarted = false;
         actionMap = actionAsset.FindActionMap("Player");
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
         totalBeerConsumed = 0;
-        alcoolPower = 1;
-        timePassedWithImmunity = 0;
-        gameStarted = true;
+        alcoolPower = 0.25f;
+        carController.enabled = false;
+        actionMap.FindAction("Hold T").Enable();
+        actionMap.FindAction("Hold S").Enable();
+        actionMap.FindAction("Move").Enable();
+        actionMap.FindAction("Speed").Enable();
     }
 
     void Update()
     {
-        if (gameStarted && timePassedWithImmunity < secondsWithDecelerationImmunity)
-            timePassedWithImmunity += Time.deltaTime;
+        if (gameStarted && secondsWithDecelerationImmunity > 0)
+            secondsWithDecelerationImmunity -= Time.deltaTime;
         else if (gameStarted)
         {
+            secondsWithDecelerationImmunity = 0;
             alcoolPower -= alcoolPowerConsumedPerSecond * Time.deltaTime;
-            if (alcoolPower < 0.5f)
+            if (alcoolPower < 0.25f)
                 GameOver();
         }
     }
 
     public float GetAlcoolPower() => alcoolPower;
     public float GetTotalBeerConsumed() => totalBeerConsumed;
+
+    public void AddDecelerationImmunity(float value)
+    {
+        secondsWithDecelerationImmunity += value;
+    }
 
     public void UpdateTotalBeerConsumed(float beerConsumed)
     {
@@ -52,12 +64,23 @@ public class GameManager : MonoBehaviour
         UIManager.instance.UpdateEbrezza();
     }
 
-    public void UpdateAlcoolPower(float beerConsumed)
+    public void UpdateAlcoolPower(float increment)
     {
-        if (alcoolPower + beerConsumed >= maxAlcoolPower)
-            alcoolPower = maxAlcoolPower;
+        if (!gameStarted)
+        {
+            alcoolPower = 0.5f + increment;
+            StartGame();
+        }
         else
-            alcoolPower += beerConsumed;
+            alcoolPower = Mathf.Clamp(alcoolPower + increment, 0, maxAlcoolPower);
+    }
+
+    private void StartGame()
+    {
+        gameStarted = true;
+        UIManager.instance.StartGame();
+        carController.enabled = true;
+        Debug.Log("GAME STARTED");
     }
 
     private void GameOver()

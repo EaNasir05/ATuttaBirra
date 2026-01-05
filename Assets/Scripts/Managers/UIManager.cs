@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -22,16 +23,40 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float maxCameraDistance = 1f;
     [SerializeField] private float cameraMovementMultiplier;
     private ParticleSystem.ShapeModule shape;
+    private Color fogColor;
+    private float fogDensity;
 
     private void Awake()
     {
         instance = this;
         ebrezzaScreenRenderer.passMaterial.SetFloat("_Blend", 0);
+        fogColor = RenderSettings.fogColor;
+        fogDensity = RenderSettings.fogDensity;
+        RenderSettings.fogColor = Color.black;
+        RenderSettings.fogDensity = 0.2f;
     }
 
     private void Update()
     {
         UpdateSpeedEffect();
+    }
+
+    public void StartGame()
+    {
+        StartCoroutine(ChangeFog());
+    }
+
+    private IEnumerator ChangeFog()
+    {
+        float elapsed = 0f;
+        while (elapsed < 1f)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / 1f;
+            RenderSettings.fogColor = Color.Lerp(Color.black, fogColor, t);
+            RenderSettings.fogDensity = Mathf.Lerp(0.2f, fogDensity, t);
+            yield return null;
+        }
     }
 
     private void UpdateSpeedEffect()
@@ -45,11 +70,8 @@ public class UIManager : MonoBehaviour
 
     public void UpdateEbrezza()
     {
-        float blend = GameManager.instance.GetTotalBeerConsumed() / ebrezzaMultiplier;
-        if (blend > maxEbrezzaBlend)
-            blend = maxEbrezzaBlend;
-        else if (blend < 0)
-            blend = 0;
+        float blend = (GameManager.instance.GetTotalBeerConsumed() - 1) / ebrezzaMultiplier;
+        blend = Mathf.Clamp(blend, 0, maxEbrezzaBlend);
         ebrezzaScreenRenderer.passMaterial.SetFloat("_Blend", blend);
     }
 

@@ -150,9 +150,8 @@ public class DrinkSystem : MonoBehaviour
         {
             readyToRandomlyMove = false;
             int index = Random.Range(1, 7);
-            float extraMovement = Mathf.Round(totalBeerConsumed) * randomMovementMultiplier;
-            if (extraMovement > maxRandomMovement)
-                extraMovement = maxRandomMovement;
+            float extraMovement = Mathf.Round(totalBeerConsumed - 1) * randomMovementMultiplier;
+            extraMovement = Mathf.Clamp(extraMovement, 0, maxRandomMovement);
             switch (index)
             {
                 case 1:
@@ -331,7 +330,7 @@ public class DrinkSystem : MonoBehaviour
                 Vector3 deltaPos = absPos - transform.localPosition;
                 transform.localPosition += deltaPos;
 
-                float currentFill = Mathf.Lerp(startingFill, maxFill - shaderBugExtraFill, t);
+                float currentFill = Mathf.Lerp(startingFill, maxFill, t);
                 float deltaFill = previousFill - currentFill;
                 beer.fillAmount -= deltaFill;
                 GameManager.instance.UpdateTotalBeerConsumed(-(deltaFill * 4));
@@ -340,6 +339,7 @@ public class DrinkSystem : MonoBehaviour
 
                 if (beer.fillAmount >= maxFill - shaderBugExtraFill)
                 {
+                    Debug.Log("RITORNA!");
                     StartReturning();
                     yield break;
                 }
@@ -352,10 +352,11 @@ public class DrinkSystem : MonoBehaviour
     {
         bool needToGainExtra = true;
         float elapsed = 0f;
-        if (beerConsumed * 100 >= 23.5)
+        if (beer.fillAmount >= maxFill - shaderBugExtraFill)
         {
-            GameManager.instance.UpdateTotalBeerConsumed(1f - (beerConsumed * 4));
-            beerConsumed = 0.25f;
+            float extraBeerConsumed = maxFill - startingFill - beerConsumed;
+            GameManager.instance.UpdateTotalBeerConsumed(extraBeerConsumed * 4);
+            beerConsumed += extraBeerConsumed;
         }
         if (beer.fillAmount + extraFillWhileMoving >= maxFill - 0.01)
         {
