@@ -47,13 +47,13 @@ public class UIManager : MonoBehaviour
         if (GameManager.instance.gameStarted)
         {
             UpdateSpeedEffect();
-            fireEffect.gameObject.SetActive(true);
         }
     }
 
     public void StartGame()
     {
         StartCoroutine(ChangeFog());
+        fireEffect.gameObject.SetActive(true);
     }
 
     private IEnumerator ChangeFog()
@@ -71,9 +71,8 @@ public class UIManager : MonoBehaviour
 
     private void UpdateSpeedEffect()
     {
-        Debug.Log("SIUM");
-        int increment = (int) ((GameManager.instance.GetAlcoolPower() - 1) * speedEffectMultiplier);
-        float cameraDistance = Mathf.Clamp((GameManager.instance.GetAlcoolPower() - 1) * cameraMovementMultiplier, 0, maxCameraDistance);
+        int increment = GameManager.instance.IsImmuneToDeceleration() ? (int) ((GameManager.instance.GetAlcoolPower() - 1) * speedEffectMultiplier) + 1 : (int)((GameManager.instance.GetAlcoolPower() - 1) * speedEffectMultiplier);
+        float cameraDistance = GameManager.instance.IsImmuneToDeceleration() ? Mathf.Clamp((GameManager.instance.GetAlcoolPower() - 1) * cameraMovementMultiplier, 0, maxCameraDistance) + 0.02f : Mathf.Clamp((GameManager.instance.GetAlcoolPower() - 1) * cameraMovementMultiplier, 0, maxCameraDistance);
         speedShape.radius = 25 - increment;
         cameraHandler.backwardDistance = cameraDistance;
     }
@@ -94,5 +93,6 @@ public class UIManager : MonoBehaviour
     {
         if (gameOverTab != null)
             gameOverTab.SetActive(true);
+        speedShape.radius = 30;
     }
 }

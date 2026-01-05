@@ -340,7 +340,6 @@ public class DrinkSystem : MonoBehaviour
 
                 if (beer.fillAmount >= maxFill - shaderBugExtraFill)
                 {
-                    Debug.Log("RITORNA!");
                     StartReturning();
                     yield break;
                 }
@@ -356,7 +355,6 @@ public class DrinkSystem : MonoBehaviour
         if (beer.fillAmount >= maxFill - shaderBugExtraFill)
         {
             float extraBeerConsumed = maxFill - startingFill - beerConsumed;
-            Debug.Log(maxFill + " - " + startingFill + " - " + beerConsumed + " = " + extraBeerConsumed);
             GameManager.instance.UpdateTotalBeerConsumed(extraBeerConsumed * 4);
             beerConsumed += extraBeerConsumed;
         }

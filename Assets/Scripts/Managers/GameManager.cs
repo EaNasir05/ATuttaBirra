@@ -44,13 +44,14 @@ public class GameManager : MonoBehaviour
         {
             secondsWithDecelerationImmunity = 0;
             alcoolPower -= alcoolPowerConsumedPerSecond * Time.deltaTime;
-            if (alcoolPower < 0.25f)
+            if (alcoolPower < 0.5f)
                 GameOver();
         }
     }
 
     public float GetAlcoolPower() => alcoolPower;
     public float GetTotalBeerConsumed() => totalBeerConsumed;
+    public bool IsImmuneToDeceleration() => secondsWithDecelerationImmunity > 0;
 
     public void AddDecelerationImmunity(float value)
     {
@@ -72,7 +73,12 @@ public class GameManager : MonoBehaviour
             StartGame();
         }
         else
+        {
+            Debug.Log(increment);
+            if (Mathf.Sign(increment) > 0)
+                secondsWithDecelerationImmunity += increment * 4;
             alcoolPower = Mathf.Clamp(alcoolPower + increment, 0, maxAlcoolPower);
+        }
     }
 
     private void StartGame()
@@ -88,6 +94,7 @@ public class GameManager : MonoBehaviour
         gameStarted = false;
         UIManager.instance.GameOver();
         alcoolPower = 0;
+        actionMap.FindAction("Grab").Disable();
         actionMap.FindAction("Hold T").Disable();
         actionMap.FindAction("Hold S").Disable();
         actionMap.FindAction("Move").Disable();
