@@ -12,33 +12,36 @@ public class EntitiesSpawner : MonoBehaviour
 
     void Awake()
     {
-        timePassed = spawnTime;
+        timePassed = -spawnTime;
         spawnCount = 0;
         previousLane = -1;
     }
 
     void Update()
     {
-        timePassed += Time.deltaTime;
-        if (timePassed >= spawnTime) //modificare lo spawntime in base all'accelerazione
+        if (GameManager.instance.gameStarted)
         {
-            int i = ChooseLane();
-            previousLane = i;
-            float randomX = spawnPositionsX[i];
-            i = Random.Range(0, carsList.cars.Length);
-            GameObject car = Instantiate(carsList.cars[i].GetPrefab());
-            car.transform.position = new Vector3(randomX, carsList.cars[i].GetHeight(), spawnPositionZ);
-            if (spawnCount % 3 == 0 && spawnCount != 0)
+            timePassed += Time.deltaTime;
+            if (timePassed >= spawnTime) //modificare lo spawntime in base all'accelerazione
             {
-                i = ChooseLane();
+                int i = ChooseLane();
                 previousLane = i;
-                randomX = spawnPositionsX[i];
+                float randomX = spawnPositionsX[i];
                 i = Random.Range(0, carsList.cars.Length);
-                GameObject secondCar = Instantiate(carsList.cars[i].GetPrefab());
-                secondCar.transform.position = new Vector3(randomX, carsList.cars[i].GetHeight(), spawnPositionZ);
+                GameObject car = Instantiate(carsList.cars[i].GetPrefab());
+                car.transform.position = new Vector3(randomX, carsList.cars[i].GetHeight(), spawnPositionZ);
+                if (spawnCount % 3 == 0 && spawnCount != 0)
+                {
+                    i = ChooseLane();
+                    previousLane = i;
+                    randomX = spawnPositionsX[i];
+                    i = Random.Range(0, carsList.cars.Length);
+                    GameObject secondCar = Instantiate(carsList.cars[i].GetPrefab());
+                    secondCar.transform.position = new Vector3(randomX, carsList.cars[i].GetHeight(), spawnPositionZ);
+                }
+                spawnCount++;
+                timePassed = 0;
             }
-            spawnCount++;
-            timePassed = 0;
         }
     }
 

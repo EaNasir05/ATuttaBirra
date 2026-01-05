@@ -3,10 +3,12 @@ using UnityEngine;
 public class CarCollision : MonoBehaviour
 {
     private DrinkSystem drinkSystem;
+    private CameraMovement cameraHandler;
 
     private void Awake()
     {
         drinkSystem = transform.GetComponentInChildren<DrinkSystem>();
+        cameraHandler = transform.GetComponentInChildren<CameraMovement>();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -21,6 +23,7 @@ public class CarCollision : MonoBehaviour
             else
                 carMovement.StartSkidding(Direction.left);
             drinkSystem.ShakeBeer();
+            StartCoroutine(cameraHandler.HeadHitMovement());
             StartCoroutine(drinkSystem.LoseBeer(0.05f));
         }
         else if (collision.transform.CompareTag("Bottle"))

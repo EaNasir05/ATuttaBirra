@@ -34,7 +34,7 @@ public class CameraMovement : MonoBehaviour
     [Header("Accelerazione")]
 
     [Tooltip("Distanza massima indietro")]
-    public float backwardDistance = 0.3f;
+    public float backwardDistance = 0.1f;
 
     [Tooltip("Velocità movimento indietro")]
     public float backwardSpeed = 2f;
@@ -56,21 +56,10 @@ public class CameraMovement : MonoBehaviour
 
     void Update()
     {
-        if (Keyboard.current == null)
-            return;
-
-       
-        if (!isHeadHitPlaying && Keyboard.current.digit1Key.wasPressedThisFrame)
-        {
-            StartCoroutine(HeadHitMovement());
-        }
-
-        
         HandleBackwardHold();
     }
-
     
-    IEnumerator HeadHitMovement()
+    public IEnumerator HeadHitMovement()
     {
         isHeadHitPlaying = true;
 
@@ -132,14 +121,10 @@ public class CameraMovement : MonoBehaviour
         if (isHeadHitPlaying)
             return;
 
-        bool isHolding = Keyboard.current.digit2Key.isPressed;
-
-        float target = isHolding ? backwardDistance : 0f;
-
         backwardCurrent = Mathf.MoveTowards(
             backwardCurrent,
-            target,
-            Time.deltaTime * (isHolding ? backwardSpeed : backwardReturnSpeed)
+            backwardDistance,
+            Time.deltaTime * backwardSpeed
         );
 
         transform.localPosition =
