@@ -22,7 +22,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private CameraMovement cameraHandler;
     [SerializeField] private float maxCameraDistance = 1f;
     [SerializeField] private float cameraMovementMultiplier;
-    private ParticleSystem.ShapeModule shape;
+    [SerializeField] private ParticleSystem fireEffect;
+    //[SerializeField] private float fireEffectMultiplier;
+    //[SerializeField] private float maxFireEffectIntensity;
+    private ParticleSystem.ShapeModule speedShape;
     private Color fogColor;
     private float fogDensity;
 
@@ -34,11 +37,18 @@ public class UIManager : MonoBehaviour
         fogDensity = RenderSettings.fogDensity;
         RenderSettings.fogColor = Color.black;
         RenderSettings.fogDensity = 0.2f;
+        speedShape = speedEffect.shape;
+        speedShape.radius = 30;
+        fireEffect.gameObject.SetActive(false);
     }
 
     private void Update()
     {
-        UpdateSpeedEffect();
+        if (GameManager.instance.gameStarted)
+        {
+            UpdateSpeedEffect();
+            fireEffect.gameObject.SetActive(true);
+        }
     }
 
     public void StartGame()
@@ -61,10 +71,10 @@ public class UIManager : MonoBehaviour
 
     private void UpdateSpeedEffect()
     {
+        Debug.Log("SIUM");
         int increment = (int) ((GameManager.instance.GetAlcoolPower() - 1) * speedEffectMultiplier);
         float cameraDistance = Mathf.Clamp((GameManager.instance.GetAlcoolPower() - 1) * cameraMovementMultiplier, 0, maxCameraDistance);
-        shape = speedEffect.shape;
-        shape.radius = 25 - increment;
+        speedShape.radius = 25 - increment;
         cameraHandler.backwardDistance = cameraDistance;
     }
 

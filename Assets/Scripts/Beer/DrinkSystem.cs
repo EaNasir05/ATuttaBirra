@@ -201,6 +201,7 @@ public class DrinkSystem : MonoBehaviour
     {
         StartCoroutine(CreateRandomMovement());
         state = DrinkState.Moving;
+        startingFill = beer.fillAmount;
         MoveRoutine();
     }
 
@@ -355,6 +356,7 @@ public class DrinkSystem : MonoBehaviour
         if (beer.fillAmount >= maxFill - shaderBugExtraFill)
         {
             float extraBeerConsumed = maxFill - startingFill - beerConsumed;
+            Debug.Log(maxFill + " - " + startingFill + " - " + beerConsumed + " = " + extraBeerConsumed);
             GameManager.instance.UpdateTotalBeerConsumed(extraBeerConsumed * 4);
             beerConsumed += extraBeerConsumed;
         }
