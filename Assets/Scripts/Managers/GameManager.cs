@@ -7,11 +7,15 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public bool gameStarted;
+    public bool policeArrived;
 
     [Header("Player inputs")]
     [SerializeField] private InputActionAsset actionAsset;
-    [SerializeField] private CarController carController;
     private InputActionMap actionMap;
+
+    [Header("External scripts")]
+    [SerializeField] private CarController carController;
+    [SerializeField] private EntitiesSpawner spawner;
 
     [Header("Alcool")]
     [SerializeField] private float maxAlcoolPower;
@@ -20,11 +24,14 @@ public class GameManager : MonoBehaviour
     private float secondsWithDecelerationImmunity;
     private float totalBeerConsumed;
     private float alcoolPower;
+    private bool gameOver;
 
     void Awake()
     {
         instance = this;
         gameStarted = false;
+        gameOver = false;
+        policeArrived = false;
         actionMap = actionAsset.FindActionMap("Player");
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
@@ -43,8 +50,8 @@ public class GameManager : MonoBehaviour
         {
             secondsWithDecelerationImmunity = 0;
             alcoolPower -= alcoolPowerConsumedPerSecond * Time.deltaTime;
-            if (alcoolPower < 0.5f)
-                GameOver();
+            if (alcoolPower < 0.5f && !gameOver)
+                StartCoroutine(SpawnPolice());
         }
     }
 
@@ -78,6 +85,7 @@ public class GameManager : MonoBehaviour
         totalBeerConsumed += beerConsumed;
         UIManager.instance.UpdateBeerConsumed(Mathf.Round(totalBeerConsumed * 100) / 100);
         UIManager.instance.UpdateEbrezza();
+        spawner.UpdateSpawnTime();
     }
 
     public void UpdateAlcoolPower(float increment)
@@ -94,6 +102,14 @@ public class GameManager : MonoBehaviour
                 secondsWithDecelerationImmunity += increment * 4;
             alcoolPower = Mathf.Clamp(alcoolPower + increment, 0, maxAlcoolPower);
         }
+    }
+
+    private IEnumerator SpawnPolice()
+    {
+        gameOver = true;
+        //spawna la macchina della polizia
+        yield return new WaitUntil(() => policeArrived);
+        GameOver();
     }
 
     private void StartGame()

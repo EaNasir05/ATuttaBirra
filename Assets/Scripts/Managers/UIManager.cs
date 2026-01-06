@@ -14,7 +14,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject gameOverTab;
 
     [Header("VFX")]
-    [SerializeField] private int ebrezzaMultiplier;
+    [SerializeField] private int ebrezzaDivider;
     [SerializeField] private float maxEbrezzaBlend;
     [SerializeField] private FullScreenPassRendererFeature ebrezzaScreenRenderer;
     [SerializeField] private ParticleSystem speedEffect;
@@ -71,15 +71,15 @@ public class UIManager : MonoBehaviour
 
     private void UpdateSpeedEffect()
     {
-        int increment = GameManager.instance.IsImmuneToDeceleration() ? (int) ((GameManager.instance.GetAlcoolPower() - 1) * speedEffectMultiplier) + 1 : (int)((GameManager.instance.GetAlcoolPower() - 1) * speedEffectMultiplier);
+        float increment = GameManager.instance.IsImmuneToDeceleration() ? ((GameManager.instance.GetAlcoolPower() - 1) * speedEffectMultiplier) + 1 : ((GameManager.instance.GetAlcoolPower() - 1) * speedEffectMultiplier);
         float cameraDistance = GameManager.instance.IsImmuneToDeceleration() ? Mathf.Clamp((GameManager.instance.GetAlcoolPower() - 1) * cameraMovementMultiplier, 0, maxCameraDistance) + 0.02f : Mathf.Clamp((GameManager.instance.GetAlcoolPower() - 1) * cameraMovementMultiplier, 0, maxCameraDistance);
-        speedShape.radius = 25 - increment;
+        speedShape.radius = 26 - increment;
         cameraHandler.backwardDistance = cameraDistance;
     }
 
     public void UpdateEbrezza()
     {
-        float blend = (GameManager.instance.GetTotalBeerConsumed() - 1) / ebrezzaMultiplier;
+        float blend = (GameManager.instance.GetTotalBeerConsumed() - 1) / ebrezzaDivider;
         blend = Mathf.Clamp(blend, 0, maxEbrezzaBlend);
         ebrezzaScreenRenderer.passMaterial.SetFloat("_Blend", blend);
     }
