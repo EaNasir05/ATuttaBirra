@@ -100,7 +100,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log(increment);
             if (Mathf.Sign(increment) > 0)
                 secondsWithDecelerationImmunity += increment * 4;
             alcoolPower = Mathf.Clamp(alcoolPower + increment, 0, maxAlcoolPower);
