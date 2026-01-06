@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
@@ -19,7 +20,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float secondsWithDecelerationImmunity;
     private float totalBeerConsumed;
     private float alcoolPower;
-
+    public float GetMaxAlcoolPower() => maxAlcoolPower;
     void Awake()
     {
         instance = this;
