@@ -16,7 +16,8 @@ public class GameManager : MonoBehaviour
     [Header("Alcool")]
     [SerializeField] private float maxAlcoolPower;
     [SerializeField] private float alcoolPowerConsumedPerSecond;
-    [SerializeField] private float secondsWithDecelerationImmunity;
+    [SerializeField] private float startingSecondsWithDecelerationImmunity;
+    private float secondsWithDecelerationImmunity;
     private float totalBeerConsumed;
     private float alcoolPower;
 
@@ -38,15 +39,29 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (gameStarted && secondsWithDecelerationImmunity > 0)
-            secondsWithDecelerationImmunity -= Time.deltaTime;
-        else if (gameStarted)
+        if (gameStarted && !UpdateImmunity())
         {
             secondsWithDecelerationImmunity = 0;
             alcoolPower -= alcoolPowerConsumedPerSecond * Time.deltaTime;
             if (alcoolPower < 0.5f)
                 GameOver();
         }
+    }
+
+    private bool UpdateImmunity()
+    {
+        bool immune = false;
+        if (gameStarted && startingSecondsWithDecelerationImmunity > 0)
+        {
+            startingSecondsWithDecelerationImmunity -= Time.deltaTime;
+            immune = true;
+        }
+        if (gameStarted && secondsWithDecelerationImmunity > 0)
+        {
+            secondsWithDecelerationImmunity -= Time.deltaTime;
+            immune = true;
+        }
+        return immune;
     }
 
     public float GetAlcoolPower() => alcoolPower;
