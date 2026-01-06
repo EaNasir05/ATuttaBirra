@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
 
     [Header("UI elements")]
     [SerializeField] private TMP_Text beerConsumed;
+    [SerializeField] private Image skyboxCover;
     [SerializeField] private GameObject gameOverTab;
 
     [Header("VFX")]
@@ -65,6 +66,7 @@ public class UIManager : MonoBehaviour
             float t = elapsed / 1f;
             RenderSettings.fogColor = Color.Lerp(Color.black, fogColor, t);
             RenderSettings.fogDensity = Mathf.Lerp(0.2f, fogDensity, t);
+            //skyboxCover.color = new Color(skyboxCover.color.r, skyboxCover.color.g, skyboxCover.color.b, Mathf.Lerp(1, 0, t));
             yield return null;
         }
     }

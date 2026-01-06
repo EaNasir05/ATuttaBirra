@@ -92,8 +92,11 @@ public class GameManager : MonoBehaviour
     {
         if (!gameStarted)
         {
-            alcoolPower = 0.5f + increment;
-            StartGame();
+            if (increment > 0)
+            {
+                alcoolPower = 0.5f + increment;
+                StartGame();
+            }
         }
         else
         {
