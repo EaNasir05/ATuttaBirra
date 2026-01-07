@@ -12,9 +12,10 @@ public class UIManager : MonoBehaviour
     [Header("UI elements")]
     [SerializeField] private TMP_Text beerConsumed;
     [SerializeField] private Image skyboxCover;
-    [SerializeField] private GameObject gameOverTab;
+    [SerializeField] private Image blackScreen;
 
     [Header("VFX")]
+    [SerializeField] private float blackScreenFadeDuration;
     [SerializeField] private int ebrezzaDivider;
     [SerializeField] private float maxEbrezzaBlend;
     [SerializeField] private FullScreenPassRendererFeature ebrezzaScreenRenderer;
@@ -43,11 +44,44 @@ public class UIManager : MonoBehaviour
         fireEffect.gameObject.SetActive(false);
     }
 
+    private void Start()
+    {
+        StartCoroutine(FadeInBlackScreen());
+    }
+
     private void Update()
     {
         if (GameManager.instance.gameStarted)
         {
             UpdateSpeedEffect();
+        }
+    }
+
+    private IEnumerator FadeInBlackScreen()
+    {
+        float elapsed = 0;
+        Color targetColor = new Color(Color.black.r, Color.black.g, Color.black.b, 0);
+        while (elapsed < blackScreenFadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            blackScreen.color = Color.Lerp(Color.black, targetColor, elapsed / blackScreenFadeDuration);
+            yield return null;
+        }
+        blackScreen.gameObject.SetActive(false);
+    }
+
+    private IEnumerator FadeOutBlackScreen()
+    {
+        float elapsed = 0;
+        yield return new WaitForSeconds(2);
+        Color currentColor = new Color(Color.black.r, Color.black.g, Color.black.b, 0);
+        blackScreen.color = currentColor;
+        blackScreen.gameObject.SetActive(true);
+        while (elapsed < blackScreenFadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            blackScreen.color = Color.Lerp(currentColor, Color.black, elapsed / blackScreenFadeDuration);
+            yield return null;
         }
     }
 
@@ -93,8 +127,7 @@ public class UIManager : MonoBehaviour
 
     public void GameOver()
     {
-        if (gameOverTab != null)
-            gameOverTab.SetActive(true);
         speedShape.radius = 30;
+        StartCoroutine(FadeOutBlackScreen());
     }
 }

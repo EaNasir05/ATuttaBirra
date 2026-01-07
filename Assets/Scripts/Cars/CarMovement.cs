@@ -37,9 +37,9 @@ public class CarMovement : MonoBehaviour
         {
             float extraSpeed = GameManager.instance.GetAlcoolPower() * -accelerationMultiplier < 0 ? GameManager.instance.GetAlcoolPower() * -accelerationMultiplier : 0;
             float altSpeed = (-speed + extraSpeed) * (bottleDetector != null ? bottleDetector.speedMultiplier : 1);
-            currentSpeed = altSpeed;
-            //currentSpeed = carDetector.speed > altSpeed ? carDetector.speed : altSpeed;
-            rb.linearVelocity = new Vector3(0, 0, currentSpeed);
+            currentSpeed = carDetector != null && carDetector.speed > altSpeed ? carDetector.speed : altSpeed;
+            if (!rb.isKinematic)
+                rb.linearVelocity = new Vector3(0, 0, currentSpeed);
         }
         else
         {

@@ -58,7 +58,6 @@ public class DrinkSystem : MonoBehaviour
     private Vector3 startPos;
     private Quaternion startRot;
     private bool iHateJews;
-    private bool readyToGainBeer = true;
     private bool readyToLoseBeer = true;
     private bool readyToUpdateFill = true;
     public bool shakingBeer = false;

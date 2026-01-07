@@ -18,14 +18,17 @@ public class PoliceChaseSystem : MonoBehaviour
     [SerializeField] private float reflectionMinPosY;
     [SerializeField] private Transform policeCar;
     [SerializeField] private float policeMovementDuration;
+    [SerializeField] private float reflectionTransitionDuration;
     private float timePassed = 0;
     private int currentColor = 0;
     private bool policeNear = false;
+    private bool readyToUpdateReflection = false;
     private bool policeSpawned = false;
 
     private void Awake()
     {
-
+        reflectionInTheMirror.rectTransform.localScale = new Vector3(reflectionMinSize, reflectionMinSize, 1);
+        reflectionInTheMirror.rectTransform.localPosition = new Vector3(0, reflectionMaxPosY, 0);
     }
 
     private void Update()
@@ -54,27 +57,73 @@ public class PoliceChaseSystem : MonoBehaviour
                 currentColor = 0;
                 timePassed = lightDuration;
                 lightsOnThePlayer[0].transform.parent.gameObject.SetActive(true);
-                reflectionInTheMirror.gameObject.SetActive(true);
+                StartCoroutine(ApproachThePlayer());
             }
             else if (alcoolPower > 1 && policeNear)
             {
+                Debug.Log("SIUM");
                 policeNear = false;
                 lightsOnThePlayer[0].transform.parent.gameObject.SetActive(false);
-                reflectionInTheMirror.gameObject.SetActive(false);
+                StartCoroutine(DepartFromThePlayer());
             }
 
             if (policeNear)
             {
                 float t = Mathf.Clamp(alcoolPower - 0.5f, 0, 0.5f) * 2;
                 float lightIntensity = Mathf.Lerp(lightMaxIntensity, lightMinIntensity, t);
-                float reflectionSize = Mathf.Lerp(reflectionMaxSize, reflectionMinSize, t);
-                float reflectionPosY = Mathf.Lerp(reflectionMinPosY, reflectionMaxPosY, t);
                 lightsOnThePlayer[0].intensity = lightIntensity;
                 lightsOnThePlayer[1].intensity = lightIntensity;
-                reflectionInTheMirror.rectTransform.localScale = new Vector3(reflectionSize, reflectionSize, 1);
-                reflectionInTheMirror.rectTransform.localPosition = new Vector3(0, reflectionPosY, 0);
+                if (readyToUpdateReflection)
+                {
+                    float reflectionSize = Mathf.Lerp(reflectionMaxSize, reflectionMinSize, t);
+                    float reflectionPosY = Mathf.Lerp(reflectionMinPosY, reflectionMaxPosY, t);
+                    reflectionInTheMirror.rectTransform.localScale = new Vector3(reflectionSize, reflectionSize, 1);
+                    reflectionInTheMirror.rectTransform.localPosition = new Vector3(0, reflectionPosY, 0);
+                }
             }
         }
+    }
+
+    private IEnumerator ApproachThePlayer()
+    {
+        float elapsed = 0;
+        float currentScale = reflectionInTheMirror.rectTransform.localScale.x;
+        float targetScale = Mathf.Lerp(reflectionMaxSize, reflectionMinSize, Mathf.Clamp(GameManager.instance.GetAlcoolPower() - 0.5f, 0, 0.5f) * 2);
+        float currentPosY = reflectionInTheMirror.rectTransform.localPosition.y;
+        float targetPosY = Mathf.Lerp(reflectionMinPosY, reflectionMaxPosY, Mathf.Clamp(GameManager.instance.GetAlcoolPower() - 0.5f, 0, 0.5f) * 2);
+        reflectionInTheMirror.gameObject.SetActive(true);
+        while (elapsed < reflectionTransitionDuration && policeNear)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / reflectionTransitionDuration;
+            float reflectionSize = Mathf.Lerp(currentScale, targetScale, t);
+            float reflectionPosY = Mathf.Lerp(currentPosY, targetPosY, t);
+            reflectionInTheMirror.rectTransform.localScale = new Vector3(reflectionSize, reflectionSize, 1);
+            reflectionInTheMirror.rectTransform.localPosition = new Vector3(0, reflectionPosY, 0);
+            yield return null;
+        }
+        readyToUpdateReflection = true;
+    }
+
+    private IEnumerator DepartFromThePlayer()
+    {
+        readyToUpdateReflection = false;
+        float elapsed = 0;
+        float currentScale = reflectionInTheMirror.rectTransform.localScale.x;
+        float targetScale = reflectionMinSize;
+        float currentPosY = reflectionInTheMirror.rectTransform.localPosition.y;
+        float targetPosY = reflectionMaxPosY;
+        while (elapsed < reflectionTransitionDuration && !policeNear)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / reflectionTransitionDuration;
+            float reflectionSize = Mathf.Lerp(currentScale, targetScale, t);
+            float reflectionPosY = Mathf.Lerp(currentPosY, targetPosY, t);
+            reflectionInTheMirror.rectTransform.localScale = new Vector3(reflectionSize, reflectionSize, 1);
+            reflectionInTheMirror.rectTransform.localPosition = new Vector3(0, reflectionPosY, 0);
+            yield return null;
+        }
+        reflectionInTheMirror.gameObject.SetActive(false);
     }
 
     private void UpdateLights()
@@ -114,9 +163,7 @@ public class PoliceChaseSystem : MonoBehaviour
     public IEnumerator SpawnPoliceCar()
     {
         policeSpawned = true;
-        reflectionInTheMirror.gameObject.SetActive(false);
-        lightsOnThePlayer[0].enabled = false;
-        lightsOnThePlayer[1].enabled = false;
+        readyToUpdateReflection = false;
         float spawnX;
         float rotSign;
         if (transform.position.x >= 0)
@@ -129,6 +176,20 @@ public class PoliceChaseSystem : MonoBehaviour
             spawnX = transform.position.x + 4;
             rotSign = -1;
         }
+        float elapsed = 0;
+        Vector3 currentScale = reflectionInTheMirror.rectTransform.localScale;
+        Vector3 targetScale = new Vector3(reflectionMaxSize, reflectionMaxSize, 1);
+        Vector3 currentPosition = reflectionInTheMirror.rectTransform.localPosition;
+        Vector3 targetPosition = new Vector3(currentPosition.x + (260 * -rotSign), reflectionMinPosY, 0);
+        while (elapsed < 0.5f)
+        {
+            elapsed += Time.deltaTime;
+            reflectionInTheMirror.rectTransform.localPosition = Vector3.Lerp(currentPosition, targetPosition, elapsed / 0.5f);
+            reflectionInTheMirror.rectTransform.localScale = Vector3.Lerp(currentScale, targetScale, elapsed / 0.5f);
+            yield return null;
+        }
+        lightsOnThePlayer[0].enabled = false;
+        lightsOnThePlayer[1].enabled = false;
         policeCar.position = new Vector3(spawnX, 1.3f, -12);
         policeCar.gameObject.SetActive(true);
         float elapsedPosition = 0;
