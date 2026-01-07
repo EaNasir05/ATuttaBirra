@@ -36,7 +36,7 @@ public class CarMovement : MonoBehaviour
         if (!skidding)
         {
             float extraSpeed = GameManager.instance.GetAlcoolPower() * -accelerationMultiplier < 0 ? GameManager.instance.GetAlcoolPower() * -accelerationMultiplier : 0;
-            float altSpeed = (-speed + extraSpeed) * bottleDetector.speedMultiplier;
+            float altSpeed = (-speed + extraSpeed) * (bottleDetector != null ? bottleDetector.speedMultiplier : 1);
             currentSpeed = altSpeed;
             //currentSpeed = carDetector.speed > altSpeed ? carDetector.speed : altSpeed;
             rb.linearVelocity = new Vector3(0, 0, currentSpeed);

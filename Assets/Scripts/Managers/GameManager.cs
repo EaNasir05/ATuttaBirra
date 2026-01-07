@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     [Header("External scripts")]
     [SerializeField] private CarController carController;
     [SerializeField] private EntitiesSpawner spawner;
+    [SerializeField] private PoliceChaseSystem policeManager;
 
     [Header("Alcool")]
     [SerializeField] private float maxAlcoolPower;
@@ -94,7 +95,7 @@ public class GameManager : MonoBehaviour
         {
             if (increment > 0)
             {
-                alcoolPower = 0.5f + increment;
+                alcoolPower = 1 + increment;
                 StartGame();
             }
         }
@@ -109,7 +110,12 @@ public class GameManager : MonoBehaviour
     private IEnumerator SpawnPolice()
     {
         gameOver = true;
-        //spawna la macchina della polizia
+        actionMap.FindAction("Grab").Disable();
+        actionMap.FindAction("Hold T").Disable();
+        actionMap.FindAction("Hold S").Disable();
+        actionMap.FindAction("Move").Disable();
+        actionMap.FindAction("Speed").Disable();
+        StartCoroutine(policeManager.SpawnPoliceCar());
         yield return new WaitUntil(() => policeArrived);
         GameOver();
     }
@@ -127,11 +133,6 @@ public class GameManager : MonoBehaviour
         gameStarted = false;
         UIManager.instance.GameOver();
         alcoolPower = 0;
-        actionMap.FindAction("Grab").Disable();
-        actionMap.FindAction("Hold T").Disable();
-        actionMap.FindAction("Hold S").Disable();
-        actionMap.FindAction("Move").Disable();
-        actionMap.FindAction("Speed").Disable();
         Debug.Log("GAME OVER");
     }
 }

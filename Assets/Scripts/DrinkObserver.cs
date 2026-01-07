@@ -42,7 +42,7 @@ public class DrinkObserver : MonoBehaviour
             if (delta >= sipThreshold && Time.time - lastSipTime >= sipCooldown)
             {
                 lastSipTime = Time.time;
-                policeChase.OnPlayerDrink();
+                //policeChase.OnPlayerDrink();
             }
         }
 
