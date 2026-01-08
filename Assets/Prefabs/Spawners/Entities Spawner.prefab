@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5569338033313303048
+--- !u!1 &7590217864926603308
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,46 +8,48 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2497957902204167617}
-  - component: {fileID: 3426123920281821310}
-  m_Layer: 0
-  m_Name: UI Manager
+  - component: {fileID: 7896000718411384850}
+  - component: {fileID: 5208084999160861658}
+  m_Layer: 7
+  m_Name: Entities Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2497957902204167617
+--- !u!4 &7896000718411384850
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5569338033313303048}
+  m_GameObject: {fileID: 7590217864926603308}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3426123920281821310
+--- !u!114 &5208084999160861658
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5569338033313303048}
+  m_GameObject: {fileID: 7590217864926603308}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21a77e5442c2d67458a79cf8d560d64f, type: 3}
+  m_Script: {fileID: 11500000, guid: 27851467cbe904f468984549d31a4551, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UIManager
-  beerConsumed: {fileID: 0}
-  gameOverTab: {fileID: 0}
-  ebrezzaMultiplier: 100
-  maxEbrezzaBlend: 0.1
-  ebrezzaScreenRenderer: {fileID: -7559563332645031118, guid: f288ae1f4751b564a96ac7587541f7a2, type: 2}
-  speedEffect: {fileID: 0}
-  speedEffectMultiplier: 1
+  m_EditorClassIdentifier: Assembly-CSharp::CarsSpawn
+  carsList: {fileID: 11400000, guid: c0a86217c79ade74a83930b7ae39a54b, type: 2}
+  startingSpawnTime: 1.75
+  minSpawnTime: 1.5
+  spawnTimeReduction: 0.05
+  spawnPositionZ: 250
+  spawnPositionsX:
+  - -4
+  - 0
+  - 4

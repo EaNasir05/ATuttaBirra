@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3237901206844611450
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1717623392697555753}
+  - component: {fileID: 4987028530118638609}
+  m_Layer: 0
+  m_Name: EnvironmentSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1717623392697555753
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3237901206844611450}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4987028530118638609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3237901206844611450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f12ca652bea329445ae3802a0f11c88a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnvironmentSpawner
+  spawnPositionZ: 225
+  spawnPositionY: 0.3
+  environmentBlocks:
+  - {fileID: 2679378086458905450, guid: 644af08579e6d314dac7472541b0710a, type: 3}
+  - {fileID: 2610233404480624430, guid: bd5ffb77caf5ea84dbf9b7d622748ae6, type: 3}
+  - {fileID: 8959533229096990302, guid: 0f46a433befe8e9448a2fb3b734e05a9, type: 3}
+  - {fileID: 8839798118143343897, guid: e10f5dfb9ad51f44db8f3786694a1c12, type: 3}
+  - {fileID: 127045913396962216, guid: 3ba3f6356f81227479657ece7a648c0e, type: 3}
+  - {fileID: 3763708974889808219, guid: a4628d94cafaf43499aa5634a53f3977, type: 3}
+  - {fileID: 7775115280570893867, guid: 97dc8c423c750bc4b93a59f49aa0e8b9, type: 3}
+  - {fileID: 8275844344059818832, guid: 591254ac5bf6f5b40b54de4e181e8c05, type: 3}
+  - {fileID: 5137463141539350436, guid: 512a0dcc5b6f59b45b6d7048b5c0a853, type: 3}
+  blocksSize: 25
+  firstBlockLinked: {fileID: 0}

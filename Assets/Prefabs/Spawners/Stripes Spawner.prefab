@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1717202422693493295
+--- !u!1 &5836871655249285341
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,44 +8,42 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2137469621144541287}
-  - component: {fileID: 2031404378355120815}
-  m_Layer: 0
-  m_Name: Game Manager
+  - component: {fileID: 3346242369795564818}
+  - component: {fileID: 2057047380062034437}
+  m_Layer: 10
+  m_Name: Stripes Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2137469621144541287
+--- !u!4 &3346242369795564818
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1717202422693493295}
+  m_GameObject: {fileID: 5836871655249285341}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2, y: 0.023777831, z: 134.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2031404378355120815
+--- !u!114 &2057047380062034437
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1717202422693493295}
+  m_GameObject: {fileID: 5836871655249285341}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d88d1117d04e9224cb3cafdfad0fcfeb, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ed538ae0d61e294580586f0b325d7a3, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  gameStarted: 0
-  actionAsset: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  maxAlcoolPower: 3
-  alcoolPowerConsumedPerSecond: 0
-  secondsWithDecelerationImmunity: 5
+  m_EditorClassIdentifier: Assembly-CSharp::StripesSpawner
+  stripesPrefab: {fileID: 2004370914691540004, guid: bd052e6ffe30ede4db2122aaf38c3d04, type: 3}
+  stripesHeight: 0.02377783
+  firstStripesLinked: {fileID: 0}
