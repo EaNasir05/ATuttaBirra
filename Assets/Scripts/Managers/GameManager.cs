@@ -75,6 +75,7 @@ public class GameManager : MonoBehaviour
     public float GetAlcoolPower() => alcoolPower;
     public float GetTotalBeerConsumed() => totalBeerConsumed;
     public bool IsImmuneToDeceleration() => secondsWithDecelerationImmunity > 0;
+    public float GetMaxAlcoolPower() => maxAlcoolPower;
 
     public void AddDecelerationImmunity(float value)
     {

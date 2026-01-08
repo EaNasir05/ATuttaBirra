@@ -78,7 +78,7 @@ public class LeverInteraction_InputSystem : MonoBehaviour
         UpdateFlow();
     }
 
-    // ---------------- HAND ----------------
+    
 
     void MoveHandToLever()
     {
@@ -113,7 +113,7 @@ public class LeverInteraction_InputSystem : MonoBehaviour
         );
     }
 
-    // ---------------- LEVER ----------------
+    
 
     void HandleLeverInput(Gamepad gamepad)
     {
@@ -137,10 +137,10 @@ public class LeverInteraction_InputSystem : MonoBehaviour
 
     void UpdateLeverRotation()
     {
-        leverPivot.localRotation = Quaternion.AngleAxis(currentAngle, Vector3.forward);
+        leverPivot.localRotation = Quaternion.AngleAxis(currentAngle, -Vector3.forward);
     }
 
-    // ---------------- FLOW ----------------
+    
 
     void UpdateFlow()
     {
