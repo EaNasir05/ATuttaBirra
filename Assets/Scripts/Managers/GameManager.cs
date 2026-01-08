@@ -3,28 +3,36 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
-
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public bool gameStarted;
+    public bool policeArrived;
 
     [Header("Player inputs")]
     [SerializeField] private InputActionAsset actionAsset;
-    [SerializeField] private CarController carController;
     private InputActionMap actionMap;
+
+    [Header("External scripts")]
+    [SerializeField] private CarController carController;
+    [SerializeField] private EntitiesSpawner spawner;
+    [SerializeField] private PoliceChaseSystem policeManager;
 
     [Header("Alcool")]
     [SerializeField] private float maxAlcoolPower;
     [SerializeField] private float alcoolPowerConsumedPerSecond;
-    [SerializeField] private float secondsWithDecelerationImmunity;
+    [SerializeField] private float startingSecondsWithDecelerationImmunity;
+    private float secondsWithDecelerationImmunity;
     private float totalBeerConsumed;
     private float alcoolPower;
-    public float GetMaxAlcoolPower() => maxAlcoolPower;
+    private bool gameOver;
+
     void Awake()
     {
         instance = this;
         gameStarted = false;
+        gameOver = false;
+        policeArrived = false;
         actionMap = actionAsset.FindActionMap("Player");
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
@@ -39,19 +47,34 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (gameStarted && secondsWithDecelerationImmunity > 0)
-            secondsWithDecelerationImmunity -= Time.deltaTime;
-        else if (gameStarted)
+        if (gameStarted && !UpdateImmunity())
         {
             secondsWithDecelerationImmunity = 0;
             alcoolPower -= alcoolPowerConsumedPerSecond * Time.deltaTime;
-            if (alcoolPower < 0.25f)
-                GameOver();
+            if (alcoolPower < 0.5f && !gameOver)
+                StartCoroutine(SpawnPolice());
         }
+    }
+
+    private bool UpdateImmunity()
+    {
+        bool immune = false;
+        if (gameStarted && startingSecondsWithDecelerationImmunity > 0)
+        {
+            startingSecondsWithDecelerationImmunity -= Time.deltaTime;
+            immune = true;
+        }
+        if (gameStarted && secondsWithDecelerationImmunity > 0)
+        {
+            secondsWithDecelerationImmunity -= Time.deltaTime;
+            immune = true;
+        }
+        return immune;
     }
 
     public float GetAlcoolPower() => alcoolPower;
     public float GetTotalBeerConsumed() => totalBeerConsumed;
+    public bool IsImmuneToDeceleration() => secondsWithDecelerationImmunity > 0;
 
     public void AddDecelerationImmunity(float value)
     {
@@ -63,17 +86,38 @@ public class GameManager : MonoBehaviour
         totalBeerConsumed += beerConsumed;
         UIManager.instance.UpdateBeerConsumed(Mathf.Round(totalBeerConsumed * 100) / 100);
         UIManager.instance.UpdateEbrezza();
+        spawner.UpdateSpawnTime();
     }
 
     public void UpdateAlcoolPower(float increment)
     {
         if (!gameStarted)
         {
-            alcoolPower = 0.5f + increment;
-            StartGame();
+            if (increment > 0)
+            {
+                alcoolPower = 1 + increment;
+                StartGame();
+            }
         }
         else
+        {
+            if (Mathf.Sign(increment) > 0)
+                secondsWithDecelerationImmunity += increment * 4;
             alcoolPower = Mathf.Clamp(alcoolPower + increment, 0, maxAlcoolPower);
+        }
+    }
+
+    private IEnumerator SpawnPolice()
+    {
+        gameOver = true;
+        actionMap.FindAction("Grab").Disable();
+        actionMap.FindAction("Hold T").Disable();
+        actionMap.FindAction("Hold S").Disable();
+        actionMap.FindAction("Move").Disable();
+        actionMap.FindAction("Speed").Disable();
+        StartCoroutine(policeManager.SpawnPoliceCar());
+        yield return new WaitUntil(() => policeArrived);
+        GameOver();
     }
 
     private void StartGame()
@@ -89,10 +133,6 @@ public class GameManager : MonoBehaviour
         gameStarted = false;
         UIManager.instance.GameOver();
         alcoolPower = 0;
-        actionMap.FindAction("Hold T").Disable();
-        actionMap.FindAction("Hold S").Disable();
-        actionMap.FindAction("Move").Disable();
-        actionMap.FindAction("Speed").Disable();
         Debug.Log("GAME OVER");
     }
 }

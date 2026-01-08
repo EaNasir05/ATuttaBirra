@@ -40,7 +40,6 @@ public class CarController : MonoBehaviour
     public float steeringWheelRotationSpeed;
     private Quaternion startingSteeringWheelRot;
     private Vector3 steeringLocalAxis;
-    private Vector3 steeringCustomizedAxis = Vector3.up;
 
     private Rigidbody rb;
     private LeverInteraction_InputSystem leverHandler;
@@ -63,7 +62,7 @@ public class CarController : MonoBehaviour
         localUpAxis = startingLocalRot * Vector3.up;
         startingSmoothing = accelSmoothing;
         startingSteeringWheelRot = steeringWheel.localRotation;
-        steeringLocalAxis = steeringWheel.TransformDirection(steeringCustomizedAxis.normalized);
+        steeringLocalAxis = steeringWheel.TransformDirection(Vector3.forward);
     }
 
     void OnEnable()
@@ -161,7 +160,7 @@ public class CarController : MonoBehaviour
         float lerpSpeed = accelSmoothing * Time.fixedDeltaTime;
 
         Quaternion rotationOffset =
-            Quaternion.AngleAxis(-targetAngle, steeringLocalAxis);
+            Quaternion.AngleAxis(targetAngle, steeringLocalAxis);
 
         Quaternion targetRot = startingSteeringWheelRot * rotationOffset;
 

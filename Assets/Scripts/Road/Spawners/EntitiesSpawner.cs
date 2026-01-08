@@ -3,9 +3,12 @@ using UnityEngine;
 public class EntitiesSpawner : MonoBehaviour
 {
     [SerializeField] private CarsList carsList;
-    [SerializeField] private float spawnTime;
+    [SerializeField] private float startingSpawnTime;
+    [SerializeField] private float minSpawnTime;
+    [SerializeField] private float spawnTimeReduction;
     [SerializeField] private float spawnPositionZ;
     [SerializeField] private float[] spawnPositionsX;
+    private float spawnTime;
     private int previousLane;
     private float timePassed;
     private int spawnCount;
@@ -13,6 +16,7 @@ public class EntitiesSpawner : MonoBehaviour
     void Awake()
     {
         timePassed = -spawnTime;
+        spawnTime = startingSpawnTime;
         spawnCount = 0;
         previousLane = -1;
     }
@@ -43,6 +47,11 @@ public class EntitiesSpawner : MonoBehaviour
                 timePassed = 0;
             }
         }
+    }
+
+    public void UpdateSpawnTime()
+    {
+        spawnTime = Mathf.Clamp(spawnTime - ((int)((GameManager.instance.GetTotalBeerConsumed() - 1) / 5) * spawnTimeReduction), minSpawnTime, startingSpawnTime);
     }
 
     private int ChooseLane()

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class CarCollision : MonoBehaviour
 {
+    [SerializeField] private float speedLoss;
     private DrinkSystem drinkSystem;
     private CameraMovement cameraHandler;
 
@@ -25,6 +26,8 @@ public class CarCollision : MonoBehaviour
             drinkSystem.ShakeBeer();
             StartCoroutine(cameraHandler.HeadHitMovement());
             StartCoroutine(drinkSystem.LoseBeer(0.05f));
+            if (!GameManager.instance.IsImmuneToDeceleration())
+                GameManager.instance.UpdateAlcoolPower(-speedLoss);
         }
         else if (collision.transform.CompareTag("Bottle"))
         {

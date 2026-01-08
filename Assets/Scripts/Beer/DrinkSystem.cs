@@ -58,7 +58,6 @@ public class DrinkSystem : MonoBehaviour
     private Vector3 startPos;
     private Quaternion startRot;
     private bool iHateJews;
-    private bool readyToGainBeer = true;
     private bool readyToLoseBeer = true;
     private bool readyToUpdateFill = true;
     public bool shakingBeer = false;
@@ -201,6 +200,7 @@ public class DrinkSystem : MonoBehaviour
     {
         StartCoroutine(CreateRandomMovement());
         state = DrinkState.Moving;
+        startingFill = beer.fillAmount;
         MoveRoutine();
     }
 
@@ -339,7 +339,6 @@ public class DrinkSystem : MonoBehaviour
 
                 if (beer.fillAmount >= maxFill - shaderBugExtraFill)
                 {
-                    Debug.Log("RITORNA!");
                     StartReturning();
                     yield break;
                 }

@@ -11,10 +11,12 @@ public class UIManager : MonoBehaviour
 
     [Header("UI elements")]
     [SerializeField] private TMP_Text beerConsumed;
-    [SerializeField] private GameObject gameOverTab;
+    [SerializeField] private Image skyboxCover;
+    [SerializeField] private Image blackScreen;
 
     [Header("VFX")]
-    [SerializeField] private int ebrezzaMultiplier;
+    [SerializeField] private float blackScreenFadeDuration;
+    [SerializeField] private int ebrezzaDivider;
     [SerializeField] private float maxEbrezzaBlend;
     [SerializeField] private FullScreenPassRendererFeature ebrezzaScreenRenderer;
     [SerializeField] private ParticleSystem speedEffect;
@@ -22,7 +24,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private CameraMovement cameraHandler;
     [SerializeField] private float maxCameraDistance = 1f;
     [SerializeField] private float cameraMovementMultiplier;
-    private ParticleSystem.ShapeModule shape;
+    [SerializeField] private ParticleSystem fireEffect;
+    //[SerializeField] private float fireEffectMultiplier;
+    //[SerializeField] private float maxFireEffectIntensity;
+    private ParticleSystem.ShapeModule speedShape;
     private Color fogColor;
     private float fogDensity;
 
@@ -34,16 +39,56 @@ public class UIManager : MonoBehaviour
         fogDensity = RenderSettings.fogDensity;
         RenderSettings.fogColor = Color.black;
         RenderSettings.fogDensity = 0.2f;
+        speedShape = speedEffect.shape;
+        speedShape.radius = 30;
+        fireEffect.gameObject.SetActive(false);
+    }
+
+    private void Start()
+    {
+        StartCoroutine(FadeInBlackScreen());
     }
 
     private void Update()
     {
-        UpdateSpeedEffect();
+        if (GameManager.instance.gameStarted)
+        {
+            UpdateSpeedEffect();
+        }
+    }
+
+    private IEnumerator FadeInBlackScreen()
+    {
+        float elapsed = 0;
+        Color targetColor = new Color(Color.black.r, Color.black.g, Color.black.b, 0);
+        while (elapsed < blackScreenFadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            blackScreen.color = Color.Lerp(Color.black, targetColor, elapsed / blackScreenFadeDuration);
+            yield return null;
+        }
+        blackScreen.gameObject.SetActive(false);
+    }
+
+    private IEnumerator FadeOutBlackScreen()
+    {
+        float elapsed = 0;
+        yield return new WaitForSeconds(2);
+        Color currentColor = new Color(Color.black.r, Color.black.g, Color.black.b, 0);
+        blackScreen.color = currentColor;
+        blackScreen.gameObject.SetActive(true);
+        while (elapsed < blackScreenFadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            blackScreen.color = Color.Lerp(currentColor, Color.black, elapsed / blackScreenFadeDuration);
+            yield return null;
+        }
     }
 
     public void StartGame()
     {
         StartCoroutine(ChangeFog());
+        fireEffect.gameObject.SetActive(true);
     }
 
     private IEnumerator ChangeFog()
@@ -55,22 +100,22 @@ public class UIManager : MonoBehaviour
             float t = elapsed / 1f;
             RenderSettings.fogColor = Color.Lerp(Color.black, fogColor, t);
             RenderSettings.fogDensity = Mathf.Lerp(0.2f, fogDensity, t);
+            //skyboxCover.color = new Color(skyboxCover.color.r, skyboxCover.color.g, skyboxCover.color.b, Mathf.Lerp(1, 0, t));
             yield return null;
         }
     }
 
     private void UpdateSpeedEffect()
     {
-        int increment = (int) ((GameManager.instance.GetAlcoolPower() - 1) * speedEffectMultiplier);
-        float cameraDistance = Mathf.Clamp((GameManager.instance.GetAlcoolPower() - 1) * cameraMovementMultiplier, 0, maxCameraDistance);
-        shape = speedEffect.shape;
-        shape.radius = 25 - increment;
+        float increment = GameManager.instance.IsImmuneToDeceleration() ? ((GameManager.instance.GetAlcoolPower() - 1) * speedEffectMultiplier) + 1 : ((GameManager.instance.GetAlcoolPower() - 1) * speedEffectMultiplier);
+        float cameraDistance = GameManager.instance.IsImmuneToDeceleration() ? Mathf.Clamp((GameManager.instance.GetAlcoolPower() - 1) * cameraMovementMultiplier, 0, maxCameraDistance) + 0.02f : Mathf.Clamp((GameManager.instance.GetAlcoolPower() - 1) * cameraMovementMultiplier, 0, maxCameraDistance);
+        speedShape.radius = 26 - increment;
         cameraHandler.backwardDistance = cameraDistance;
     }
 
     public void UpdateEbrezza()
     {
-        float blend = (GameManager.instance.GetTotalBeerConsumed() - 1) / ebrezzaMultiplier;
+        float blend = (GameManager.instance.GetTotalBeerConsumed() - 1) / ebrezzaDivider;
         blend = Mathf.Clamp(blend, 0, maxEbrezzaBlend);
         ebrezzaScreenRenderer.passMaterial.SetFloat("_Blend", blend);
     }
@@ -82,7 +127,7 @@ public class UIManager : MonoBehaviour
 
     public void GameOver()
     {
-        if (gameOverTab != null)
-            gameOverTab.SetActive(true);
+        speedShape.radius = 30;
+        StartCoroutine(FadeOutBlackScreen());
     }
 }

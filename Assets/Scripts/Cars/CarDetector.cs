@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class CarDetector : MonoBehaviour
@@ -6,6 +7,8 @@ public class CarDetector : MonoBehaviour
     private CarMovement movementSystem;
     private CarMovement nearestCar = null;
     private bool approachingACar;
+    private bool slowingDown = false;
+    private bool followingTheCar = false;
 
 
     private void Awake()
@@ -21,23 +24,30 @@ public class CarDetector : MonoBehaviour
         else
         {
             float baseSpeed = -movementSystem.GetBaseSpeed() + (-movementSystem.GetAccelerationMultiplier() * GameManager.instance.GetAlcoolPower());
-            if (baseSpeed > nearestCar.currentSpeed)
+            if (baseSpeed < nearestCar.currentSpeed && !slowingDown)
             {
-                float distance = Vector3.Distance(movementSystem.transform.position, nearestCar.transform.position);
-                if (distance > 12)
-                    speed = -9999999;
-                else if (distance <= 12)
-                    speed = Mathf.Lerp(baseSpeed, nearestCar.currentSpeed, 0.2f);
-                else if (distance <= 11)
-                    speed = Mathf.Lerp(baseSpeed, nearestCar.currentSpeed, 0.4f);
-                else if (distance <= 10)
-                    speed = Mathf.Lerp(baseSpeed, nearestCar.currentSpeed, 0.6f);
-                else if (distance <= 9)
-                    speed = Mathf.Lerp(baseSpeed, nearestCar.currentSpeed, 0.8f);
-                else if (distance <= 8)
-                    speed = nearestCar.currentSpeed;
+                if (!followingTheCar)
+                    StartCoroutine(SlowDown(baseSpeed));
+                else
+                    speed = nearestCar != null ? nearestCar.currentSpeed : -9999999;
             }
         }
+    }
+
+    private IEnumerator SlowDown(float baseSpeed)
+    {
+        slowingDown = true;
+        float elapsed = 0;
+        float duration = Mathf.Clamp(1 / GameManager.instance.GetAlcoolPower(), 0.2f, 1);
+        float targetSpeed = nearestCar.currentSpeed;
+        while (elapsed < duration && slowingDown)
+        {
+            elapsed += Time.deltaTime;
+            speed = Mathf.Lerp(baseSpeed, targetSpeed, elapsed / duration);
+            yield return null;
+        }
+        followingTheCar = true;
+        slowingDown = false;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -60,6 +70,9 @@ public class CarDetector : MonoBehaviour
             {
                 nearestCar = null;
                 approachingACar = false;
+                speed = -9999999;
+                slowingDown = false;
+                followingTheCar = false;
             }
         }
     }
