@@ -125,6 +125,7 @@ public class GameManager : MonoBehaviour
     {
         gameStarted = true;
         UIManager.instance.StartGame();
+        OSTManager.instance.StartGame();
         carController.enabled = true;
         Debug.Log("GAME STARTED");
     }
