@@ -8,7 +8,6 @@ public class OSTManager : MonoBehaviour
     public static OSTManager instance;
 
     [SerializeField] private GameObject[] alcoolPowerClips;
-    [SerializeField] private float[] alcoolPowerClipsStartingPoints;
     [SerializeField] private float ebrezzaMultiplier;
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private AudioMixerSnapshot[] snapshots;
@@ -23,6 +22,7 @@ public class OSTManager : MonoBehaviour
         currentLevel = 0;
         activeMusicLayers = 0;
         currentMuffling = 0;
+        audioMixer.SetFloat("MusicVolume", 0);
     }
 
     void Update()
@@ -79,5 +79,17 @@ public class OSTManager : MonoBehaviour
     public void StartGame()
     {
         alcoolPowerClips[0].SetActive(true);
+    }
+
+    public IEnumerator GameOver()
+    {
+        float elapsed = 0;
+        yield return new WaitForSeconds(2);
+        while (elapsed < 1)
+        {
+            elapsed += Time.deltaTime;
+            audioMixer.SetFloat("MusicVolume", Mathf.Lerp(0, -80, elapsed / 1));
+            yield return null;
+        }
     }
 }

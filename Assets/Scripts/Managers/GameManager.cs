@@ -134,6 +134,7 @@ public class GameManager : MonoBehaviour
     {
         gameStarted = false;
         UIManager.instance.GameOver();
+        StartCoroutine(OSTManager.instance.GameOver());
         alcoolPower = 0;
         Debug.Log("GAME OVER");
     }
