@@ -53,3 +53,5 @@ MonoBehaviour:
   maxAlcoolPower: 3
   alcoolPowerConsumedPerSecond: 0.015
   startingSecondsWithDecelerationImmunity: 10
+  accelerationAudioClip: {fileID: 8300000, guid: 6c396229586d5c94780bb5d3b1a0b7be, type: 3}
+  accelerationAudioVolume: 1

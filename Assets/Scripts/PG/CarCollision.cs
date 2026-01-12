@@ -3,6 +3,8 @@ using UnityEngine;
 public class CarCollision : MonoBehaviour
 {
     [SerializeField] private float speedLoss;
+    [SerializeField] private AudioClip[] collisionAudioClips;
+    [SerializeField] private float[] collisionAudioVolumes;
     private DrinkSystem drinkSystem;
     private CameraMovement cameraHandler;
 
@@ -16,6 +18,8 @@ public class CarCollision : MonoBehaviour
     {
         if (collision.transform.CompareTag("Car"))
         {
+            int i = Random.Range(0, collisionAudioClips.Length);
+            SFXManager.instance.PlayClipWithRandomPitch(collisionAudioClips[i], collisionAudioVolumes[i]);
             CarMovement carMovement = collision.gameObject.GetComponent<CarMovement>();
             ContactPoint contact = collision.GetContact(0);
             Vector3 contactPointLocal = transform.InverseTransformPoint(contact.point);

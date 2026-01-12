@@ -11,6 +11,8 @@ public class LeverInteraction_InputSystem : MonoBehaviour
     public Transform handTargetOnLever;
     public Transform leverPivot;
     public LiquidStreamToggle liquidStream;
+    public AudioClip leverAudioClip;
+    public float leverAudioVolume;
 
     [Header("Hand")]
     public float handMoveSpeed = 6f;
@@ -29,6 +31,7 @@ public class LeverInteraction_InputSystem : MonoBehaviour
     private Vector3 handStartLocalPos;
     private Quaternion handStartLocalRot;
     private bool handOnSteering = true;
+    private bool leverActive = false;
 
     void Start()
     {
@@ -128,6 +131,8 @@ public class LeverInteraction_InputSystem : MonoBehaviour
 
     void ReturnLever()
     {
+        if (leverActive)
+            leverActive = false;
         currentAngle = Mathf.MoveTowards(
             currentAngle,
             0f,
@@ -138,6 +143,11 @@ public class LeverInteraction_InputSystem : MonoBehaviour
     void UpdateLeverRotation()
     {
         leverPivot.localRotation = Quaternion.AngleAxis(currentAngle, -Vector3.forward);
+        if (leverPivot.localRotation.eulerAngles.z >= -maxAngle && !leverActive)
+        {
+            SFXManager.instance.PlayClip(leverAudioClip, leverAudioVolume);
+            leverActive = true;
+        }
     }
 
     
@@ -150,7 +160,12 @@ public class LeverInteraction_InputSystem : MonoBehaviour
         bool leverAtBottom =
             Mathf.Abs(currentAngle - maxAngle) <= angleTolerance;
 
-        liquidStream.SetFlow(leverAtBottom);
+        if (leverAtBottom)
+            liquidStream.StartLoopClip();
+        else
+            liquidStream.StopLoopClip();
+
+            liquidStream.SetFlow(leverAtBottom);
     }
 
     public bool IsGrabbingTheLever() => isGrabbing;

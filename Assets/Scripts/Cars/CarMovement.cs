@@ -11,6 +11,8 @@ public class CarMovement : MonoBehaviour
     [SerializeField] private float accelerationMultiplier;
     [SerializeField] private float skiddingMovementSpeed;
     [SerializeField] private float skiddingRotationSpeed;
+    [SerializeField] private AudioClip skiddingAudioClip;
+    [SerializeField] private float skiddingAudioVolume;
     private Transform skiddingLeftTarget;
     private Transform skiddingRightTarget;
     private bool skidding;
@@ -18,6 +20,7 @@ public class CarMovement : MonoBehaviour
     private Rigidbody rb;
     private BottleDetector bottleDetector;
     private CarDetector carDetector;
+    private AudioSource audioSource;
 
     public float GetBaseSpeed() => speed;
     public float GetAccelerationMultiplier() => accelerationMultiplier;
@@ -29,6 +32,7 @@ public class CarMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         bottleDetector = GetComponentInChildren<BottleDetector>();
         carDetector = GetComponentInChildren<CarDetector>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -54,6 +58,7 @@ public class CarMovement : MonoBehaviour
     public void StartSkidding(Direction direction)
     {
         skiddingDirection = direction;
+        SFXManager.instance.PlayClipWithRandomPitch(skiddingAudioClip, skiddingAudioVolume);
         skidding = true;
         rb.linearVelocity = Vector3.zero;
     }

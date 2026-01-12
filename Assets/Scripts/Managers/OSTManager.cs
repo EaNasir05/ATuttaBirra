@@ -60,7 +60,7 @@ public class OSTManager : MonoBehaviour
         }
         else if (layers < activeMusicLayers)
         {
-            snapshots[layers].TransitionTo(1);
+            snapshots[layers].TransitionTo((activeMusicLayers - layers) * 1.5f);
             activeMusicLayers = layers;
         }
     }

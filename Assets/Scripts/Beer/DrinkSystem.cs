@@ -52,6 +52,16 @@ public class DrinkSystem : MonoBehaviour
     [SerializeField] private float beerLossDuration;
     private float realDrinkDuration;
 
+    [Header("Audios")]
+    [SerializeField] private AudioClip drinkingAudioClip;
+    [SerializeField] private float drinkingAudioVolume;
+    [SerializeField] private AudioClip coughAudioClip;
+    [SerializeField] private float coughAudioVolume;
+    [SerializeField] private AudioClip burpAudioClip;
+    [SerializeField] private float burpAudioVolume;
+    [SerializeField] private AudioClip splashAudioClip;
+    [SerializeField] private float splashAudioVolume;
+
     [Header ("Stati")]
     private DrinkState state = DrinkState.Idle;
     private Coroutine routine;
@@ -62,6 +72,7 @@ public class DrinkSystem : MonoBehaviour
     private bool readyToUpdateFill = true;
     public bool shakingBeer = false;
     public bool receivingBeer = false;
+    public bool beerOverflowing = false;
 
     private void Awake()
     {
@@ -121,6 +132,7 @@ public class DrinkSystem : MonoBehaviour
     {
         if (!receivingBeer && beer.fillAmount < minFill && readyToUpdateFill)
         {
+            beerOverflowing = false;
             StartCoroutine(UpdateMaxFillAmount(minFill - beer.fillAmount));
         }
     }
@@ -148,7 +160,7 @@ public class DrinkSystem : MonoBehaviour
         if (readyToRandomlyMove)
         {
             readyToRandomlyMove = false;
-            int index = Random.Range(1, 7);
+            int index = Random.Range(1, 8);
             float extraMovement = Mathf.Round(totalBeerConsumed - 1) * randomMovementMultiplier;
             extraMovement = Mathf.Clamp(extraMovement, 0, maxRandomMovement);
             switch (index)
@@ -167,6 +179,9 @@ public class DrinkSystem : MonoBehaviour
                     break;
                 case 5:
                     randomHandMovement = new Vector2(extraMovement, 0);
+                    break;
+                case 6:
+                    randomHandMovement = new Vector2(-extraMovement, -extraMovement);
                     break;
                 default:
                     randomHandMovement = new Vector2(extraMovement, -extraMovement);
@@ -254,7 +269,10 @@ public class DrinkSystem : MonoBehaviour
     public void GainBeer(float fillLoss)
     {
         if (beer.fillAmount - fillLoss <= minFill - beerOverflowExtraFill)
+        {
             beer.fillAmount -= beer.fillAmount - (minFill - beerOverflowExtraFill);
+            beerOverflowing = true;
+        }
         else
             beer.fillAmount -= fillLoss;
     }
@@ -315,6 +333,7 @@ public class DrinkSystem : MonoBehaviour
                 if (firstTime)
                 {
                     previousFill = beer.fillAmount;
+                    SFXManager.instance.PlayClipWithRandomPitch(drinkingAudioClip, drinkingAudioVolume);
                     firstTime = false;
                 }
                 elapsedDrinking += Time.deltaTime;
@@ -359,6 +378,7 @@ public class DrinkSystem : MonoBehaviour
         }
         if (beer.fillAmount + extraFillWhileMoving >= maxFill - 0.01)
         {
+            //SFXManager.instance.PlayClipWithRandomPitch(burpAudioClip, burpAudioVolume);
             beer.fillAmount = maxFill + 2 + extraFillWhileMoving;
             iHateJews = true;
             needToGainExtra = false;
@@ -419,12 +439,14 @@ public class DrinkSystem : MonoBehaviour
         if (state == DrinkState.Drinking)
         {
             StartReturning();
+            SFXManager.instance.PlayClipWithRandomPitch(coughAudioClip, coughAudioVolume);
             //StartCoroutine(ShakeJar());
         }
         else
         {
             if (beer.fillAmount < maxFill)
             {
+                SFXManager.instance.PlayClipWithRandomPitch(splashAudioClip, splashAudioVolume);
                 shakingBeer = true;
                 beer.AddImpulse(new Vector2(1, 0), 5);
             }

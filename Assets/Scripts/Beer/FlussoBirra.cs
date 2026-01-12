@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 [RequireComponent(typeof(LineRenderer))]
 public class LiquidStreamToggle : MonoBehaviour
@@ -23,12 +24,18 @@ public class LiquidStreamToggle : MonoBehaviour
     private float currentLength = 0f;
     private bool wasFillingTheJug = false;
     private bool isFillingTheJug = false;
+    private AudioSource audioSource;
+    private AudioSource loopAudioSource;
+    private float startingLoopSeconds;
 
     void Awake()
     {
         line = GetComponent<LineRenderer>();
         line.positionCount = segments;
         line.enabled = false;
+        audioSource = GetComponent<AudioSource>();
+        loopAudioSource = startPoint.GetComponent<AudioSource>();
+        startingLoopSeconds = loopAudioSource.clip.length * 0.25f;
 
         if (splashParticles != null)
             splashParticles.Stop();
@@ -44,6 +51,10 @@ public class LiquidStreamToggle : MonoBehaviour
         else
             isFillingTheJug = false;
         CheckFillingTheJug();
+        if (loopAudioSource.isPlaying && loopAudioSource.time >= loopAudioSource.clip.length)
+        {
+            loopAudioSource.time = startingLoopSeconds;
+        }
     }
 
     private void CheckFillingTheJug()
@@ -52,12 +63,17 @@ public class LiquidStreamToggle : MonoBehaviour
         {
             drinkSystem.receivingBeer = true;
             wasFillingTheJug = true;
+            //setta il tempo di partenza dell'audio
+            audioSource.Play();
         }
         else if (wasFillingTheJug && !isFillingTheJug)
         {
             drinkSystem.receivingBeer = false;
             wasFillingTheJug = false;
+            audioSource.Stop();
         }
+        if (drinkSystem.beerOverflowing)
+            audioSource.Stop();
     }
     
     public void SetFlow(bool active)
@@ -74,6 +90,18 @@ public class LiquidStreamToggle : MonoBehaviour
             if (splashParticles != null)
                 splashParticles.Stop();
         }
+    }
+
+    public void StartLoopClip()
+    {
+        if (!loopAudioSource.isPlaying)
+            loopAudioSource.Play();
+    }
+
+    public void StopLoopClip()
+    {
+        if (loopAudioSource.isPlaying)
+            loopAudioSource.Stop();
     }
 
     void DrawStream()
