@@ -454,4 +454,15 @@ public class DrinkSystem : MonoBehaviour
 
     public bool IsDrinking() => state == DrinkState.Drinking;
     public bool IsMoving() => state == DrinkState.Moving;
+
+    public float GetBeerFill()
+    {
+        return beer.fillAmount;
+    }
+
+    public float GetMinFill()
+    {
+        return minFill;
+    }
+
 }

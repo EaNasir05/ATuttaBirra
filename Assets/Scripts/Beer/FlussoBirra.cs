@@ -18,6 +18,10 @@ public class LiquidStreamToggle : MonoBehaviour
     [Header("Optional")]
     public ParticleSystem splashParticles;
 
+    
+    [Header("Enough Beer")]
+    public GameObject EnoughBeer;
+
     private LineRenderer line;
     private bool isFlowing = false;
     private float currentLength = 0f;
@@ -32,6 +36,10 @@ public class LiquidStreamToggle : MonoBehaviour
 
         if (splashParticles != null)
             splashParticles.Stop();
+
+        
+        if (EnoughBeer != null)
+            EnoughBeer.SetActive(false);
     }
 
     void Update()
@@ -43,7 +51,11 @@ public class LiquidStreamToggle : MonoBehaviour
         }
         else
             isFillingTheJug = false;
+
         CheckFillingTheJug();
+
+      
+        CheckEnoughBeer();
     }
 
     private void CheckFillingTheJug()
@@ -59,7 +71,27 @@ public class LiquidStreamToggle : MonoBehaviour
             wasFillingTheJug = false;
         }
     }
-    
+
+   
+    private void CheckEnoughBeer()
+    {
+        if (EnoughBeer == null || drinkSystem == null)
+            return;
+
+        bool overLimit = drinkSystem.GetBeerFill() <= drinkSystem.GetMinFill();
+
+        if (isFillingTheJug && overLimit)
+        {
+            if (!EnoughBeer.activeSelf)
+                EnoughBeer.SetActive(true);
+        }
+        else
+        {
+            if (EnoughBeer.activeSelf)
+                EnoughBeer.SetActive(false);
+        }
+    }
+
     public void SetFlow(bool active)
     {
         if (isFlowing == active)
