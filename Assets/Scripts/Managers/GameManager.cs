@@ -132,8 +132,10 @@ public class GameManager : MonoBehaviour
     private void GameOver()
     {
         gameStarted = false;
+        finalScore = totalBeerConsumed;
         UIManager.instance.GameOver();
         alcoolPower = 0;
         Debug.Log("GAME OVER");
     }
+    [HideInInspector] public float finalScore;
 }
