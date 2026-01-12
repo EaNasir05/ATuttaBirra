@@ -19,6 +19,10 @@ public class LiquidStreamToggle : MonoBehaviour
     [Header("Optional")]
     public ParticleSystem splashParticles;
 
+    
+    [Header("Enough Beer")]
+    public GameObject EnoughBeer;
+
     private LineRenderer line;
     private bool isFlowing = false;
     private float currentLength = 0f;
@@ -39,6 +43,10 @@ public class LiquidStreamToggle : MonoBehaviour
 
         if (splashParticles != null)
             splashParticles.Stop();
+
+        
+        if (EnoughBeer != null)
+            EnoughBeer.SetActive(false);
     }
 
     void Update()
@@ -50,10 +58,36 @@ public class LiquidStreamToggle : MonoBehaviour
         }
         else
             isFillingTheJug = false;
+
         CheckFillingTheJug();
+
+        
+        CheckEnoughBeer();
+
         if (loopAudioSource.isPlaying && loopAudioSource.time >= loopAudioSource.clip.length)
         {
             loopAudioSource.time = startingLoopSeconds;
+        }
+    }
+
+   
+    private void CheckEnoughBeer()
+    {
+        if (EnoughBeer == null || drinkSystem == null)
+            return;
+
+        
+        bool overLimit = drinkSystem.GetBeerFill() <= drinkSystem.GetMinFill();
+
+        if (isFillingTheJug && overLimit)
+        {
+            if (!EnoughBeer.activeSelf)
+                EnoughBeer.SetActive(true);
+        }
+        else
+        {
+            if (EnoughBeer.activeSelf)
+                EnoughBeer.SetActive(false);
         }
     }
 
@@ -63,7 +97,6 @@ public class LiquidStreamToggle : MonoBehaviour
         {
             drinkSystem.receivingBeer = true;
             wasFillingTheJug = true;
-            //setta il tempo di partenza dell'audio
             audioSource.Play();
         }
         else if (wasFillingTheJug && !isFillingTheJug)
@@ -75,7 +108,7 @@ public class LiquidStreamToggle : MonoBehaviour
         if (drinkSystem.beerOverflowing)
             audioSource.Stop();
     }
-    
+
     public void SetFlow(bool active)
     {
         if (isFlowing == active)

@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -83,6 +84,7 @@ public class UIManager : MonoBehaviour
             blackScreen.color = Color.Lerp(currentColor, Color.black, elapsed / blackScreenFadeDuration);
             yield return null;
         }
+        SceneManager.LoadScene("GameOver");
     }
 
     public void StartGame()
@@ -122,7 +124,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateBeerConsumed(float value)
     {
-        beerConsumed.text = value + " L";
+        beerConsumed.text = value + "\npints";
     }
 
     public void GameOver()
