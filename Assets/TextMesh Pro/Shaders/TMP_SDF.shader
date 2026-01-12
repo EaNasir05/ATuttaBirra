@@ -90,7 +90,7 @@ SubShader {
 	{
 		"Queue"="Transparent"
 		"IgnoreProjector"="True"
-		"RenderType"="Transparent"
+		"RenderType"="Opaque"
 	}
 
 	Stencil
@@ -315,7 +315,7 @@ SubShader {
 			clip(faceColor.a - 0.001);
 		    #endif
 
-  		    return faceColor * input.color.a;
+  		    return faceColor;
 		}
 		ENDCG
 	}

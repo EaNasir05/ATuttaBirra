@@ -1,0 +1,55 @@
+{
+    "version": 1,
+    "name": "GameOverInput",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "f4121289-9a13-4a5d-835b-acf35b08a2f7",
+            "actions": [
+                {
+                    "name": "MoveCursor",
+                    "type": "Value",
+                    "id": "7cd17b18-d548-41fc-b361-5fb8213b2066",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Submit",
+                    "type": "Button",
+                    "id": "c7255482-e4d3-4b08-bb52-393432e743c8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "11d9afb3-e220-4122-b2d7-3e6b6470d8b2",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveCursor",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2f3d1f60-69a2-4d90-ad97-2665c6c6b44e",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
