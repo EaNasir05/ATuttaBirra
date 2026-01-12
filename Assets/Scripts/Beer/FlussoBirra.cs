@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 [RequireComponent(typeof(LineRenderer))]
 public class LiquidStreamToggle : MonoBehaviour
@@ -18,28 +19,26 @@ public class LiquidStreamToggle : MonoBehaviour
     [Header("Optional")]
     public ParticleSystem splashParticles;
 
-    
-    [Header("Enough Beer")]
-    public GameObject EnoughBeer;
-
     private LineRenderer line;
     private bool isFlowing = false;
     private float currentLength = 0f;
     private bool wasFillingTheJug = false;
     private bool isFillingTheJug = false;
+    private AudioSource audioSource;
+    private AudioSource loopAudioSource;
+    private float startingLoopSeconds;
 
     void Awake()
     {
         line = GetComponent<LineRenderer>();
         line.positionCount = segments;
         line.enabled = false;
+        audioSource = GetComponent<AudioSource>();
+        loopAudioSource = startPoint.GetComponent<AudioSource>();
+        startingLoopSeconds = loopAudioSource.clip.length * 0.25f;
 
         if (splashParticles != null)
             splashParticles.Stop();
-
-        
-        if (EnoughBeer != null)
-            EnoughBeer.SetActive(false);
     }
 
     void Update()
@@ -51,11 +50,11 @@ public class LiquidStreamToggle : MonoBehaviour
         }
         else
             isFillingTheJug = false;
-
         CheckFillingTheJug();
-
-      
-        CheckEnoughBeer();
+        if (loopAudioSource.isPlaying && loopAudioSource.time >= loopAudioSource.clip.length)
+        {
+            loopAudioSource.time = startingLoopSeconds;
+        }
     }
 
     private void CheckFillingTheJug()
@@ -64,34 +63,19 @@ public class LiquidStreamToggle : MonoBehaviour
         {
             drinkSystem.receivingBeer = true;
             wasFillingTheJug = true;
+            //setta il tempo di partenza dell'audio
+            audioSource.Play();
         }
         else if (wasFillingTheJug && !isFillingTheJug)
         {
             drinkSystem.receivingBeer = false;
             wasFillingTheJug = false;
+            audioSource.Stop();
         }
+        if (drinkSystem.beerOverflowing)
+            audioSource.Stop();
     }
-
-   
-    private void CheckEnoughBeer()
-    {
-        if (EnoughBeer == null || drinkSystem == null)
-            return;
-
-        bool overLimit = drinkSystem.GetBeerFill() <= drinkSystem.GetMinFill();
-
-        if (isFillingTheJug && overLimit)
-        {
-            if (!EnoughBeer.activeSelf)
-                EnoughBeer.SetActive(true);
-        }
-        else
-        {
-            if (EnoughBeer.activeSelf)
-                EnoughBeer.SetActive(false);
-        }
-    }
-
+    
     public void SetFlow(bool active)
     {
         if (isFlowing == active)
@@ -106,6 +90,18 @@ public class LiquidStreamToggle : MonoBehaviour
             if (splashParticles != null)
                 splashParticles.Stop();
         }
+    }
+
+    public void StartLoopClip()
+    {
+        if (!loopAudioSource.isPlaying)
+            loopAudioSource.Play();
+    }
+
+    public void StopLoopClip()
+    {
+        if (loopAudioSource.isPlaying)
+            loopAudioSource.Stop();
     }
 
     void DrawStream()

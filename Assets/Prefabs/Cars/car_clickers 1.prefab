@@ -342,3 +342,5 @@ MonoBehaviour:
   accelerationMultiplier: 15
   skiddingMovementSpeed: 30
   skiddingRotationSpeed: 600
+  skiddingAudioClip: {fileID: 8300000, guid: 295366fdda839aa43be8f0b5f217c0f8, type: 3}
+  skiddingAudioVolume: 0.6

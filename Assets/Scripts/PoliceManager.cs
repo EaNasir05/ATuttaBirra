@@ -19,6 +19,9 @@ public class PoliceChaseSystem : MonoBehaviour
     [SerializeField] private Transform policeCar;
     [SerializeField] private float policeMovementDuration;
     [SerializeField] private float reflectionTransitionDuration;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private float maxAudioVolume;
+    [SerializeField] private float minAudioVolume;
     private float timePassed = 0;
     private int currentColor = 0;
     private bool policeNear = false;
@@ -57,13 +60,14 @@ public class PoliceChaseSystem : MonoBehaviour
                 currentColor = 0;
                 timePassed = lightDuration;
                 lightsOnThePlayer[0].transform.parent.gameObject.SetActive(true);
+                audioSource.Play();
                 StartCoroutine(ApproachThePlayer());
             }
             else if (alcoolPower > 1 && policeNear)
             {
-                Debug.Log("SIUM");
                 policeNear = false;
                 lightsOnThePlayer[0].transform.parent.gameObject.SetActive(false);
+                audioSource.Stop();
                 StartCoroutine(DepartFromThePlayer());
             }
 
@@ -71,6 +75,7 @@ public class PoliceChaseSystem : MonoBehaviour
             {
                 float t = Mathf.Clamp(alcoolPower - 0.5f, 0, 0.5f) * 2;
                 float lightIntensity = Mathf.Lerp(lightMaxIntensity, lightMinIntensity, t);
+                audioSource.volume = Mathf.Lerp(maxAudioVolume, minAudioVolume, t);
                 lightsOnThePlayer[0].intensity = lightIntensity;
                 lightsOnThePlayer[1].intensity = lightIntensity;
                 if (readyToUpdateReflection)

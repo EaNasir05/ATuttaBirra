@@ -27,7 +27,12 @@ public class GameManager : MonoBehaviour
     private float alcoolPower;
     private bool gameOver;
 
-    void Awake()
+    [Header("Audios")]
+    [SerializeField] private AudioClip accelerationAudioClip;
+    [SerializeField] private float accelerationAudioVolume;
+    private AudioSource carAudioSource;
+
+    private void Awake()
     {
         instance = this;
         gameStarted = false;
@@ -43,9 +48,10 @@ public class GameManager : MonoBehaviour
         actionMap.FindAction("Hold S").Enable();
         actionMap.FindAction("Move").Enable();
         actionMap.FindAction("Speed").Enable();
+        carAudioSource = carController.gameObject.GetComponent<AudioSource>();
     }
 
-    void Update()
+    private void Update()
     {
         if (gameStarted && !UpdateImmunity())
         {
@@ -79,6 +85,7 @@ public class GameManager : MonoBehaviour
 
     public void AddDecelerationImmunity(float value)
     {
+        SFXManager.instance.PlayClipWithRandomPitch(accelerationAudioClip, accelerationAudioVolume);
         secondsWithDecelerationImmunity += value;
     }
 
@@ -103,7 +110,7 @@ public class GameManager : MonoBehaviour
         else
         {
             if (Mathf.Sign(increment) > 0)
-                secondsWithDecelerationImmunity += increment * 4;
+                AddDecelerationImmunity(increment * 4);
             alcoolPower = Mathf.Clamp(alcoolPower + increment, 0, maxAlcoolPower);
         }
     }
@@ -125,7 +132,10 @@ public class GameManager : MonoBehaviour
     {
         gameStarted = true;
         UIManager.instance.StartGame();
+        OSTManager.instance.StartGame();
         carController.enabled = true;
+        SFXManager.instance.PlayClip(accelerationAudioClip, accelerationAudioVolume);
+        carAudioSource.Play();
         Debug.Log("GAME STARTED");
     }
 
@@ -134,7 +144,9 @@ public class GameManager : MonoBehaviour
         gameStarted = false;
         finalScore = totalBeerConsumed;
         UIManager.instance.GameOver();
+        StartCoroutine(OSTManager.instance.GameOver());
         alcoolPower = 0;
+        carAudioSource.Stop();
         Debug.Log("GAME OVER");
     }
     [HideInInspector] public float finalScore;

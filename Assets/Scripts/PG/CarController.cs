@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum PlayerDirection { Left, Right, Center }
+
 [RequireComponent(typeof(Rigidbody))]
 public class CarController : MonoBehaviour
 {
@@ -41,6 +43,9 @@ public class CarController : MonoBehaviour
     private Quaternion startingSteeringWheelRot;
     private Vector3 steeringLocalAxis;
 
+    [Header("SFX")]
+    [SerializeField] private AudioSource audioSource;
+
     private Rigidbody rb;
     private LeverInteraction_InputSystem leverHandler;
     private DrinkSystem drinkSystem;
@@ -49,6 +54,7 @@ public class CarController : MonoBehaviour
     private bool vibrating = false;
     private float lastMoveX;
     private bool bothSticksActive;
+    private PlayerDirection previousDirection;
 
     void Awake()
     {
@@ -81,6 +87,7 @@ public class CarController : MonoBehaviour
     {
         float movement = Move();
         Rotate(movement);
+        UpdateAudio(movement);
         UpdateVibration();
         UpdateAccelSmoothing();
         RotateSteeringWheel();
@@ -129,6 +136,34 @@ public class CarController : MonoBehaviour
         bothSticksActive = moveX != 0f && speed.magnitude > inputDeadzone;
         lastMoveX = moveX;
         return moveX;
+    }
+
+    private void UpdateAudio(float movement)
+    {
+        if (movement > 0)
+        {
+            if (previousDirection != PlayerDirection.Right)
+            {
+                audioSource.Stop();
+                audioSource.pitch = Random.Range(0.9f, 1.1f);
+                audioSource.Play();
+                previousDirection = PlayerDirection.Right;
+            }
+        }
+        else if (movement < 0)
+        {
+            if (previousDirection != PlayerDirection.Left)
+            {
+                audioSource.Stop();
+                audioSource.pitch = Random.Range(0.9f, 1.1f);
+                audioSource.Play();
+                previousDirection = PlayerDirection.Left;
+            }
+        }
+        else
+        {
+            previousDirection = PlayerDirection.Center;
+        }
     }
 
     private void Rotate(float movement)

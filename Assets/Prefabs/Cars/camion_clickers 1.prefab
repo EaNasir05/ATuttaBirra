@@ -377,6 +377,8 @@ MonoBehaviour:
   accelerationMultiplier: 15
   skiddingMovementSpeed: 30
   skiddingRotationSpeed: 300
+  skiddingAudioClip: {fileID: 8300000, guid: b4df9109069ea1d46a855c317da1690a, type: 3}
+  skiddingAudioVolume: 0.6
 --- !u!4 &3437155138402630363 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
