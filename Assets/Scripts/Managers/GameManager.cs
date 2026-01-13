@@ -86,6 +86,7 @@ public class GameManager : MonoBehaviour
     public void AddDecelerationImmunity(float value)
     {
         SFXManager.instance.PlayClipWithRandomPitch(accelerationAudioClip, accelerationAudioVolume);
+        UIManager.instance.StartCameraMovement(value);
         secondsWithDecelerationImmunity += value;
     }
 

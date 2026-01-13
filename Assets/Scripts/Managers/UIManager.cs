@@ -23,14 +23,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] private ParticleSystem speedEffect;
     [SerializeField] private float speedEffectMultiplier;
     [SerializeField] private CameraMovement cameraHandler;
-    [SerializeField] private float maxCameraDistance = 1f;
-    [SerializeField] private float cameraMovementMultiplier;
+    [SerializeField] private float cameraDistanceWhileAccelerating = 0.2f;
+    [SerializeField] private float cameraFirstMovementDuration = 0.2f;
+    [SerializeField] private float cameraSecondMovementDuration = 0.5f;
     [SerializeField] private ParticleSystem fireEffect;
     //[SerializeField] private float fireEffectMultiplier;
     //[SerializeField] private float maxFireEffectIntensity;
     private ParticleSystem.ShapeModule speedShape;
     private Color fogColor;
     private float fogDensity;
+    private Coroutine moveCameraRoutine;
 
     private void Awake()
     {
@@ -43,6 +45,7 @@ public class UIManager : MonoBehaviour
         speedShape = speedEffect.shape;
         speedShape.radius = 30;
         fireEffect.gameObject.SetActive(false);
+        cameraHandler.backwardDistance = 0;
     }
 
     private void Start()
@@ -110,9 +113,7 @@ public class UIManager : MonoBehaviour
     private void UpdateSpeedEffect()
     {
         float increment = GameManager.instance.IsImmuneToDeceleration() ? ((GameManager.instance.GetAlcoolPower() - 1) * speedEffectMultiplier) + 1 : ((GameManager.instance.GetAlcoolPower() - 1) * speedEffectMultiplier);
-        float cameraDistance = GameManager.instance.IsImmuneToDeceleration() ? Mathf.Clamp((GameManager.instance.GetAlcoolPower() - 1) * cameraMovementMultiplier, 0, maxCameraDistance) + 0.02f : Mathf.Clamp((GameManager.instance.GetAlcoolPower() - 1) * cameraMovementMultiplier, 0, maxCameraDistance);
-        speedShape.radius = 26 - increment;
-        cameraHandler.backwardDistance = cameraDistance;
+        speedShape.radius = 25 - increment;
     }
 
     public void UpdateEbrezza()
@@ -120,6 +121,34 @@ public class UIManager : MonoBehaviour
         float blend = (GameManager.instance.GetTotalBeerConsumed() - 1) / ebrezzaDivider;
         blend = Mathf.Clamp(blend, 0, maxEbrezzaBlend);
         ebrezzaScreenRenderer.passMaterial.SetFloat("_Blend", blend);
+    }
+
+    public void StartCameraMovement(float duration)
+    {
+        if (moveCameraRoutine != null)
+            StopCoroutine(moveCameraRoutine);
+        moveCameraRoutine = StartCoroutine(MoveHead(duration));
+    }
+
+    private IEnumerator MoveHead(float duration)
+    {
+        float elapsed = 0f;
+        float currentDistance = cameraHandler.backwardDistance;
+        while (elapsed < cameraFirstMovementDuration)
+        {
+            elapsed += Time.deltaTime;
+            cameraHandler.backwardDistance = Mathf.Lerp(currentDistance, cameraDistanceWhileAccelerating, elapsed / cameraFirstMovementDuration);
+            yield return null;
+        }
+        elapsed = 0f;
+        yield return new WaitForSeconds(duration);
+        while (elapsed < cameraFirstMovementDuration)
+        {
+            elapsed += Time.deltaTime;
+            cameraHandler.backwardDistance = Mathf.Lerp(cameraDistanceWhileAccelerating, 0, elapsed / cameraFirstMovementDuration);
+            yield return null;
+        }
+        moveCameraRoutine = null;
     }
 
     public void UpdateBeerConsumed(float value)

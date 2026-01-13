@@ -59,7 +59,6 @@ public class EntitiesSpawner : MonoBehaviour
                     spawnedCar.transform.position = new Vector3(posX, car.GetHeight(), spawnPositionZ + selectedBlock.carsPositionZ[i]);
                 }
                 int newBlock = selectedBlock.possibleNextBlocksIndexes[Random.Range(0, selectedBlock.possibleNextBlocksIndexes.Length)];
-                Debug.Log(newBlock);
                 selectedBlock = blocks[newBlock];
                 timePassed = 0;
             }
