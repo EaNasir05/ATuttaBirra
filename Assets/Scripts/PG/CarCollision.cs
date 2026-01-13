@@ -3,15 +3,20 @@ using UnityEngine;
 public class CarCollision : MonoBehaviour
 {
     [SerializeField] private float speedLoss;
+    [SerializeField] private float maxSpeedLoss;
     [SerializeField] private AudioClip[] collisionAudioClips;
     [SerializeField] private float[] collisionAudioVolumes;
     private DrinkSystem drinkSystem;
     private CameraMovement cameraHandler;
+    private float policeAlcoolPower;
+    private float maxAlcoolPower;
 
     private void Awake()
     {
         drinkSystem = transform.GetComponentInChildren<DrinkSystem>();
         cameraHandler = transform.GetComponentInChildren<CameraMovement>();
+        policeAlcoolPower = GameManager.instance.GetPoliceAlcoolPower();
+        maxAlcoolPower = GameManager.instance.GetMaxAlcoolPower();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -31,7 +36,10 @@ public class CarCollision : MonoBehaviour
             StartCoroutine(cameraHandler.HeadHitMovement());
             StartCoroutine(drinkSystem.LoseBeer(0.05f));
             if (!GameManager.instance.IsImmuneToDeceleration())
-                GameManager.instance.UpdateAlcoolPower(-speedLoss);
+            {
+                float t = Mathf.Clamp(GameManager.instance.GetAlcoolPower() - policeAlcoolPower, 0, maxAlcoolPower - policeAlcoolPower) / (maxAlcoolPower - policeAlcoolPower);
+                GameManager.instance.UpdateAlcoolPower(-Mathf.Lerp(speedLoss, maxSpeedLoss, t));
+            }
         }
         else if (collision.transform.CompareTag("Bottle"))
         {

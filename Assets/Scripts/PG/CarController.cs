@@ -57,6 +57,7 @@ public class CarController : MonoBehaviour
     private bool bothSticksActive;
     private PlayerDirection previousDirection;
     private float maxAlcoolPower;
+    private float policeAlcoolPower;
 
     void Awake()
     {
@@ -72,6 +73,7 @@ public class CarController : MonoBehaviour
         startingSteeringWheelRot = steeringWheel.localRotation;
         steeringLocalAxis = steeringWheel.TransformDirection(Vector3.forward);
         maxAlcoolPower = GameManager.instance.GetMaxAlcoolPower();
+        policeAlcoolPower = GameManager.instance.GetPoliceAlcoolPower();
     }
 
     void OnEnable()
@@ -119,15 +121,13 @@ public class CarController : MonoBehaviour
             sameDirection = dot >= sameDirectionDotThreshold;
         }
 
-        float t = Mathf.Clamp(GameManager.instance.GetAlcoolPower() - 1, 0, maxAlcoolPower - 1) / (maxAlcoolPower - 1);
-        Debug.Log("AlcoolPower: " + GameManager.instance.GetAlcoolPower() + " / MAX: " + (maxAlcoolPower - 1) + " / T: " + t);
+        float t = Mathf.Clamp(GameManager.instance.GetAlcoolPower() - policeAlcoolPower, 0, maxAlcoolPower - policeAlcoolPower) / (maxAlcoolPower - policeAlcoolPower);
         float targetSpeed = Mathf.Lerp(baseSpeed, maxBaseSpeed, t);
         if (sameDirection)
         {
             float rightMag = Mathf.Clamp01(speed.magnitude);
             targetSpeed *= (1f + accelMultiplier * rightMag);
         }
-        Debug.Log(targetSpeed);
 
         float desiredVelX = moveX * targetSpeed;
         Vector3 currentVel = rb.linearVelocity;
