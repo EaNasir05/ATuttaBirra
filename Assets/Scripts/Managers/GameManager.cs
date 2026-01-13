@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float alcoolPowerConsumedPerSecond;
     [SerializeField] private float startingSecondsWithDecelerationImmunity;
     private float secondsWithDecelerationImmunity;
-    private float totalBeerConsumed;
+    public float totalBeerConsumed;
     private float alcoolPower;
     private bool gameOver;
 
@@ -79,6 +79,7 @@ public class GameManager : MonoBehaviour
     }
 
     public float GetAlcoolPower() => alcoolPower;
+    
     public float GetTotalBeerConsumed() => totalBeerConsumed;
     public bool IsImmuneToDeceleration() => secondsWithDecelerationImmunity > 0;
     public float GetMaxAlcoolPower() => maxAlcoolPower;
