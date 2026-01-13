@@ -43,7 +43,6 @@ public class LiquidStreamToggle : MonoBehaviour
 
         if (splashParticles != null)
             splashParticles.Stop();
-
         
         if (EnoughBeer != null)
             EnoughBeer.SetActive(false);
@@ -75,7 +74,6 @@ public class LiquidStreamToggle : MonoBehaviour
     {
         if (EnoughBeer == null || drinkSystem == null)
             return;
-
         
         bool overLimit = drinkSystem.GetBeerFill() <= drinkSystem.GetMinFill();
 
@@ -97,7 +95,9 @@ public class LiquidStreamToggle : MonoBehaviour
         {
             drinkSystem.receivingBeer = true;
             wasFillingTheJug = true;
+            float perc = 1 - ((drinkSystem.GetBeerFill() - drinkSystem.GetMinFill()) / (drinkSystem.GetMaxFill() - drinkSystem.GetMinFill()));
             audioSource.Play();
+            audioSource.time = perc * audioSource.clip.length;
         }
         else if (wasFillingTheJug && !isFillingTheJug)
         {
