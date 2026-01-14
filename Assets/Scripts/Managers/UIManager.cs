@@ -113,7 +113,7 @@ public class UIManager : MonoBehaviour
     private void UpdateSpeedEffect()
     {
         float increment = GameManager.instance.IsImmuneToDeceleration() ? ((GameManager.instance.GetAlcoolPower() - 1) * speedEffectMultiplier) + 1 : ((GameManager.instance.GetAlcoolPower() - 1) * speedEffectMultiplier);
-        speedShape.radius = 25 - increment;
+        speedShape.radius = 24 - increment;
     }
 
     public void UpdateEbrezza()
