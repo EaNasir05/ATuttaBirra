@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarsSpawn
   carsList: {fileID: 11400000, guid: c0a86217c79ade74a83930b7ae39a54b, type: 2}
+  carsBlocks: {fileID: 11400000, guid: 2b4640558ca61064695f7d1dfba18463, type: 2}
   startingSpawnTime: 1.75
   minSpawnTime: 1.5
   spawnTimeReduction: 0.05

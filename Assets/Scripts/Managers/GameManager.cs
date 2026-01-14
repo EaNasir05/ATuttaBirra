@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Alcool")]
     [SerializeField] private float maxAlcoolPower;
+    [SerializeField] private float minAlcoolPower;
+    [SerializeField] private float policeAlcoolPower;
     [SerializeField] private float alcoolPowerConsumedPerSecond;
     [SerializeField] private float startingSecondsWithDecelerationImmunity;
     private float secondsWithDecelerationImmunity;
@@ -41,6 +43,7 @@ public class GameManager : MonoBehaviour
         actionMap = actionAsset.FindActionMap("Player");
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
+        Cursor.visible = false;
         totalBeerConsumed = 0;
         alcoolPower = 0.25f;
         carController.enabled = false;
@@ -57,9 +60,10 @@ public class GameManager : MonoBehaviour
         {
             secondsWithDecelerationImmunity = 0;
             alcoolPower -= alcoolPowerConsumedPerSecond * Time.deltaTime;
-            if (alcoolPower < 0.5f && !gameOver)
+            if (alcoolPower < minAlcoolPower && !gameOver)
                 StartCoroutine(SpawnPolice());
         }
+        Debug.Log(alcoolPower);
     }
 
     private bool UpdateImmunity()
@@ -83,10 +87,13 @@ public class GameManager : MonoBehaviour
     public float GetTotalBeerConsumed() => totalBeerConsumed;
     public bool IsImmuneToDeceleration() => secondsWithDecelerationImmunity > 0;
     public float GetMaxAlcoolPower() => maxAlcoolPower;
+    public float GetMinAlcoolPower() => minAlcoolPower;
+    public float GetPoliceAlcoolPower() => policeAlcoolPower;
 
     public void AddDecelerationImmunity(float value)
     {
         SFXManager.instance.PlayClipWithRandomPitch(accelerationAudioClip, accelerationAudioVolume);
+        UIManager.instance.StartCameraMovement(value);
         secondsWithDecelerationImmunity += value;
     }
 

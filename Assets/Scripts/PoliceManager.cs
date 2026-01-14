@@ -27,11 +27,15 @@ public class PoliceChaseSystem : MonoBehaviour
     private bool policeNear = false;
     private bool readyToUpdateReflection = false;
     private bool policeSpawned = false;
+    private float policeAlcoolPower;
+    private float minAlcoolPower;
 
     private void Awake()
     {
         reflectionInTheMirror.rectTransform.localScale = new Vector3(reflectionMinSize, reflectionMinSize, 1);
         reflectionInTheMirror.rectTransform.localPosition = new Vector3(0, reflectionMaxPosY, 0);
+        policeAlcoolPower = GameManager.instance.GetPoliceAlcoolPower();
+        minAlcoolPower = GameManager.instance.GetMinAlcoolPower();
     }
 
     private void Update()
@@ -54,7 +58,7 @@ public class PoliceChaseSystem : MonoBehaviour
         if (!policeSpawned)
         {
             float alcoolPower = GameManager.instance.GetAlcoolPower();
-            if (alcoolPower <= 1 && !policeNear)
+            if (alcoolPower <= policeAlcoolPower && !policeNear)
             {
                 policeNear = true;
                 currentColor = 0;
@@ -63,7 +67,7 @@ public class PoliceChaseSystem : MonoBehaviour
                 audioSource.Play();
                 StartCoroutine(ApproachThePlayer());
             }
-            else if (alcoolPower > 1 && policeNear)
+            else if (alcoolPower > policeAlcoolPower && policeNear)
             {
                 policeNear = false;
                 lightsOnThePlayer[0].transform.parent.gameObject.SetActive(false);
@@ -73,7 +77,7 @@ public class PoliceChaseSystem : MonoBehaviour
 
             if (policeNear)
             {
-                float t = Mathf.Clamp(alcoolPower - 0.5f, 0, 0.5f) * 2;
+                float t = Mathf.Clamp(alcoolPower - minAlcoolPower, 0, policeAlcoolPower - minAlcoolPower) * (1 / (policeAlcoolPower - minAlcoolPower));
                 float lightIntensity = Mathf.Lerp(lightMaxIntensity, lightMinIntensity, t);
                 audioSource.volume = Mathf.Lerp(maxAudioVolume, minAudioVolume, t);
                 lightsOnThePlayer[0].intensity = lightIntensity;

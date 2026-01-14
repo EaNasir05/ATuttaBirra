@@ -473,18 +473,11 @@ public class DrinkSystem : MonoBehaviour
     }
 
     public bool IsIdling() => state == DrinkState.Idle;
-
     public bool IsDrinking() => state == DrinkState.Drinking;
     public bool IsMoving() => state == DrinkState.Moving;
 
-    public float GetBeerFill()
-    {
-        return beer.fillAmount;
-    }
-
-    public float GetMinFill()
-    {
-        return minFill;
-    }
+    public float GetBeerFill() => beer.fillAmount;
+    public float GetMinFill() => minFill;
+    public float GetMaxFill() => maxFill;
 
 }
