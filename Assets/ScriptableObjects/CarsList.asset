@@ -15,13 +15,19 @@ MonoBehaviour:
   cars:
   - prefab: {fileID: 5060046609583140968, guid: c6ee57362cd037648b1f57150c9dcfa9, type: 3}
     height: 0.25
+    big: 1
   - prefab: {fileID: 2664137357268476001, guid: f3e0d5c4ed07a7e439d51c71c872d03d, type: 3}
     height: 2
+    big: 1
   - prefab: {fileID: 5394486444882743845, guid: f789fe9943940a54c9d3f54b332a9626, type: 3}
     height: 0.9
+    big: 0
   - prefab: {fileID: 3202089544926591401, guid: 5131867dc8b9b94448491fbf6527bd9a, type: 3}
     height: 1.25
+    big: 0
   - prefab: {fileID: 6869089734541228707, guid: b99ae1d75cc395f45a3df570b655db4f, type: 3}
     height: 1
+    big: 0
   - prefab: {fileID: 3719728359773063807, guid: fc81e0acd211168468945cb32cf81484, type: 3}
     height: 0.75
+    big: 0

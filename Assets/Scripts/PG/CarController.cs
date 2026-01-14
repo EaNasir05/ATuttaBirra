@@ -14,6 +14,7 @@ public class CarController : MonoBehaviour
 
     [Header("Movement")]
     public float baseSpeed = 6f;
+    public float maxBaseSpeed = 9f;
     public float accelMultiplier = 1.3f;
     public float accelSmoothing = 10f;
     public float smoothingLossMultiplier = 0.5f;
@@ -55,6 +56,8 @@ public class CarController : MonoBehaviour
     private float lastMoveX;
     private bool bothSticksActive;
     private PlayerDirection previousDirection;
+    private float maxAlcoolPower;
+    private float policeAlcoolPower;
 
     void Awake()
     {
@@ -69,6 +72,8 @@ public class CarController : MonoBehaviour
         startingSmoothing = accelSmoothing;
         startingSteeringWheelRot = steeringWheel.localRotation;
         steeringLocalAxis = steeringWheel.TransformDirection(Vector3.forward);
+        maxAlcoolPower = GameManager.instance.GetMaxAlcoolPower();
+        policeAlcoolPower = GameManager.instance.GetPoliceAlcoolPower();
     }
 
     void OnEnable()
@@ -116,11 +121,12 @@ public class CarController : MonoBehaviour
             sameDirection = dot >= sameDirectionDotThreshold;
         }
 
-        float targetSpeed = baseSpeed;
+        float t = Mathf.Clamp(GameManager.instance.GetAlcoolPower() - policeAlcoolPower, 0, maxAlcoolPower - policeAlcoolPower) / (maxAlcoolPower - policeAlcoolPower);
+        float targetSpeed = Mathf.Lerp(baseSpeed, maxBaseSpeed, t);
         if (sameDirection)
         {
             float rightMag = Mathf.Clamp01(speed.magnitude);
-            targetSpeed = baseSpeed * (1f + accelMultiplier * rightMag);
+            targetSpeed *= (1f + accelMultiplier * rightMag);
         }
 
         float desiredVelX = moveX * targetSpeed;

@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff478c0cc654a8e488f39437a6ad4c7e, type: 3}
+  m_Name: CarsBlocks
+  m_EditorClassIdentifier: Assembly-CSharp::CarsBlocks
+  blocks:
+  - carsPositionZ:
+    - 0
+    carsLane: 00000000
+    bigCars: 00
+    possibleNextBlocksIndexes: 0800000007000000
+  - carsPositionZ:
+    - 0
+    carsLane: 00000000
+    bigCars: 01
+    possibleNextBlocksIndexes: 0800000007000000
+  - carsPositionZ:
+    - 0
+    carsLane: 01000000
+    bigCars: 00
+    possibleNextBlocksIndexes: 0600000008000000
+  - carsPositionZ:
+    - 0
+    carsLane: 01000000
+    bigCars: 01
+    possibleNextBlocksIndexes: 0600000008000000
+  - carsPositionZ:
+    - 0
+    carsLane: 02000000
+    bigCars: 00
+    possibleNextBlocksIndexes: 0600000007000000
+  - carsPositionZ:
+    - 0
+    carsLane: 02000000
+    bigCars: 01
+    possibleNextBlocksIndexes: 0600000007000000
+  - carsPositionZ:
+    - 0
+    carsLane: 00000000
+    bigCars: 00
+    possibleNextBlocksIndexes: 090000000a0000000b000000
+  - carsPositionZ:
+    - 0
+    carsLane: 01000000
+    bigCars: 00
+    possibleNextBlocksIndexes: 090000000a0000000b000000
+  - carsPositionZ:
+    - 0
+    carsLane: 02000000
+    bigCars: 00
+    possibleNextBlocksIndexes: 090000000a0000000b000000
+  - carsPositionZ:
+    - 0
+    - 0
+    carsLane: 0000000001000000
+    bigCars: 0000
+    possibleNextBlocksIndexes: 000000000100000002000000030000000400000005000000
+  - carsPositionZ:
+    - 0
+    - 0
+    carsLane: 0100000002000000
+    bigCars: 0000
+    possibleNextBlocksIndexes: 000000000100000002000000030000000400000005000000
+  - carsPositionZ:
+    - 0
+    - 0
+    carsLane: 0000000002000000
+    bigCars: 0000
+    possibleNextBlocksIndexes: 000000000100000002000000030000000400000005000000

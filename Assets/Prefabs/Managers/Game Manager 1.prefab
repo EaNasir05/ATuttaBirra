@@ -50,8 +50,11 @@ MonoBehaviour:
   carController: {fileID: 0}
   spawner: {fileID: 0}
   policeManager: {fileID: 0}
-  maxAlcoolPower: 3
+  maxAlcoolPower: 3.5
+  minAlcoolPower: 1
+  policeAlcoolPower: 1.5
   alcoolPowerConsumedPerSecond: 0.015
   startingSecondsWithDecelerationImmunity: 10
   accelerationAudioClip: {fileID: 8300000, guid: 6c396229586d5c94780bb5d3b1a0b7be, type: 3}
   accelerationAudioVolume: 1
+  finalScore: 0

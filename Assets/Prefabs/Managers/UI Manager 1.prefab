@@ -54,6 +54,7 @@ MonoBehaviour:
   speedEffect: {fileID: 0}
   speedEffectMultiplier: 1
   cameraHandler: {fileID: 0}
-  maxCameraDistance: 0.1
-  cameraMovementMultiplier: 0.02
+  cameraDistanceWhileAccelerating: 0.075
+  cameraFirstMovementDuration: 0.2
+  cameraSecondMovementDuration: 0.75
   fireEffect: {fileID: 0}
