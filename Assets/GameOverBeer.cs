@@ -10,7 +10,7 @@ public class GameOverBeer : MonoBehaviour
       
 
         float score = GameManager.instance.finalScore;
-        punteggioText.text = "Punteggio: " + Mathf.Round(score * 100f) / 100f + " L";
+        punteggioText.text = "Ma hai bevuto " + Mathf.Round(score * 100f) / 100f + " pinte!";
     }
 }
 
