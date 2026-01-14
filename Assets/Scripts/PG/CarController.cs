@@ -72,6 +72,10 @@ public class CarController : MonoBehaviour
         startingSmoothing = accelSmoothing;
         startingSteeringWheelRot = steeringWheel.localRotation;
         steeringLocalAxis = steeringWheel.TransformDirection(Vector3.forward);
+    }
+
+    private void Start()
+    {
         maxAlcoolPower = GameManager.instance.GetMaxAlcoolPower();
         policeAlcoolPower = GameManager.instance.GetPoliceAlcoolPower();
     }
@@ -128,7 +132,6 @@ public class CarController : MonoBehaviour
             float rightMag = Mathf.Clamp01(speed.magnitude);
             targetSpeed *= (1f + accelMultiplier * rightMag);
         }
-
         float desiredVelX = moveX * targetSpeed;
         Vector3 currentVel = rb.linearVelocity;
         float newVelX = Mathf.Lerp(

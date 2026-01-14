@@ -34,6 +34,10 @@ public class PoliceChaseSystem : MonoBehaviour
     {
         reflectionInTheMirror.rectTransform.localScale = new Vector3(reflectionMinSize, reflectionMinSize, 1);
         reflectionInTheMirror.rectTransform.localPosition = new Vector3(0, reflectionMaxPosY, 0);
+    }
+
+    private void Start()
+    {
         policeAlcoolPower = GameManager.instance.GetPoliceAlcoolPower();
         minAlcoolPower = GameManager.instance.GetMinAlcoolPower();
     }

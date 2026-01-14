@@ -15,6 +15,10 @@ public class CarCollision : MonoBehaviour
     {
         drinkSystem = transform.GetComponentInChildren<DrinkSystem>();
         cameraHandler = transform.GetComponentInChildren<CameraMovement>();
+    }
+
+    private void Start()
+    {
         policeAlcoolPower = GameManager.instance.GetPoliceAlcoolPower();
         maxAlcoolPower = GameManager.instance.GetMaxAlcoolPower();
     }
