@@ -77,10 +77,10 @@ MonoBehaviour:
     bigCars: 0000
     possibleNextBlocksIndexes: 000000000100000002000000030000000400000005000000
   - carsPositionZ:
+    - 3
     - 0
-    - 0
-    carsLane: 0000000002000000
-    bigCars: 0000
+    carsLane: 0000000001000000
+    bigCars: 0100
     possibleNextBlocksIndexes: 000000000100000002000000030000000400000005000000
   - carsPositionZ:
     - 0
