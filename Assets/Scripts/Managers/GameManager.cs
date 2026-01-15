@@ -103,6 +103,8 @@ public class GameManager : MonoBehaviour
         UIManager.instance.UpdateBeerConsumed(Mathf.Round(totalBeerConsumed * 100) / 100);
         UIManager.instance.UpdateEbrezza();
         spawner.UpdateSpawnTime();
+        UIManager.instance.CheckBeerPopups(totalBeerConsumed);
+
     }
 
     public void UpdateAlcoolPower(float increment)

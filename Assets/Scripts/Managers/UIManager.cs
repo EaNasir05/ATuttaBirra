@@ -29,7 +29,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private ParticleSystem fireEffect;
     //[SerializeField] private float fireEffectMultiplier;
     //[SerializeField] private float maxFireEffectIntensity;
-    private ParticleSystem.ShapeModule speedShape;
+
+    [Header("Beer popups")]
+    [SerializeField] private RectTransform canvasRect;
+    [SerializeField] private GameObject beerImagePrefab;
+    [SerializeField] private Vector2 minMaxSize = new Vector2(80, 160);
+
+    private int lastSpawnedLiter = 0; private ParticleSystem.ShapeModule speedShape;
     private Color fogColor;
     private float fogDensity;
     private Coroutine moveCameraRoutine;
@@ -160,5 +166,43 @@ public class UIManager : MonoBehaviour
     {
         speedShape.radius = 30;
         StartCoroutine(FadeOutBlackScreen());
+    }
+    public void CheckBeerPopups(float totalBeer)
+    {
+       
+        if (beerImagePrefab == null || canvasRect == null)
+            return;
+
+        int currentLiters = Mathf.FloorToInt(totalBeer);
+
+        if (currentLiters > lastSpawnedLiter)
+        {
+            int toSpawn = currentLiters - lastSpawnedLiter;
+
+            for (int i = 0; i < toSpawn; i++)
+            {
+                SpawnBeerImage();
+            }
+
+            lastSpawnedLiter = currentLiters;
+        }
+    }
+
+    private void SpawnBeerImage()
+    {
+        if (beerImagePrefab == null || canvasRect == null)
+            return;
+
+        GameObject img = Instantiate(beerImagePrefab, canvasRect);
+
+        RectTransform rt = img.GetComponent<RectTransform>();
+
+        float x = Random.Range(0, canvasRect.rect.width);
+        float y = Random.Range(0, canvasRect.rect.height);
+
+        rt.anchoredPosition = new Vector2(x, y);
+
+        float size = Random.Range(minMaxSize.x, minMaxSize.y);
+        rt.sizeDelta = new Vector2(size, size);
     }
 }
