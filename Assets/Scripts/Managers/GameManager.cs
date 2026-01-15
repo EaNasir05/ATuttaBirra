@@ -146,7 +146,6 @@ public class GameManager : MonoBehaviour
         carController.enabled = true;
         SFXManager.instance.PlayClip(accelerationAudioClip, accelerationAudioVolume);
         carAudioSource.Play();
-        Debug.Log("GAME STARTED");
     }
 
     private void GameOver()
@@ -157,7 +156,6 @@ public class GameManager : MonoBehaviour
         StartCoroutine(OSTManager.instance.GameOver());
         alcoolPower = 0;
         carAudioSource.Stop();
-        Debug.Log("GAME OVER");
     }
     [HideInInspector] public float finalScore;
 }

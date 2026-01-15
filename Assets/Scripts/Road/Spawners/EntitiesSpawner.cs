@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class EntitiesSpawner : MonoBehaviour
@@ -17,6 +18,7 @@ public class EntitiesSpawner : MonoBehaviour
     private float spawnTime;
     private float timePassed;
     private CarsBlock selectedBlock;
+    private int count = 0;
 
     void Awake()
     {
@@ -59,6 +61,13 @@ public class EntitiesSpawner : MonoBehaviour
                     spawnedCar.transform.position = new Vector3(posX, car.GetHeight(), spawnPositionZ + selectedBlock.carsPositionZ[i]);
                 }
                 int newBlock = selectedBlock.possibleNextBlocksIndexes[Random.Range(0, selectedBlock.possibleNextBlocksIndexes.Length)];
+
+                /*
+                count++;
+                if (count % 3 == 0 && count != 0)
+                    newBlock = INDICE_BLOCCO;
+                */
+
                 selectedBlock = blocks[newBlock];
                 timePassed = 0;
             }
