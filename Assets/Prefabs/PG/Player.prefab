@@ -1520,6 +1520,7 @@ MonoBehaviour:
   sameDirectionDotThreshold: 0.6
   carTransform: {fileID: 739859206002030821}
   rotationAngle: 1
+  maxRotationAngle: 1.5
   rotationSpeed: 10
   vibrationLow: 0
   vibrationHigh: 0
