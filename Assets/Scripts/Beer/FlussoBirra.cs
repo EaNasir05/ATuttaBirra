@@ -1,92 +1,139 @@
 ﻿using UnityEngine;
-using static Unity.VisualScripting.Member;
 
-[RequireComponent(typeof(LineRenderer))]
 public class LiquidStreamToggle : MonoBehaviour
 {
     [Header("Flow Settings")]
     public Transform startPoint;
     public float maxDistance = 5f;
-    public int segments = 20;
-    public float gravityCurve = 0.1f;
-    public float flowSpeed = 5f;
 
     [Header("Collision and DrinkSystem")]
     public LayerMask collisionMask;
     public DrinkSystem drinkSystem;
-    public float beerGainRate;
+    public float beerGainRate = 5f;
 
-    [Header("Optional")]
+    [Header("Particles")]
+    public ParticleSystem streamParticles;
     public ParticleSystem splashParticles;
 
-    
     [Header("Enough Beer")]
     public GameObject EnoughBeer;
 
-    private LineRenderer line;
     private bool isFlowing = false;
-    private float currentLength = 0f;
     private bool wasFillingTheJug = false;
     private bool isFillingTheJug = false;
+
     private AudioSource audioSource;
     private AudioSource loopAudioSource;
     private float startingLoopSeconds;
 
     void Awake()
     {
-        line = GetComponent<LineRenderer>();
-        line.positionCount = segments;
-        line.enabled = false;
         audioSource = GetComponent<AudioSource>();
         loopAudioSource = startPoint.GetComponent<AudioSource>();
         startingLoopSeconds = loopAudioSource.clip.length * 0.25f;
 
+        if (streamParticles != null)
+            streamParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
         if (splashParticles != null)
-            splashParticles.Stop();
-        
+            splashParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
         if (EnoughBeer != null)
             EnoughBeer.SetActive(false);
     }
 
     void Update()
     {
-        if (isFlowing)
+        if (!isFlowing)
         {
-            currentLength += flowSpeed * Time.deltaTime;
-            DrawStream();
-        }
-        else
             isFillingTheJug = false;
+            CheckFillingTheJug();
+            CheckEnoughBeer(); 
+            return;
+        }
 
+        RaycastCheck();
         CheckFillingTheJug();
-
-        
         CheckEnoughBeer();
 
         if (loopAudioSource.isPlaying && loopAudioSource.time >= loopAudioSource.clip.length)
-        {
             loopAudioSource.time = startingLoopSeconds;
+    }
+
+    
+
+    public void SetFlow(bool active)
+    {
+        if (isFlowing == active)
+            return;
+
+        isFlowing = active;
+
+        if (active)
+        {
+            if (streamParticles != null)
+                streamParticles.Play();
+
+            StartLoopClip();
+        }
+        else
+        {
+            if (streamParticles != null)
+                streamParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+
+            if (splashParticles != null)
+                splashParticles.Stop();
+
+            if (EnoughBeer != null)                 
+                EnoughBeer.SetActive(false);
+
+            StopLoopClip();
+        }
+    }
+
+    
+    void RaycastCheck()
+    {
+        Vector3 start = startPoint.position;
+        Vector3 dir = Vector3.down;
+        isFillingTheJug = false;
+
+        if (Physics.Raycast(start, dir, out RaycastHit hit, maxDistance, collisionMask))
+        {
+            if (splashParticles != null)
+            {
+                splashParticles.transform.position = hit.point;
+
+                if (!splashParticles.isPlaying)
+                    splashParticles.Play();
+            }
+
+            if (hit.collider.CompareTag("StreamTarget"))
+            {
+                drinkSystem.GainBeer(beerGainRate * Time.deltaTime);
+                isFillingTheJug = true;
+            }
+        }
+        else
+        {
+            if (splashParticles != null && splashParticles.isPlaying)
+                splashParticles.Stop();
         }
     }
 
    
+
     private void CheckEnoughBeer()
     {
         if (EnoughBeer == null || drinkSystem == null)
             return;
-        
+
         bool overLimit = drinkSystem.GetBeerFill() <= drinkSystem.GetMinFill();
 
         if (isFillingTheJug && overLimit)
-        {
-            if (!EnoughBeer.activeSelf)
-                EnoughBeer.SetActive(true);
-        }
+            EnoughBeer.SetActive(true);
         else
-        {
-            if (EnoughBeer.activeSelf)
-                EnoughBeer.SetActive(false);
-        }
+            EnoughBeer.SetActive(false);
     }
 
     private void CheckFillingTheJug()
@@ -95,7 +142,10 @@ public class LiquidStreamToggle : MonoBehaviour
         {
             drinkSystem.receivingBeer = true;
             wasFillingTheJug = true;
-            float perc = 1 - ((drinkSystem.GetBeerFill() - drinkSystem.GetMinFill()) / (drinkSystem.GetMaxFill() - drinkSystem.GetMinFill()));
+
+            float perc = 1 - ((drinkSystem.GetBeerFill() - drinkSystem.GetMinFill()) /
+                             (drinkSystem.GetMaxFill() - drinkSystem.GetMinFill()));
+
             audioSource.Play();
             audioSource.time = perc * audioSource.clip.length;
         }
@@ -105,25 +155,12 @@ public class LiquidStreamToggle : MonoBehaviour
             wasFillingTheJug = false;
             audioSource.Stop();
         }
+
         if (drinkSystem.beerOverflowing)
             audioSource.Stop();
     }
 
-    public void SetFlow(bool active)
-    {
-        if (isFlowing == active)
-            return;
-
-        isFlowing = active;
-        line.enabled = active;
-
-        if (!active)
-        {
-            currentLength = 0f;
-            if (splashParticles != null)
-                splashParticles.Stop();
-        }
-    }
+    
 
     public void StartLoopClip()
     {
@@ -136,42 +173,5 @@ public class LiquidStreamToggle : MonoBehaviour
         if (loopAudioSource.isPlaying)
             loopAudioSource.Stop();
     }
-
-    void DrawStream()
-    {
-        Vector3 start = startPoint.position;
-
-        float targetLength = maxDistance;
-        Vector3 end = start + Vector3.down * maxDistance;
-        isFillingTheJug = false;
-
-        if (Physics.Raycast(start, Vector3.down, out RaycastHit hit, maxDistance, collisionMask))
-        {
-            targetLength = hit.distance;
-            end = hit.point;
-
-            if (hit.collider.CompareTag("StreamTarget"))
-            {
-                drinkSystem.GainBeer(beerGainRate * Time.deltaTime);
-                isFillingTheJug = true;
-            }
-        }
-
-        float length = Mathf.Min(currentLength, targetLength);
-
-        for (int i = 0; i < segments; i++)
-        {
-            float t = i / (float)(segments - 1);
-            Vector3 pos = start + Vector3.down * length * t;
-            pos.y -= gravityCurve * t * t;
-            line.SetPosition(i, pos);
-        }
-
-        if (splashParticles != null && length >= targetLength)
-        {
-            splashParticles.transform.position = end;
-            if (!splashParticles.isPlaying)
-                splashParticles.Play();
-        }
-    }
 }
+
