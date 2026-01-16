@@ -1,5 +1,6 @@
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -14,6 +15,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text beerConsumed;
     [SerializeField] private Image skyboxCover;
     [SerializeField] private Image blackScreen;
+    [SerializeField] private GameObject holdGlassTutorial;
+    [SerializeField] private GameObject moveGlassTutorial;
+    [SerializeField] private GameObject holdLeverTutorial;
+    [SerializeField] private GameObject pullLeverTutorial;
+    [SerializeField] private GameObject drinkDirectionTutorial;
+    [SerializeField] private GameObject driveTutorial;
+    [SerializeField] private TMP_Text drinkAndDriveText;
 
     [Header("VFX")]
     [SerializeField] private float blackScreenFadeDuration;
@@ -205,4 +213,30 @@ public class UIManager : MonoBehaviour
         float size = Random.Range(minMaxSize.x, minMaxSize.y);
         rt.sizeDelta = new Vector2(size, size);
     }
+
+    public IEnumerator FadeInDrinkNDrive()
+    {
+        float elapsed = 0f;
+        float size = drinkAndDriveText.fontSize;
+        drinkAndDriveText.fontSize = 5;
+        drinkAndDriveText.gameObject.SetActive(true);
+        while (elapsed < 0.5f)
+        {
+            elapsed += Time.deltaTime;
+            float currentSize = Mathf.Lerp(5, size, elapsed / 0.5f);
+            drinkAndDriveText.fontSize = currentSize;
+            yield return null;
+        }
+        yield return new WaitForSeconds(2);
+        drinkAndDriveText.gameObject.SetActive(false);
+        GameManager.instance.gameStarted = true;
+        StaticGameVariables.instance.firstTimePlaying = false;
+    }
+
+    public void EnableHoldGlassTutorialImage(bool value) => holdGlassTutorial.SetActive(value);
+    public void EnableMoveGlassTutorialImage(bool value) => moveGlassTutorial.SetActive(value);
+    public void EnableHoldLeverTutorialImage(bool value) => holdLeverTutorial.SetActive(value);
+    public void EnablePullLeverTutorialImage(bool value) => pullLeverTutorial.SetActive(value);
+    public void EnableDrinkTutorialDirection(bool value) => drinkDirectionTutorial.SetActive(value);
+    public void EnableDriveTutorial(bool value) => driveTutorial.SetActive(value);
 }

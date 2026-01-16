@@ -101,9 +101,9 @@ public class PoliceChaseSystem : MonoBehaviour
     {
         float elapsed = 0;
         float currentScale = reflectionInTheMirror.rectTransform.localScale.x;
-        float targetScale = Mathf.Lerp(reflectionMaxSize, reflectionMinSize, Mathf.Clamp(GameManager.instance.GetAlcoolPower() - 0.5f, 0, 0.5f) * 2);
+        float targetScale = Mathf.Lerp(reflectionMaxSize, reflectionMinSize, Mathf.Clamp(GameManager.instance.GetAlcoolPower() - minAlcoolPower, 0, policeAlcoolPower - minAlcoolPower) * (1 / (policeAlcoolPower - minAlcoolPower)));
         float currentPosY = reflectionInTheMirror.rectTransform.localPosition.y;
-        float targetPosY = Mathf.Lerp(reflectionMinPosY, reflectionMaxPosY, Mathf.Clamp(GameManager.instance.GetAlcoolPower() - 0.5f, 0, 0.5f) * 2);
+        float targetPosY = Mathf.Lerp(reflectionMinPosY, reflectionMaxPosY, Mathf.Clamp(GameManager.instance.GetAlcoolPower() - minAlcoolPower, 0, policeAlcoolPower - minAlcoolPower) * (1 / (policeAlcoolPower - minAlcoolPower)));
         reflectionInTheMirror.gameObject.SetActive(true);
         while (elapsed < reflectionTransitionDuration && policeNear)
         {

@@ -62,6 +62,21 @@ public class SFXManager : MonoBehaviour
         StartCoroutine(MakeSourceAvailable(clip.length, i));
     }
 
+    public int PlayClipWithRandomPitchAndReturnIndex(AudioClip clip, float volume)
+    {
+        int i = GetTheFirstAvailableSource();
+        if (i == -1)
+            return -1;
+        availableSources[i] = false;
+        sources[i].clip = clip;
+        sources[i].volume = volume;
+        sources[i].loop = false;
+        sources[i].pitch = Random.Range(0.85f, 1.15f);
+        sources[i].Play();
+        StartCoroutine(MakeSourceAvailable(clip.length, i));
+        return i;
+    }
+
     public int PlayClipInLoop(AudioClip clip, float volume)
     {
         int i = GetTheFirstAvailableSource();
@@ -86,5 +101,10 @@ public class SFXManager : MonoBehaviour
     {
         sources[index].Stop();
         availableSources[index] = true;
+    }
+
+    public void StopClip(int index)
+    {
+        sources[index].Stop();
     }
 }

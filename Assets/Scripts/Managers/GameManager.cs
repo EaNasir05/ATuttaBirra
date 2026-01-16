@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
 
     [Header("External scripts")]
     [SerializeField] private CarController carController;
+    [SerializeField] private DrinkSystem drinkSystem;
+    [SerializeField] private LeverInteraction_InputSystem leverSystem;
+    [SerializeField] private LiquidStreamToggle liquidStream;
     [SerializeField] private EntitiesSpawner spawner;
     [SerializeField] private PoliceChaseSystem policeManager;
 
@@ -25,9 +28,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float alcoolPowerConsumedPerSecond;
     [SerializeField] private float startingSecondsWithDecelerationImmunity;
     private float secondsWithDecelerationImmunity;
-    public float totalBeerConsumed;
+    private float totalBeerConsumed;
     private float alcoolPower;
     private bool gameOver;
+    private bool tutorial;
 
     [Header("Audios")]
     [SerializeField] private AudioClip accelerationAudioClip;
@@ -46,12 +50,20 @@ public class GameManager : MonoBehaviour
         Cursor.visible = false;
         totalBeerConsumed = 0;
         alcoolPower = 0.25f;
+        tutorial = false;
         carController.enabled = false;
         actionMap.FindAction("Hold T").Enable();
         actionMap.FindAction("Hold S").Enable();
         actionMap.FindAction("Move").Enable();
         actionMap.FindAction("Speed").Enable();
         carAudioSource = carController.gameObject.GetComponent<AudioSource>();
+        StaticGameVariables.instance ??= new();
+        if (StaticGameVariables.instance.firstTimePlaying)
+        {
+            Debug.Log("Inizio tutorial");
+            StartCoroutine(Tutorial());
+            startingSecondsWithDecelerationImmunity = 0;
+        }
     }
 
     private void Update()
@@ -63,7 +75,6 @@ public class GameManager : MonoBehaviour
             if (alcoolPower < minAlcoolPower && !gameOver)
                 StartCoroutine(SpawnPolice());
         }
-        Debug.Log(alcoolPower);
     }
 
     private bool UpdateImmunity()
@@ -83,7 +94,6 @@ public class GameManager : MonoBehaviour
     }
 
     public float GetAlcoolPower() => alcoolPower;
-    
     public float GetTotalBeerConsumed() => totalBeerConsumed;
     public bool IsImmuneToDeceleration() => secondsWithDecelerationImmunity > 0;
     public float GetMaxAlcoolPower() => maxAlcoolPower;
@@ -114,6 +124,7 @@ public class GameManager : MonoBehaviour
             if (increment > 0)
             {
                 alcoolPower = 1 + increment;
+                UIManager.instance.StartCameraMovement(increment);
                 StartGame();
             }
         }
@@ -140,7 +151,8 @@ public class GameManager : MonoBehaviour
 
     private void StartGame()
     {
-        gameStarted = true;
+        if (!tutorial)
+            gameStarted = true;
         UIManager.instance.StartGame();
         OSTManager.instance.StartGame();
         carController.enabled = true;
@@ -157,5 +169,34 @@ public class GameManager : MonoBehaviour
         alcoolPower = 0;
         carAudioSource.Stop();
     }
+
     [HideInInspector] public float finalScore;
+
+    private IEnumerator Tutorial()
+    {
+        tutorial = true;
+        drinkSystem.EmptyTheGlass();
+        UIManager.instance.EnableHoldLeverTutorialImage(true);
+        yield return new WaitUntil(() => leverSystem.IsGrabbingTheLever());
+        UIManager.instance.EnableHoldLeverTutorialImage(false);
+        UIManager.instance.EnablePullLeverTutorialImage(true);
+        yield return new WaitUntil(() => liquidStream.IsFlowing());
+        UIManager.instance.EnablePullLeverTutorialImage(false);
+        UIManager.instance.EnableHoldGlassTutorialImage(true);
+        yield return new WaitUntil(() => drinkSystem.IsMoving());
+        UIManager.instance.EnableHoldGlassTutorialImage(false);
+        UIManager.instance.EnableMoveGlassTutorialImage(true);
+        yield return new WaitUntil(() => drinkSystem.GetBeerFill() <= drinkSystem.GetMinFill() || drinkSystem.IsDrinking());
+        UIManager.instance.EnableMoveGlassTutorialImage(false);
+        UIManager.instance.EnableDrinkTutorialDirection(true);
+        yield return new WaitUntil(() => drinkSystem.IsDrinking());
+        UIManager.instance.EnableDrinkTutorialDirection(false);
+        yield return new WaitUntil(() => drinkSystem.IsIdling() || drinkSystem.IsMoving());
+        UIManager.instance.EnableDriveTutorial(true);
+        yield return new WaitUntil(() => carController.GetLastMove() > 0);
+        UIManager.instance.EnableDriveTutorial(false);
+        yield return new WaitForSeconds(2);
+        tutorial = false;
+        StartCoroutine(UIManager.instance.FadeInDrinkNDrive());
+    }
 }

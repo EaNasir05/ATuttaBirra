@@ -254,4 +254,6 @@ public class CarController : MonoBehaviour
         Gamepad.current.SetMotorSpeeds(0f, 0f);
         vibrating = false;
     }
+
+    public float GetLastMove() => lastMoveX;
 }

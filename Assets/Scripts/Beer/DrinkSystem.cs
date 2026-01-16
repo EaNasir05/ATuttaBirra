@@ -61,6 +61,7 @@ public class DrinkSystem : MonoBehaviour
     [SerializeField] private float burpAudioVolume;
     [SerializeField] private AudioClip splashAudioClip;
     [SerializeField] private float splashAudioVolume;
+    private int audioSourceIndex;
 
     [Header ("Stati")]
     private DrinkState state = DrinkState.Idle;
@@ -333,7 +334,7 @@ public class DrinkSystem : MonoBehaviour
                 if (firstTime)
                 {
                     previousFill = beer.fillAmount;
-                    SFXManager.instance.PlayClipWithRandomPitch(drinkingAudioClip, drinkingAudioVolume);
+                    audioSourceIndex = SFXManager.instance.PlayClipWithRandomPitchAndReturnIndex(drinkingAudioClip, drinkingAudioVolume);
                     firstTime = false;
                 }
                 elapsedDrinking += Time.deltaTime;
@@ -382,6 +383,10 @@ public class DrinkSystem : MonoBehaviour
             beer.fillAmount = maxFill + 2 + extraFillWhileMoving;
             iHateJews = true;
             needToGainExtra = false;
+        }
+        else
+        {
+            SFXManager.instance.StopClip(audioSourceIndex);
         }
         float startFill = beer.fillAmount;
         float endFill = startFill + extraFillWhileMoving;
@@ -480,4 +485,5 @@ public class DrinkSystem : MonoBehaviour
     public float GetMinFill() => minFill;
     public float GetMaxFill() => maxFill;
 
+    public void EmptyTheGlass() => beer.fillAmount = maxFill;
 }
