@@ -15,6 +15,7 @@ public class DrinkSystem : MonoBehaviour
     [SerializeField] private float minXRightHand = -0.1f;
     [SerializeField] private float maxYRightHand = 0.318f;
     [SerializeField] private float minYRightHand = 0.14f;
+    private bool movingForReal = false;
     private InputActionMap inputMap;
     private InputAction holdT, holdS, rightHand, actionTest;
     private Vector2 rightHandMovement;
@@ -62,6 +63,7 @@ public class DrinkSystem : MonoBehaviour
     [SerializeField] private float burpAudioVolume;
     [SerializeField] private AudioClip splashAudioClip;
     [SerializeField] private float splashAudioVolume;
+    private int audioSourceIndex;
 
     [Header ("Stati")]
     private DrinkState state = DrinkState.Idle;
@@ -285,6 +287,7 @@ public class DrinkSystem : MonoBehaviour
         float speed = rightHandSpeed * (1 - (alcoolLevel * 0.05f));
         float moveX = Mathf.Abs(rightHandMovement.x) > inputDeadZone ? rightHandMovement.x : 0f;
         float moveY = Mathf.Abs(rightHandMovement.y) > inputDeadZone ? rightHandMovement.y : 0f;
+        movingForReal = moveX != 0 || moveY != 0;
         Vector3 newPos = transform.position + new Vector3(((moveX * speed) + randomHandMovement.x) * Time.deltaTime, 0, ((moveY * speed) + randomHandMovement.y) * Time.deltaTime);
         Vector3 localPos = transform.parent.InverseTransformPoint(newPos);
         localPos.x = Mathf.Clamp(localPos.x, minXRightHand, maxXRightHand);
@@ -335,7 +338,7 @@ public class DrinkSystem : MonoBehaviour
                 if (firstTime)
                 {
                     previousFill = beer.fillAmount;
-                    SFXManager.instance.PlayClipWithRandomPitch(drinkingAudioClip, drinkingAudioVolume);
+                    audioSourceIndex = SFXManager.instance.PlayClipWithRandomPitchAndReturnIndex(drinkingAudioClip, drinkingAudioVolume);
                     firstTime = false;
                 }
                 elapsedDrinking += Time.deltaTime;
@@ -384,6 +387,10 @@ public class DrinkSystem : MonoBehaviour
             beer.fillAmount = maxFill + 2 + extraFillWhileMoving;
             iHateJews = true;
             needToGainExtra = false;
+        }
+        else
+        {
+            SFXManager.instance.StopClip(audioSourceIndex);
         }
         float startFill = beer.fillAmount;
         float endFill = startFill + extraFillWhileMoving;
@@ -483,5 +490,7 @@ public class DrinkSystem : MonoBehaviour
     public float GetBeerFill() => beer.fillAmount;
     public float GetMinFill() => minFill;
     public float GetMaxFill() => maxFill;
+    public bool IsMovingForReal() => movingForReal;
 
+    public void EmptyTheGlass() => beer.fillAmount = maxFill;
 }

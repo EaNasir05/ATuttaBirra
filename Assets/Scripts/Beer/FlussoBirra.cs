@@ -143,11 +143,10 @@ public class LiquidStreamToggle : MonoBehaviour
             drinkSystem.receivingBeer = true;
             wasFillingTheJug = true;
 
-            float perc = 1 - ((drinkSystem.GetBeerFill() - drinkSystem.GetMinFill()) /
-                             (drinkSystem.GetMaxFill() - drinkSystem.GetMinFill()));
+            float perc = 1 - ((drinkSystem.GetBeerFill() - drinkSystem.GetMinFill()) / (drinkSystem.GetMaxFill() - drinkSystem.GetMinFill()));
 
             audioSource.Play();
-            audioSource.time = perc * audioSource.clip.length;
+            audioSource.time = Mathf.Clamp(perc * audioSource.clip.length, 0, audioSource.clip.length);
         }
         else if (wasFillingTheJug && !isFillingTheJug)
         {
@@ -173,5 +172,8 @@ public class LiquidStreamToggle : MonoBehaviour
         if (loopAudioSource.isPlaying)
             loopAudioSource.Stop();
     }
+
+    public bool IsFlowing() => isFlowing;
+    public bool IsFillingTheJug() => isFillingTheJug;
 }
 

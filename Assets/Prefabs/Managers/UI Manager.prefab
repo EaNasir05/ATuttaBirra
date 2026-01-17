@@ -1,0 +1,137 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4404219672658727683
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4241789543033195168}
+  - component: {fileID: 5067376538251011999}
+  m_Layer: 0
+  m_Name: UI Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4241789543033195168
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4404219672658727683}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4363389208520179255}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5067376538251011999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4404219672658727683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21a77e5442c2d67458a79cf8d560d64f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIManager
+  beerConsumed: {fileID: 0}
+  skyboxCover: {fileID: 0}
+  blackScreen: {fileID: 0}
+  holdGlassTutorial: {fileID: 0}
+  moveGlassTutorial: {fileID: 0}
+  holdLeverTutorial: {fileID: 0}
+  pullLeverTutorial: {fileID: 0}
+  drinkDirectionTutorial: {fileID: 0}
+  driveTutorial: {fileID: 0}
+  drinkAndDriveText: {fileID: 0}
+  blackScreenFadeDuration: 1
+  ebrezzaDivider: 100
+  maxEbrezzaBlend: 0.1
+  ebrezzaScreenRenderer: {fileID: -7559563332645031118, guid: f288ae1f4751b564a96ac7587541f7a2, type: 2}
+  speedEffect: {fileID: 0}
+  speedEffectMultiplier: 1
+  cameraHandler: {fileID: 0}
+  cameraDistanceWhileAccelerating: 0.075
+  cameraFirstMovementDuration: 0.2
+  cameraSecondMovementDuration: 1
+  fireEffect: {fileID: 0}
+  canvasRect: {fileID: 0}
+  beerImagePrefab: {fileID: 0}
+  minMaxSize: {x: 80, y: 160}
+--- !u!1001 &4444778193029904891
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4241789543033195168}
+    m_Modifications:
+    - target: {fileID: 81866794589816780, guid: a5e7aa42b5cd3ba439ae0fa28a8b85b9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.69468
+      objectReference: {fileID: 0}
+    - target: {fileID: 81866794589816780, guid: a5e7aa42b5cd3ba439ae0fa28a8b85b9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.02227
+      objectReference: {fileID: 0}
+    - target: {fileID: 81866794589816780, guid: a5e7aa42b5cd3ba439ae0fa28a8b85b9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5.56751
+      objectReference: {fileID: 0}
+    - target: {fileID: 81866794589816780, guid: a5e7aa42b5cd3ba439ae0fa28a8b85b9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 81866794589816780, guid: a5e7aa42b5cd3ba439ae0fa28a8b85b9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 81866794589816780, guid: a5e7aa42b5cd3ba439ae0fa28a8b85b9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 81866794589816780, guid: a5e7aa42b5cd3ba439ae0fa28a8b85b9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 81866794589816780, guid: a5e7aa42b5cd3ba439ae0fa28a8b85b9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 81866794589816780, guid: a5e7aa42b5cd3ba439ae0fa28a8b85b9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 81866794589816780, guid: a5e7aa42b5cd3ba439ae0fa28a8b85b9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7569606714342111177, guid: a5e7aa42b5cd3ba439ae0fa28a8b85b9, type: 3}
+      propertyPath: m_Name
+      value: Flame Manager
+      objectReference: {fileID: 0}
+    - target: {fileID: 8521954604891626033, guid: a5e7aa42b5cd3ba439ae0fa28a8b85b9, type: 3}
+      propertyPath: maxScale
+      value: 8
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a5e7aa42b5cd3ba439ae0fa28a8b85b9, type: 3}
+--- !u!4 &4363389208520179255 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 81866794589816780, guid: a5e7aa42b5cd3ba439ae0fa28a8b85b9, type: 3}
+  m_PrefabInstance: {fileID: 4444778193029904891}
+  m_PrefabAsset: {fileID: 0}

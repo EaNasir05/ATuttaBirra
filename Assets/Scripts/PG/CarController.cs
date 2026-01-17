@@ -26,6 +26,7 @@ public class CarController : MonoBehaviour
     [Header("Car Rotation")]
     [SerializeField] Transform carTransform;
     public float rotationAngle = 10f;
+    public float maxRotationAngle = 15f;
     public float rotationSpeed = 5f;
     private Quaternion startingLocalRot;
     private float currentRotation;
@@ -177,7 +178,9 @@ public class CarController : MonoBehaviour
 
     private void Rotate(float movement)
     {
-        float targetOffset = movement * rotationAngle;
+        float t = Mathf.Clamp(GameManager.instance.GetTotalBeerConsumed() - 1, 0, 10) / 10;
+        float rot = Mathf.Lerp(rotationAngle, maxRotationAngle, t);
+        float targetOffset = movement * rot;
         float speed = movement != 0 ? rotationSpeed : rotationSpeed / 2;
 
         currentRotation = Mathf.MoveTowards(
@@ -251,4 +254,6 @@ public class CarController : MonoBehaviour
         Gamepad.current.SetMotorSpeeds(0f, 0f);
         vibrating = false;
     }
+
+    public float GetLastMove() => lastMoveX;
 }
