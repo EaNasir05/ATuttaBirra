@@ -174,5 +174,6 @@ public class LiquidStreamToggle : MonoBehaviour
     }
 
     public bool IsFlowing() => isFlowing;
+    public bool IsFillingTheJug() => isFillingTheJug;
 }
 

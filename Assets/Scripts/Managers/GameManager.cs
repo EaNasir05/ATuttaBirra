@@ -59,6 +59,12 @@ public class GameManager : MonoBehaviour
         carAudioSource = carController.gameObject.GetComponent<AudioSource>();
         StaticGameVariables.instance ??= new();
         if (StaticGameVariables.instance.firstTimePlaying)
+            tutorial = true;
+    }
+
+    private void Start()
+    {
+        if (tutorial)
         {
             Debug.Log("Inizio tutorial");
             StartCoroutine(Tutorial());
@@ -174,7 +180,6 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator Tutorial()
     {
-        tutorial = true;
         drinkSystem.EmptyTheGlass();
         UIManager.instance.EnableHoldLeverTutorialImage(true);
         yield return new WaitUntil(() => leverSystem.IsGrabbingTheLever());
@@ -186,8 +191,11 @@ public class GameManager : MonoBehaviour
         yield return new WaitUntil(() => drinkSystem.IsMoving());
         UIManager.instance.EnableHoldGlassTutorialImage(false);
         UIManager.instance.EnableMoveGlassTutorialImage(true);
-        yield return new WaitUntil(() => drinkSystem.GetBeerFill() <= drinkSystem.GetMinFill() || drinkSystem.IsDrinking());
+        yield return new WaitUntil(() => drinkSystem.IsMovingForReal());
         UIManager.instance.EnableMoveGlassTutorialImage(false);
+        UIManager.instance.EnableFillGlassTutorialImage(true);
+        yield return new WaitUntil(() => (drinkSystem.GetBeerFill() < drinkSystem.GetMaxFill() && !liquidStream.IsFillingTheJug()) || drinkSystem.GetBeerFill() <= drinkSystem.GetMinFill());
+        UIManager.instance.EnableFillGlassTutorialImage(false);
         UIManager.instance.EnableDrinkTutorialDirection(true);
         yield return new WaitUntil(() => drinkSystem.IsDrinking());
         UIManager.instance.EnableDrinkTutorialDirection(false);

@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image blackScreen;
     [SerializeField] private GameObject holdGlassTutorial;
     [SerializeField] private GameObject moveGlassTutorial;
+    [SerializeField] private GameObject fillGlassTutorial;
     [SerializeField] private GameObject holdLeverTutorial;
     [SerializeField] private GameObject pullLeverTutorial;
     [SerializeField] private GameObject drinkDirectionTutorial;
@@ -235,6 +236,7 @@ public class UIManager : MonoBehaviour
 
     public void EnableHoldGlassTutorialImage(bool value) => holdGlassTutorial.SetActive(value);
     public void EnableMoveGlassTutorialImage(bool value) => moveGlassTutorial.SetActive(value);
+    public void EnableFillGlassTutorialImage(bool value) => fillGlassTutorial.SetActive(value);
     public void EnableHoldLeverTutorialImage(bool value) => holdLeverTutorial.SetActive(value);
     public void EnablePullLeverTutorialImage(bool value) => pullLeverTutorial.SetActive(value);
     public void EnableDrinkTutorialDirection(bool value) => drinkDirectionTutorial.SetActive(value);
