@@ -134,6 +134,84 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarDetector
   speed: -9999999
+--- !u!1001 &2364583942826607991
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6059654960116457497}
+    m_Modifications:
+    - target: {fileID: 2664979609460669482, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_SpotAngle
+      value: 50.69128
+      objectReference: {fileID: 0}
+    - target: {fileID: 3187625886042801441, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_SpotAngle
+      value: 50.404617
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.76
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.70303684
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.07575813
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.70303684
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.07575813
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 12.301
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5995595811460610021, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_Name
+      value: Fari
+      objectReference: {fileID: 0}
+    - target: {fileID: 6583406513692274556, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 6583406513692274556, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+--- !u!4 &985429737687816455 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+  m_PrefabInstance: {fileID: 2364583942826607991}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6022017943235299314
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -267,6 +345,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 46da28503ce0d904b9b3284555aa9c76, type: 3}
       insertIndex: 1
       addedObject: {fileID: 3217207981980993614}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 46da28503ce0d904b9b3284555aa9c76, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 985429737687816455}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 46da28503ce0d904b9b3284555aa9c76, type: 3}
       insertIndex: -1
