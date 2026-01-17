@@ -134,6 +134,68 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarDetector
   speed: -9999999
+--- !u!1001 &114693597760679026
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5525184015460602290}
+    m_Modifications:
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.0383
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.0168
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.009
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.69646174
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.08171169
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.70847994
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.079502456
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 13.089
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 91.014
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0.297
+      objectReference: {fileID: 0}
+    - target: {fileID: 5995595811460610021, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+      propertyPath: m_Name
+      value: Fari
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+--- !u!4 &3236745118500368386 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3277569058324143216, guid: cf5ed64a021a9834585907a98d14aaf6, type: 3}
+  m_PrefabInstance: {fileID: 114693597760679026}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2898492001284054320
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -261,7 +323,7 @@ PrefabInstance:
     - target: {fileID: 3857033036310923978, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 547acabf205afbe44a9ca4801f2262c2, type: 2}
+      objectReference: {fileID: 2100000, guid: cb52a06f8ad92f147ab1fd9ac32cfc42, type: 2}
     - target: {fileID: 6097031815715081322, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -295,6 +357,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
       insertIndex: 1
       addedObject: {fileID: 5076026084846197708}
+    - targetCorrespondingSourceObject: {fileID: -1975700860811162494, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3236745118500368386}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
       insertIndex: -1
@@ -382,5 +447,10 @@ MonoBehaviour:
 --- !u!4 &3437155138402630363 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
+  m_PrefabInstance: {fileID: 2898492001284054320}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5525184015460602290 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -1975700860811162494, guid: 966955ed7fe8f744197fdcc3631e64d8, type: 3}
   m_PrefabInstance: {fileID: 2898492001284054320}
   m_PrefabAsset: {fileID: 0}
