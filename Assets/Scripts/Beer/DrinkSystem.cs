@@ -26,6 +26,7 @@ public class DrinkSystem : MonoBehaviour
     [SerializeField] private GameObject handOnSteering;
     [SerializeField] private GameObject handOnGlass;
     [SerializeField] private Transform targetTransform;
+    [SerializeField] private ParticleSystem BeerSplash;
 
     [Header("Birra")]
     [SerializeField] private Liquid beer;
@@ -75,6 +76,7 @@ public class DrinkSystem : MonoBehaviour
     public bool shakingBeer = false;
     public bool receivingBeer = false;
     public bool beerOverflowing = false;
+    
 
     private void Awake()
     {
@@ -456,6 +458,8 @@ public class DrinkSystem : MonoBehaviour
                 SFXManager.instance.PlayClipWithRandomPitch(splashAudioClip, splashAudioVolume);
                 shakingBeer = true;
                 beer.AddImpulse(new Vector2(1, 0), 5);
+                if (BeerSplash != null)
+                    BeerSplash.Play();
             }
         }
     }
