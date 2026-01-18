@@ -65,7 +65,7 @@ public class EntitiesSpawner : MonoBehaviour
                 /*
                 count++;
                 if (count % 3 == 0 && count != 0)
-                    newBlock = INDICE_BLOCCO;
+                    newBlock = 18;
                 */
 
                 selectedBlock = blocks[newBlock];
