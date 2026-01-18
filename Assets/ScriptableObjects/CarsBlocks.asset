@@ -38,7 +38,7 @@ MonoBehaviour:
     carsPositionX: []
     carsLane: 01000000
     bigCars: 01
-    possibleNextBlocksIndexes: 060000000800000010000000
+    possibleNextBlocksIndexes: 06000000080000001000000013000000
   - carsPositionZ:
     - 0
     carsPositionX: []
@@ -48,7 +48,7 @@ MonoBehaviour:
   - carsPositionZ:
     - 0
     carsPositionX:
-    - -3
+    - 0
     carsLane: 02000000
     bigCars: 01
     possibleNextBlocksIndexes: 060000000700000010000000
@@ -65,7 +65,7 @@ MonoBehaviour:
     - 0
     carsLane: 01000000
     bigCars: 00
-    possibleNextBlocksIndexes: 090000000a0000000b00000010000000
+    possibleNextBlocksIndexes: 090000000a0000000b0000001000000013000000
   - carsPositionZ:
     - 0
     carsPositionX:
@@ -76,7 +76,9 @@ MonoBehaviour:
   - carsPositionZ:
     - 0
     - 0
-    carsPositionX: []
+    carsPositionX:
+    - 0
+    - 0
     carsLane: 0000000001000000
     bigCars: 0100
     possibleNextBlocksIndexes: 0000000001000000020000000300000004000000080000000d0000000f000000
@@ -122,7 +124,7 @@ MonoBehaviour:
     - -3
     carsLane: 000000000100000002000000
     bigCars: 000100
-    possibleNextBlocksIndexes: 0500000004000000030000000c0000000d000000120000000a000000
+    possibleNextBlocksIndexes: 0500000004000000030000000c0000000d000000120000000a00000013000000
   - carsPositionZ:
     - -35
     - 0
@@ -147,7 +149,7 @@ MonoBehaviour:
     - -3
     carsLane: 0000000002000000
     bigCars: 0000
-    possibleNextBlocksIndexes: 00000000010000001100000003000000040000000500000006000000
+    possibleNextBlocksIndexes: 00000000010000001300000003000000040000000500000006000000
   - carsPositionZ:
     - 0
     - 0
@@ -157,3 +159,12 @@ MonoBehaviour:
     carsLane: 0000000002000000
     bigCars: 0000
     possibleNextBlocksIndexes: 00000000010000001100000003000000040000000500000006000000
+  - carsPositionZ:
+    - 0
+    - 0
+    carsPositionX:
+    - 0
+    - 0
+    carsLane: 0000000002000000
+    bigCars: 0100
+    possibleNextBlocksIndexes: 0f00000002000000070000000a000000090000000c000000
