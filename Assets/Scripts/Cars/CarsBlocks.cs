@@ -12,6 +12,7 @@ public class CarsBlocks : ScriptableObject
 public class CarsBlock
 {
     public float[] carsPositionZ;
+    public float[] carsPositionX;
     public RoadLane[] carsLane;
     public bool[] bigCars;
     public int[] possibleNextBlocksIndexes;

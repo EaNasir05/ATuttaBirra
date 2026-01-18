@@ -66,7 +66,6 @@ public class GameManager : MonoBehaviour
     {
         if (tutorial)
         {
-            Debug.Log("Inizio tutorial");
             StartCoroutine(Tutorial());
             startingSecondsWithDecelerationImmunity = 0;
         }
@@ -80,6 +79,7 @@ public class GameManager : MonoBehaviour
             alcoolPower -= alcoolPowerConsumedPerSecond * Time.deltaTime;
             if (alcoolPower < minAlcoolPower && !gameOver)
                 StartCoroutine(SpawnPolice());
+            Debug.Log(alcoolPower);
         }
     }
 
@@ -120,7 +120,6 @@ public class GameManager : MonoBehaviour
         UIManager.instance.UpdateEbrezza();
         spawner.UpdateSpawnTime();
         UIManager.instance.CheckBeerPopups(totalBeerConsumed);
-
     }
 
     public void UpdateAlcoolPower(float increment)

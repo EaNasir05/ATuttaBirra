@@ -6,7 +6,8 @@ public class OSTManager : MonoBehaviour
 {
     public static OSTManager instance;
 
-    [SerializeField] private GameObject[] alcoolPowerClips;
+    [SerializeField] private GameObject[] clips;
+    [SerializeField] private float[] alcoolPowerStages;
     [SerializeField] private float ebrezzaMultiplier;
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private AudioMixerSnapshot[] snapshots;
@@ -28,7 +29,6 @@ public class OSTManager : MonoBehaviour
     {
         if (GameManager.instance.gameStarted)
         {
-            UpdateLevel();
             UpdateActiveLayers();
             UpdateEbrezza();
         }
@@ -42,11 +42,6 @@ public class OSTManager : MonoBehaviour
             audioMixer.SetFloat("Ebrezza", ebrezza);
             currentMuffling = ebrezza;
         }
-    }
-
-    private void UpdateLevel()
-    {
-        //cambia canzone in base all'alcoolPower
     }
 
     private void UpdateActiveLayers()
@@ -66,18 +61,21 @@ public class OSTManager : MonoBehaviour
 
     private int CalculateNewActiveLayers()
     {
-        if (GameManager.instance.IsImmuneToDeceleration())
+        float power = GameManager.instance.GetAlcoolPower();
+        if (power > alcoolPowerStages[4])
             return 4;
-        if (drinkSystem.IsDrinking())
+        if (power > alcoolPowerStages[3])
             return 3;
-        if (!drinkSystem.IsIdling())
+        if (power > alcoolPowerStages[2])
             return 2;
+        if (power > alcoolPowerStages[1])
+            return 1;
         return 0;
     }
 
     public void StartGame()
     {
-        alcoolPowerClips[0].SetActive(true);
+        clips[0].SetActive(true);
     }
 
     public IEnumerator GameOver()

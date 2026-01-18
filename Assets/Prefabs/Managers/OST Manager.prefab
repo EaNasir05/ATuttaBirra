@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8337294986546536157}
   - component: {fileID: 9020343563128951419}
   m_Layer: 0
-  m_Name: Filling Glass Clip
+  m_Name: Level5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -140,7 +140,7 @@ GameObject:
   - component: {fileID: 2723781573725002063}
   - component: {fileID: 7879180848726889243}
   m_Layer: 0
-  m_Name: Drinking Clip
+  m_Name: Level3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -269,7 +269,7 @@ GameObject:
   - component: {fileID: 9176536921407486670}
   - component: {fileID: 8860497878401685243}
   m_Layer: 0
-  m_Name: Holding Glass Clip
+  m_Name: Level4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -432,9 +432,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cdf60e1d1977a040950e7f2abe2e568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OSTManager
-  alcoolPowerClips:
+  clips:
   - {fileID: 6013202816610200774}
-  alcoolPowerClipsStartingPoints: []
+  alcoolPowerStages:
+  - 1
+  - 1.5
+  - 2
+  - 2.5
+  - 3
   ebrezzaMultiplier: 2000
   audioMixer: {fileID: 24100000, guid: 55753f4892c9341459bb7f0da5a9964a, type: 2}
   snapshots:
@@ -442,7 +447,7 @@ MonoBehaviour:
   - {fileID: 3341980191857576577, guid: 55753f4892c9341459bb7f0da5a9964a, type: 2}
   - {fileID: -1609821543347714541, guid: 55753f4892c9341459bb7f0da5a9964a, type: 2}
   - {fileID: -1111838360220736744, guid: 55753f4892c9341459bb7f0da5a9964a, type: 2}
-  - {fileID: 2055681816923319136, guid: 55753f4892c9341459bb7f0da5a9964a, type: 2}
+  - {fileID: 2571034494350391049, guid: 55753f4892c9341459bb7f0da5a9964a, type: 2}
   drinkSystem: {fileID: 0}
 --- !u!1 &5455083852544776112
 GameObject:
@@ -455,7 +460,7 @@ GameObject:
   - component: {fileID: 2327902540185265258}
   - component: {fileID: 2480144601912338058}
   m_Layer: 0
-  m_Name: Base Clip
+  m_Name: Level1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -583,7 +588,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7970122477790386695}
   m_Layer: 0
-  m_Name: Level2
+  m_Name: Boogie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -620,7 +625,7 @@ GameObject:
   - component: {fileID: 2397875959648974831}
   - component: {fileID: 6132155996482532851}
   m_Layer: 0
-  m_Name: Acceleration Clip
+  m_Name: Level2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -650,7 +655,7 @@ AudioSource:
   m_GameObject: {fileID: 6229251728171424353}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 1042898083611270385, guid: 55753f4892c9341459bb7f0da5a9964a, type: 2}
+  OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: e3e63d34b8ffddc45be459645065c7e3, type: 3}
   m_PlayOnAwake: 1

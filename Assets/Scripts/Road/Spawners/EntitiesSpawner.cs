@@ -58,7 +58,7 @@ public class EntitiesSpawner : MonoBehaviour
                     else
                         car = littleCars[Random.Range(0, littleCars.Count)];
                     GameObject spawnedCar = Instantiate(car.GetPrefab());
-                    spawnedCar.transform.position = new Vector3(posX, car.GetHeight(), spawnPositionZ + selectedBlock.carsPositionZ[i]);
+                    spawnedCar.transform.position = new Vector3(posX + (i < selectedBlock.carsPositionX.Length ? selectedBlock.carsPositionX[i] : 0), car.GetHeight(), spawnPositionZ + selectedBlock.carsPositionZ[i]);
                 }
                 int newBlock = selectedBlock.possibleNextBlocksIndexes[Random.Range(0, selectedBlock.possibleNextBlocksIndexes.Length)];
 
@@ -74,26 +74,7 @@ public class EntitiesSpawner : MonoBehaviour
         }
     }
 
-    /*
-                int i = ChooseLane();
-                previousLane = i;
-                float randomX = spawnPositionsX[i];
-                i = Random.Range(0, carsList.cars.Length);
-                GameObject car = Instantiate(carsList.cars[i].GetPrefab());
-                car.transform.position = new Vector3(randomX, carsList.cars[i].GetHeight(), spawnPositionZ);
-                if (spawnCount % 3 == 0 && spawnCount != 0)
-                {
-                    i = ChooseLane();
-                    previousLane = i;
-                    randomX = spawnPositionsX[i];
-                    i = Random.Range(0, carsList.cars.Length);
-                    GameObject secondCar = Instantiate(carsList.cars[i].GetPrefab());
-                    secondCar.transform.position = new Vector3(randomX, carsList.cars[i].GetHeight(), spawnPositionZ);
-                }
-                spawnCount++;
-    */
-
-public void UpdateSpawnTime()
+    public void UpdateSpawnTime()
     {
         spawnTime = Mathf.Clamp(spawnTime - ((int)((GameManager.instance.GetTotalBeerConsumed() - 1) / 5) * spawnTimeReduction), minSpawnTime, startingSpawnTime);
     }
