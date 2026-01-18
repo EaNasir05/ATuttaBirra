@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 7968886814831521232}
   - component: {fileID: 131451978790133279}
   m_Layer: 0
-  m_Name: Canvas
+  m_Name: Contabirra
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
