@@ -79,7 +79,6 @@ public class GameManager : MonoBehaviour
             alcoolPower -= alcoolPowerConsumedPerSecond * Time.deltaTime;
             if (alcoolPower < minAlcoolPower && !gameOver)
                 StartCoroutine(SpawnPolice());
-            Debug.Log(alcoolPower);
         }
     }
 
@@ -182,6 +181,7 @@ public class GameManager : MonoBehaviour
         drinkSystem.EmptyTheGlass();
         UIManager.instance.EnableHoldLeverTutorialImage(true);
         yield return new WaitUntil(() => leverSystem.IsGrabbingTheLever());
+        StartCoroutine(UIManager.instance.FadeOutTitle());
         UIManager.instance.EnableHoldLeverTutorialImage(false);
         UIManager.instance.EnablePullLeverTutorialImage(true);
         yield return new WaitUntil(() => liquidStream.IsFlowing());

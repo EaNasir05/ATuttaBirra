@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject drinkDirectionTutorial;
     [SerializeField] private GameObject driveTutorial;
     [SerializeField] private TMP_Text drinkAndDriveText;
+    [SerializeField] private GameObject title;
 
     [Header("VFX")]
     [SerializeField] private float blackScreenFadeDuration;
@@ -59,7 +60,7 @@ public class UIManager : MonoBehaviour
         RenderSettings.fogDensity = 0.2f;
         speedShape = speedEffect.shape;
         speedShape.radius = 30;
-        fireEffect.gameObject.SetActive(false);
+        //fireEffect.gameObject.SetActive(false);
         cameraHandler.backwardDistance = 0;
     }
 
@@ -108,7 +109,23 @@ public class UIManager : MonoBehaviour
     public void StartGame()
     {
         StartCoroutine(ChangeFog());
-        fireEffect.gameObject.SetActive(true);
+        StartCoroutine(FadeOutTitle());
+        //fireEffect.gameObject.SetActive(true);
+    }
+
+    public IEnumerator FadeOutTitle()
+    {
+        float elapsed = 0f;
+        RectTransform rectTransform = title.GetComponent<RectTransform>();
+        float size = rectTransform.localScale.x;
+        while (elapsed < 0.5f)
+        {
+            elapsed += Time.deltaTime;
+            float currentSize = Mathf.Lerp(size, 0.01f, elapsed / 0.5f);
+            rectTransform.localScale = new Vector2(currentSize, currentSize);
+            yield return null;
+        }
+        title.SetActive(false);
     }
 
     private IEnumerator ChangeFog()
@@ -241,4 +258,5 @@ public class UIManager : MonoBehaviour
     public void EnablePullLeverTutorialImage(bool value) => pullLeverTutorial.SetActive(value);
     public void EnableDrinkTutorialDirection(bool value) => drinkDirectionTutorial.SetActive(value);
     public void EnableDriveTutorial(bool value) => driveTutorial.SetActive(value);
+    public void EnableTitle(bool value) => title.SetActive(value);
 }

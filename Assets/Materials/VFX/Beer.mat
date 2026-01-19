@@ -55,7 +55,7 @@ Material:
     - _Distortion: 1
     - _FillAmount: 0.39
     - _Float: 0.27
-    - _FoamWidth: 0.01
+    - _FoamWidth: 0.03
     - _Foam_Smoothness: 0
     - _Frequency: 2.43
     - _NormalDistortion: 0.16
