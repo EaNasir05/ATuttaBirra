@@ -59,7 +59,7 @@ public class UIManager : MonoBehaviour
         RenderSettings.fogDensity = 0.2f;
         speedShape = speedEffect.shape;
         speedShape.radius = 30;
-        fireEffect.gameObject.SetActive(false);
+        //fireEffect?.gameObject.SetActive(false);
         cameraHandler.backwardDistance = 0;
     }
 
@@ -108,7 +108,7 @@ public class UIManager : MonoBehaviour
     public void StartGame()
     {
         StartCoroutine(ChangeFog());
-        fireEffect.gameObject.SetActive(true);
+        //fireEffect?.gameObject.SetActive(true);
     }
 
     private IEnumerator ChangeFog()
