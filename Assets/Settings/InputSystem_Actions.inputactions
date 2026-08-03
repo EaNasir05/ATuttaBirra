@@ -7,22 +7,112 @@
             "id": "df70fa95-8a34-4494-b137-73ab6b9c7d37",
             "actions": [
                 {
-                    "name": "Move",
+                    "name": "MoveL",
                     "type": "Value",
                     "id": "351f2ccd-1f9f-44bf-9bec-d62ac5c5f408",
                     "expectedControlType": "Vector2",
-                    "processors": "",
+                    "processors": "StickDeadzone",
                     "interactions": "",
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Speed",
+                    "name": "MoveR",
                     "type": "Value",
                     "id": "6b444451-8a00-4d00-a97e-f47457f736a8",
                     "expectedControlType": "Vector2",
-                    "processors": "",
+                    "processors": "StickDeadzone",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "HoldGlassT",
+                    "type": "Button",
+                    "id": "327efb72-c059-4248-a6d9-ea85601072fb",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "HoldGlassS",
+                    "type": "Button",
+                    "id": "758d760c-e5fa-4526-9f0b-b55606642b0c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "GrabLeverT",
+                    "type": "Button",
+                    "id": "99d09c64-f6fd-4493-aa24-3f609db2a1c7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "GrabLeverS",
+                    "type": "Button",
+                    "id": "c689825a-dfcf-4083-8b59-187b4ce1ffec",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Test",
+                    "type": "Button",
+                    "id": "e1cd7930-ac4b-45ed-bafb-53d489549e3c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "fe609fee-ef93-430a-8e54-e328d3b41d8b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OpenBeers",
+                    "type": "Button",
+                    "id": "3af9249a-3d40-4633-b419-b4bc9f1a6909",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OpenGlasses",
+                    "type": "Button",
+                    "id": "2cdaafbb-6278-489f-8f0f-497bea5cba33",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OpenScores",
+                    "type": "Button",
+                    "id": "8d8a96bf-26f6-425e-ac18-54df15851fe6",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OpenSettings",
+                    "type": "Button",
+                    "id": "9e665df6-35eb-41b4-8995-270b63f46d3a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Previous",
@@ -37,46 +127,10 @@
                     "name": "Next",
                     "type": "Button",
                     "id": "b7230bb6-fc9b-4f52-8b25-f5e19cb2c2ba",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Hold T",
-                    "type": "Button",
-                    "id": "327efb72-c059-4248-a6d9-ea85601072fb",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Hold S",
-                    "type": "Button",
-                    "id": "758d760c-e5fa-4526-9f0b-b55606642b0c",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Test",
-                    "type": "Button",
-                    "id": "e1cd7930-ac4b-45ed-bafb-53d489549e3c",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Grab",
-                    "type": "Value",
-                    "id": "99d09c64-f6fd-4493-aa24-3f609db2a1c7",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -87,7 +141,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Move",
+                    "action": "MoveL",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -98,7 +152,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Speed",
+                    "action": "MoveR",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -153,7 +207,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Hold T",
+                    "action": "HoldGlassT",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -164,7 +218,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Hold S",
+                    "action": "HoldGlassS",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -186,7 +240,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Grab",
+                    "action": "GrabLeverT",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -197,7 +251,84 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Grab",
+                    "action": "GrabLeverT",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "51afce63-548a-435c-8021-f541497b2816",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "GrabLeverS",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4c453d1a-49ac-478f-8be2-024cd75581df",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "GrabLeverS",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6cd8e899-d8a5-499e-9ad6-c2e4b12139a3",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "065f76b7-b0ba-4d14-8942-5410a9a5cfd2",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "OpenBeers",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c80e80ab-2de1-4426-b851-6e554263db81",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "OpenGlasses",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2cd2adb2-31ed-41f0-a283-675a6fe7e1af",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "OpenSettings",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "06080325-d3cd-4605-b388-e045b4705c5b",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "OpenScores",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

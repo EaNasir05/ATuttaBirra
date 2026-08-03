@@ -52,10 +52,12 @@ public class GameManager : MonoBehaviour
         alcoolPower = 0.25f;
         tutorial = false;
         carController.enabled = false;
-        actionMap.FindAction("Hold T").Enable();
-        actionMap.FindAction("Hold S").Enable();
-        actionMap.FindAction("Move").Enable();
-        actionMap.FindAction("Speed").Enable();
+        actionMap.FindAction("HoldGlassT").Enable();
+        actionMap.FindAction("HoldGlassS").Enable();
+        actionMap.FindAction("GrabLeverT").Enable();
+        actionMap.FindAction("GrabLeverS").Enable();
+        actionMap.FindAction("MoveL").Enable();
+        actionMap.FindAction("MoveR").Enable();
         carAudioSource = carController.gameObject.GetComponent<AudioSource>();
         StaticGameVariables.instance ??= new();
         if (StaticGameVariables.instance.firstTimePlaying)
@@ -143,11 +145,12 @@ public class GameManager : MonoBehaviour
     private IEnumerator SpawnPolice()
     {
         gameOver = true;
-        actionMap.FindAction("Grab").Disable();
-        actionMap.FindAction("Hold T").Disable();
-        actionMap.FindAction("Hold S").Disable();
-        actionMap.FindAction("Move").Disable();
-        actionMap.FindAction("Speed").Disable();
+        actionMap.FindAction("GrabLeverT").Disable();
+        actionMap.FindAction("GrabLeverS").Disable();
+        actionMap.FindAction("HoldGlassT").Disable();
+        actionMap.FindAction("HoldGlassS").Disable();
+        actionMap.FindAction("MoveL").Disable();
+        actionMap.FindAction("MoveR").Disable();
         StartCoroutine(policeManager.SpawnPoliceCar());
         yield return new WaitUntil(() => policeArrived);
         GameOver();
@@ -160,6 +163,7 @@ public class GameManager : MonoBehaviour
         UIManager.instance.StartGame();
         OSTManager.instance.StartGame();
         carController.enabled = true;
+        carController.EnableCarInputs();
         SFXManager.instance.PlayClip(accelerationAudioClip, accelerationAudioVolume);
         carAudioSource.Play();
     }

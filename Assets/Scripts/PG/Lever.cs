@@ -81,8 +81,6 @@ public class LeverInteraction_InputSystem : MonoBehaviour
         UpdateFlow();
     }
 
-    
-
     void MoveHandToLever()
     {
         leftHand.position = Vector3.Lerp(
@@ -116,8 +114,6 @@ public class LeverInteraction_InputSystem : MonoBehaviour
         );
     }
 
-    
-
     void HandleLeverInput(Gamepad gamepad)
     {
         float stickY = Vector3.Distance(leftHand.position, handTargetOnLever.position) < 0.1f ? gamepad.leftStick.y.ReadValue() : 0;
@@ -149,8 +145,6 @@ public class LeverInteraction_InputSystem : MonoBehaviour
             leverActive = true;
         }
     }
-
-    
 
     void UpdateFlow()
     {

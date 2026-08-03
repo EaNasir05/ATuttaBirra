@@ -9,15 +9,16 @@ public enum DrinkState { Idle, Moving, Drinking, Returning }
 public class DrinkSystem : MonoBehaviour
 {
     [Header ("Input system")]
-    [SerializeField] private InputActionAsset inputActions;
     [SerializeField] private float inputDeadZone;
     [SerializeField] private float maxXRightHand = 0.106f;
     [SerializeField] private float minXRightHand = -0.1f;
     [SerializeField] private float maxYRightHand = 0.318f;
     [SerializeField] private float minYRightHand = 0.14f;
+    private InputHandler inputHandler;
     private bool movingForReal = false;
-    private InputActionMap inputMap;
-    private InputAction holdT, holdS, rightHand, actionTest;
+    private InputAction holdT, holdS, rightHand;
+    private bool holdingT = false;
+    private bool holdingS = false;
     private Vector2 rightHandMovement;
     private Vector2 randomHandMovement;
     private bool readyToRandomlyMove;
@@ -80,11 +81,6 @@ public class DrinkSystem : MonoBehaviour
 
     private void Awake()
     {
-        inputMap = inputActions.FindActionMap("Player");
-        holdT = inputMap.FindAction("Hold T");
-        holdS = inputMap.FindAction("Hold S");
-        rightHand = inputMap.FindAction("Speed");
-        actionTest = inputMap.FindAction("Test");
         totalBeerConsumed = 0;
         startPos = transform.localPosition;
         startRot = transform.localRotation;
@@ -94,13 +90,24 @@ public class DrinkSystem : MonoBehaviour
         originalMaxWobble = beer.MaxWobble;
     }
 
-    private void OnEnable() => inputMap.Enable();
-    private void OnDisable() => inputMap.Disable();
+    private void Start()
+    {
+        inputHandler = FindObjectOfType<InputHandler>();
+        inputHandler.OnHoldGlassTInput += OnHoldGlassT;
+        inputHandler.OnHoldGlassSInput += OnHoldGlassS;
+        inputHandler.OnMoveRInput += OnMoveInput;
+    }
+
+    private void OnDestroy()
+    {
+        inputHandler.OnHoldGlassTInput -= OnHoldGlassT;
+        inputHandler.OnHoldGlassSInput -= OnHoldGlassS;
+        inputHandler.OnMoveRInput -= OnMoveInput;
+    }
 
     private void Update()
     {
-        bool holdingGlass = holdT.IsPressed() && holdS.IsPressed();
-        rightHandMovement = rightHand.ReadValue<Vector2>();
+        bool holdingGlass = holdingT && holdingS;
         switch (state)
         {
             case DrinkState.Idle:
@@ -481,6 +488,21 @@ public class DrinkSystem : MonoBehaviour
             transform.position += new Vector3(0, y, 0);
             yield return null;
         }
+    }
+
+    private void OnHoldGlassT(bool isPressed)
+    {
+        holdingT = isPressed;
+    }
+
+    private void OnHoldGlassS(bool isPressed)
+    {
+        holdingS = isPressed;
+    }
+
+    private void OnMoveInput(Vector2 input)
+    {
+        rightHandMovement = input;
     }
 
     public bool IsIdling() => state == DrinkState.Idle;

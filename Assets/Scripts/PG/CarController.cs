@@ -6,12 +6,6 @@ public enum PlayerDirection { Left, Right, Center }
 [RequireComponent(typeof(Rigidbody))]
 public class CarController : MonoBehaviour
 {
-    [Header("Input Actions")]
-    [SerializeField] private InputActionAsset inputActions;
-    private InputAction moveAction;
-    private InputAction speedAction;
-    private InputActionMap inputMap;
-
     [Header("Movement")]
     public float baseSpeed = 6f;
     public float maxBaseSpeed = 9f;
@@ -51,9 +45,12 @@ public class CarController : MonoBehaviour
     private Rigidbody rb;
     private LeverInteraction_InputSystem leverHandler;
     private DrinkSystem drinkSystem;
+    private InputHandler inputHandler;
 
     private float vibrationTimer = 0f;
     private bool vibrating = false;
+    private Vector2 moveInputL;
+    private Vector2 moveInputR;
     private float lastMoveX;
     private bool bothSticksActive;
     private PlayerDirection previousDirection;
@@ -62,10 +59,8 @@ public class CarController : MonoBehaviour
 
     void Awake()
     {
-        inputMap = inputActions.FindActionMap("Player");
-        moveAction = inputMap.FindAction("Move");
-        speedAction = inputMap.FindAction("Speed");
         rb = GetComponent<Rigidbody>();
+        inputHandler = GetComponent<InputHandler>();
         leverHandler = GetComponentInChildren<LeverInteraction_InputSystem>();
         drinkSystem = GetComponentInChildren<DrinkSystem>();
         startingLocalRot = carTransform.localRotation;
@@ -73,6 +68,8 @@ public class CarController : MonoBehaviour
         startingSmoothing = accelSmoothing;
         startingSteeringWheelRot = steeringWheel.localRotation;
         steeringLocalAxis = steeringWheel.TransformDirection(Vector3.forward);
+        moveInputL = Vector2.zero;
+        moveInputR = Vector2.zero;
     }
 
     private void Start()
@@ -81,17 +78,27 @@ public class CarController : MonoBehaviour
         policeAlcoolPower = GameManager.instance.GetPoliceAlcoolPower();
     }
 
-    void OnEnable()
-    {
-        inputMap.Enable();
-    }
-
     void OnDisable()
     {
-        inputMap?.Disable();
         StopVibration();
     }
 
+    void OnDestroy()
+    {
+        DisableCarInputs();
+    }
+
+    public void EnableCarInputs()
+    {
+        inputHandler.OnMoveLInput += OnMoveL;
+        inputHandler.OnMoveRInput += OnMoveR;
+    }
+
+    public void DisableCarInputs()
+    {
+        inputHandler.OnMoveLInput -= OnMoveL;
+        inputHandler.OnMoveRInput -= OnMoveR;
+    }
 
     void FixedUpdate()
     {
@@ -105,8 +112,8 @@ public class CarController : MonoBehaviour
 
     private float Move()
     {
-        Vector2 move = moveAction != null && !leverHandler.IsGrabbingTheLever() ? moveAction.ReadValue<Vector2>() : Vector2.zero;
-        Vector2 speed = speedAction != null && drinkSystem.IsIdling() ? speedAction.ReadValue<Vector2>() : Vector2.zero;
+        Vector2 move = !leverHandler.IsGrabbingTheLever() ? moveInputR : Vector2.zero;
+        Vector2 speed = drinkSystem.IsIdling() ? moveInputL : Vector2.zero;
 
         float moveX = Mathf.Abs(move.x) > inputDeadzone ? move.x : 0f;
 
@@ -253,6 +260,16 @@ public class CarController : MonoBehaviour
 
         Gamepad.current.SetMotorSpeeds(0f, 0f);
         vibrating = false;
+    }
+
+    private void OnMoveL(Vector2 input)
+    {
+        moveInputL = input;
+    }
+
+    private void OnMoveR(Vector2 input)
+    {
+        moveInputR = input;
     }
 
     public float GetLastMove() => lastMoveX;
