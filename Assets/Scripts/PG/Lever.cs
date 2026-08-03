@@ -13,6 +13,7 @@ public class LeverInteraction_InputSystem : MonoBehaviour
     public LiquidStreamToggle liquidStream;
     public AudioClip leverAudioClip;
     public float leverAudioVolume;
+    private InputHandler inputHandler;
 
     [Header("Hand")]
     public float handMoveSpeed = 6f;
@@ -32,12 +33,23 @@ public class LeverInteraction_InputSystem : MonoBehaviour
     private Quaternion handStartLocalRot;
     private bool handOnSteering = true;
     private bool leverActive = false;
+    private bool holdingT = false;
+    private bool holdingS = false;
 
     void Start()
     {
         handOriginalLocalPos = leftHand.localPosition;
         handStartLocalPos = playerRoot.InverseTransformPoint(leftHand.position);
         handStartLocalRot = Quaternion.Inverse(playerRoot.rotation) * leftHand.rotation;
+        inputHandler = FindObjectOfType<InputHandler>();
+        inputHandler.OnGrabLeverTInput += HandleGrabT;
+        inputHandler.OnGrabLeverSInput += HandleGrabS;
+    }
+
+    void Destroy()
+    {
+        inputHandler.OnGrabLeverTInput -= HandleGrabT;
+        inputHandler.OnGrabLeverSInput -= HandleGrabS;
     }
 
     void Update()
@@ -160,6 +172,16 @@ public class LeverInteraction_InputSystem : MonoBehaviour
             liquidStream.StopLoopClip();
 
             liquidStream.SetFlow(leverAtBottom);
+    }
+
+    private void HandleGrabT(bool isPressed)
+    {
+        holdingT = isPressed;
+    }
+
+    private void HandleGrabS(bool isPressed)
+    {
+        holdingS = isPressed;
     }
 
     public bool IsGrabbingTheLever() => isGrabbing;

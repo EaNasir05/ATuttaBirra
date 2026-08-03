@@ -125,20 +125,23 @@ public class GameManager : MonoBehaviour
 
     public void UpdateAlcoolPower(float increment)
     {
-        if (!gameStarted)
+        if (!gameOver)
         {
-            if (increment > 0)
+            if (!gameStarted)
             {
-                alcoolPower = 1 + increment;
-                UIManager.instance.StartCameraMovement(increment);
-                StartGame();
+                if (increment > 0)
+                {
+                    alcoolPower = 1 + increment;
+                    UIManager.instance.StartCameraMovement(increment);
+                    StartGame();
+                }
             }
-        }
-        else
-        {
-            if (increment > 0)
-                AddDecelerationImmunity(increment * 4);
-            alcoolPower = Mathf.Clamp(alcoolPower + increment, 0, maxAlcoolPower);
+            else
+            {
+                if (increment > 0)
+                    AddDecelerationImmunity(increment * 4);
+                alcoolPower = Mathf.Clamp(alcoolPower + increment, 0, maxAlcoolPower);
+            }
         }
     }
 

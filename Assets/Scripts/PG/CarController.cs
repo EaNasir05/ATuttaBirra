@@ -90,14 +90,14 @@ public class CarController : MonoBehaviour
 
     public void EnableCarInputs()
     {
-        inputHandler.OnMoveLInput += OnMoveL;
-        inputHandler.OnMoveRInput += OnMoveR;
+        inputHandler.OnMoveLInput += HandleMoveL;
+        inputHandler.OnMoveRInput += HandleMoveR;
     }
 
     public void DisableCarInputs()
     {
-        inputHandler.OnMoveLInput -= OnMoveL;
-        inputHandler.OnMoveRInput -= OnMoveR;
+        inputHandler.OnMoveLInput -= HandleMoveL;
+        inputHandler.OnMoveRInput -= HandleMoveR;
     }
 
     void FixedUpdate()
@@ -112,8 +112,8 @@ public class CarController : MonoBehaviour
 
     private float Move()
     {
-        Vector2 move = !leverHandler.IsGrabbingTheLever() ? moveInputR : Vector2.zero;
-        Vector2 speed = drinkSystem.IsIdling() ? moveInputL : Vector2.zero;
+        Vector2 move = !leverHandler.IsGrabbingTheLever() ? moveInputL : Vector2.zero;
+        Vector2 speed = drinkSystem.IsIdling() ? moveInputR : Vector2.zero;
 
         float moveX = Mathf.Abs(move.x) > inputDeadzone ? move.x : 0f;
 
@@ -262,12 +262,12 @@ public class CarController : MonoBehaviour
         vibrating = false;
     }
 
-    private void OnMoveL(Vector2 input)
+    private void HandleMoveL(Vector2 input)
     {
         moveInputL = input;
     }
 
-    private void OnMoveR(Vector2 input)
+    private void HandleMoveR(Vector2 input)
     {
         moveInputR = input;
     }
