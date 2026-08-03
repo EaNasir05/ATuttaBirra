@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     private float alcoolPower;
     private bool gameOver;
     private bool tutorial;
+    private DeviceType deviceConnected;
 
     [Header("Audios")]
     [SerializeField] private AudioClip accelerationAudioClip;
@@ -60,17 +61,24 @@ public class GameManager : MonoBehaviour
         actionMap.FindAction("MoveR").Enable();
         carAudioSource = carController.gameObject.GetComponent<AudioSource>();
         StaticGameVariables.instance ??= new();
+        HandleDeviceChange(Gamepad.current, InputDeviceChange.Added);
         if (StaticGameVariables.instance.firstTimePlaying)
             tutorial = true;
     }
 
     private void Start()
     {
+        InputSystem.onDeviceChange += HandleDeviceChange;
         if (tutorial)
         {
             StartCoroutine(Tutorial());
             startingSecondsWithDecelerationImmunity = 0;
         }
+    }
+
+    private void OnDestroy()
+    {
+        InputSystem.onDeviceChange -= HandleDeviceChange;
     }
 
     private void Update()
@@ -186,6 +194,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator Tutorial()
     {
         drinkSystem.EmptyTheGlass();
+        Debug.Log(deviceConnected);
         UIManager.instance.EnableHoldLeverTutorialImage(true);
         yield return new WaitUntil(() => leverSystem.IsGrabbingTheLever());
         StartCoroutine(UIManager.instance.FadeOutTitle());
@@ -213,4 +222,31 @@ public class GameManager : MonoBehaviour
         tutorial = false;
         StartCoroutine(UIManager.instance.FadeInDrinkNDrive());
     }
+
+    private void HandleDeviceChange(InputDevice inputDevice, InputDeviceChange change)
+    {
+        switch (Gamepad.current)
+        {
+            case UnityEngine.InputSystem.DualShock.DualShockGamepad:
+                deviceConnected = DeviceType.PSController;
+                break;
+            case UnityEngine.InputSystem.XInput.XInputController:
+                deviceConnected = DeviceType.XboxController;
+                break;
+            case null:
+                deviceConnected = DeviceType.KeyboardMouse;
+                break;
+            default:
+                deviceConnected = DeviceType.OtherController;
+                break;
+        }
+    }
+}
+
+public enum DeviceType
+{
+    KeyboardMouse,
+    PSController,
+    XboxController,
+    OtherController
 }
