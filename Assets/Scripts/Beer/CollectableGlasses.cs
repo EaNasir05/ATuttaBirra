@@ -13,4 +13,5 @@ public class CollectableGlass
 {
     public string glassName;
     public GameObject glassPrefab;
+    public bool unlocked;
 }

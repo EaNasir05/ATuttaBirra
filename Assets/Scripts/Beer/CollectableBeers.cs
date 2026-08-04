@@ -20,4 +20,5 @@ public class CollectableBeer
     public Color beerLiquidColor;
     public Color beerStreamColor;
     public Color beerFoamColor;
+    public bool unlocked;
 }

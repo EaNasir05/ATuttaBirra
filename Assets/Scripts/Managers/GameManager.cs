@@ -60,7 +60,8 @@ public class GameManager : MonoBehaviour
         actionMap.FindAction("MoveL").Enable();
         actionMap.FindAction("MoveR").Enable();
         carAudioSource = carController.gameObject.GetComponent<AudioSource>();
-        StaticGameVariables.instance ??= new();
+        if (StaticGameVariables.instance == null)
+            StaticGameVariables.LoadStats();
         HandleDeviceChange(Gamepad.current, InputDeviceChange.Added);
         if (StaticGameVariables.instance.firstTimePlaying)
             tutorial = true;
@@ -79,6 +80,11 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
         InputSystem.onDeviceChange -= HandleDeviceChange;
+    }
+
+    private void OnApplicationQuit()
+    {
+        StaticGameVariables.SaveStats();
     }
 
     private void Update()
