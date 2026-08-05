@@ -42,16 +42,22 @@ public class CameraMovement : MonoBehaviour
     [Tooltip("Velocità ritorno da movimento indietro")]
     public float backwardReturnSpeed = 4f;
 
+    private Transform _t;
     private Vector3 initialLocalPosition;
     private Quaternion initialLocalRotation;
 
     private bool isHeadHitPlaying = false;
     private float backwardCurrent = 0f;
 
+    void Awake()
+    {
+        _t = transform;
+    }
+
     void Start()
     {
-        initialLocalPosition = transform.localPosition;
-        initialLocalRotation = transform.localRotation;
+        initialLocalPosition = _t.localPosition;
+        initialLocalRotation = _t.localRotation;
     }
 
     void Update()
@@ -63,22 +69,23 @@ public class CameraMovement : MonoBehaviour
     {
         isHeadHitPlaying = true;
 
-        Vector3 worldPivot = transform.position + transform.up * pivotOffsetY;
+        Vector3 worldPivot = pivotOffsetY * _t.position + _t.up;
         float t = 0f;
-
+        float deltaTime;
         
         while (t < 1f)
         {
-            t += Time.deltaTime * forwardSpeed;
+            deltaTime = Time.deltaTime;
+            t += deltaTime * forwardSpeed;
             float curve = Mathf.SmoothStep(0f, 1f, t);
 
-            transform.localPosition =
-                initialLocalPosition + transform.forward * forwardDistance * curve;
+            _t.localPosition =
+                initialLocalPosition + forwardDistance * curve * _t.forward;
 
-            transform.RotateAround(
+            _t.RotateAround(
                 worldPivot,
-                transform.right,
-                rotationAngle * Time.deltaTime * forwardSpeed
+                _t.right,
+                rotationAngle * deltaTime * forwardSpeed
             );
 
             yield return null;
@@ -98,19 +105,20 @@ public class CameraMovement : MonoBehaviour
         
         while (t < 1f)
         {
-            t += Time.deltaTime * returnSpeed;
+            deltaTime = Time.deltaTime;
+            t += deltaTime * returnSpeed;
 
-            transform.localPosition =
-                Vector3.Lerp(transform.localPosition, initialLocalPosition, t);
+            _t.localPosition =
+                Vector3.Lerp(_t.localPosition, initialLocalPosition, t);
 
-            transform.localRotation =
-                Quaternion.Slerp(transform.localRotation, initialLocalRotation, t);
+            _t.localRotation =
+                Quaternion.Slerp(_t.localRotation, initialLocalRotation, t);
 
             yield return null;
         }
 
-        transform.localPosition = initialLocalPosition;
-        transform.localRotation = initialLocalRotation;
+        _t.localPosition = initialLocalPosition;
+        _t.localRotation = initialLocalRotation;
 
         isHeadHitPlaying = false;
     }
@@ -127,8 +135,8 @@ public class CameraMovement : MonoBehaviour
             Time.deltaTime * backwardSpeed
         );
 
-        transform.localPosition =
-            initialLocalPosition - transform.forward * backwardCurrent;
+        _t.localPosition =
+            initialLocalPosition - _t.forward * backwardCurrent;
     }
 
     
@@ -139,7 +147,7 @@ public class CameraMovement : MonoBehaviour
         while (elapsed < duration)
         {
             Vector3 offset = Random.insideUnitSphere * intensity;
-            transform.localPosition += offset;
+            _t.localPosition += offset;
 
             elapsed += Time.deltaTime;
             yield return null;

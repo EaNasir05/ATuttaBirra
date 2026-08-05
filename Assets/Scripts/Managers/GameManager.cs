@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviour
     public void UpdateTotalBeerConsumed(float beerConsumed)
     {
         totalBeerConsumed += beerConsumed;
-        UIManager.instance.UpdateBeerConsumed(Mathf.Round(totalBeerConsumed * 100) / 100);
+        UIManager.instance.UpdateBeerConsumed(Mathf.Round(100 * totalBeerConsumed) / 100);
         UIManager.instance.UpdateEbrezza();
         spawner.UpdateSpawnTime();
         UIManager.instance.CheckBeerPopups(totalBeerConsumed);
@@ -153,7 +153,7 @@ public class GameManager : MonoBehaviour
             else
             {
                 if (increment > 0)
-                    AddDecelerationImmunity(increment * 4);
+                    AddDecelerationImmunity(4 * increment);
                 alcoolPower = Mathf.Clamp(alcoolPower + increment, 0, maxAlcoolPower);
             }
         }

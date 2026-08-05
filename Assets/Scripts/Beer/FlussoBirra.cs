@@ -29,8 +29,6 @@ public class LiquidStreamToggle : MonoBehaviour
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        loopAudioSource = startPoint.GetComponent<AudioSource>();
-        startingLoopSeconds = loopAudioSource.clip.length * 0.25f;
 
         if (streamParticles != null)
             streamParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
@@ -40,6 +38,12 @@ public class LiquidStreamToggle : MonoBehaviour
 
         if (EnoughBeer != null)
             EnoughBeer.SetActive(false);
+    }
+
+    void Start()
+    {
+        loopAudioSource = startPoint.GetComponent<AudioSource>();
+        startingLoopSeconds = loopAudioSource.clip.length * 0.25f;
     }
 
     void Update()

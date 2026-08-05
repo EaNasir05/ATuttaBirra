@@ -6,7 +6,7 @@ public class CarDetector : MonoBehaviour
     public float speed = -9999999;
     private CarMovement movementSystem;
     private CarMovement nearestCar = null;
-    private bool approachingACar;
+    private bool approachingACar = false;
     private bool slowingDown = false;
     private bool followingTheCar = false;
 
@@ -14,7 +14,6 @@ public class CarDetector : MonoBehaviour
     private void Awake()
     {
         movementSystem = GetComponentInParent<CarMovement>();
-        approachingACar = false;
     }
 
     private void Update()

@@ -9,7 +9,6 @@ public enum DrinkState { Idle, Moving, Drinking, Returning }
 public class DrinkSystem : MonoBehaviour
 {
     [Header ("Input system")]
-    [SerializeField] private float inputDeadZone;
     [SerializeField] private float maxXRightHand = 0.106f;
     [SerializeField] private float minXRightHand = -0.1f;
     [SerializeField] private float maxYRightHand = 0.318f;
@@ -28,6 +27,8 @@ public class DrinkSystem : MonoBehaviour
     [SerializeField] private GameObject handOnGlass;
     [SerializeField] private Transform targetTransform;
     [SerializeField] private ParticleSystem BeerSplash;
+    private Transform _t;
+    private GameObject _go;
 
     [Header("Birra")]
     [SerializeField] private Liquid beer;
@@ -82,8 +83,10 @@ public class DrinkSystem : MonoBehaviour
     private void Awake()
     {
         totalBeerConsumed = 0;
-        startPos = transform.localPosition;
-        startRot = transform.localRotation;
+        _t = transform;
+        _go = gameObject;
+        startPos = _t.localPosition;
+        startRot = _t.localRotation;
         randomHandMovement = Vector2.zero;
         iHateJews = false;
         readyToRandomlyMove = true;
@@ -136,7 +139,7 @@ public class DrinkSystem : MonoBehaviour
 
     private void UpdateLocalPosition()
     {
-        transform.localPosition = startPos;
+        _t.localPosition = startPos;
     }
 
     private void UpdateFillWhileNotReceivingBeer()
@@ -292,26 +295,27 @@ public class DrinkSystem : MonoBehaviour
     {
         int alcoolLevel = (int) totalBeerConsumed > 5 ? 5 : (int) totalBeerConsumed;
         float speed = rightHandSpeed * (1 - (alcoolLevel * 0.05f));
-        float moveX = Mathf.Abs(rightHandMovement.x) > inputDeadZone ? rightHandMovement.x : 0f;
-        float moveY = Mathf.Abs(rightHandMovement.y) > inputDeadZone ? rightHandMovement.y : 0f;
+        float moveX = rightHandMovement.x;
+        float moveY = rightHandMovement.y;
         movingForReal = moveX != 0 || moveY != 0;
-        Vector3 newPos = transform.position + new Vector3(((moveX * speed) + randomHandMovement.x) * Time.deltaTime, 0, ((moveY * speed) + randomHandMovement.y) * Time.deltaTime);
-        Vector3 localPos = transform.parent.InverseTransformPoint(newPos);
+        float deltaTime = Time.deltaTime;
+        Vector3 newPos = _t.position + new Vector3(((moveX * speed) + randomHandMovement.x) * deltaTime, 0, ((moveY * speed) + randomHandMovement.y) * deltaTime);
+        Vector3 localPos = _t.parent.InverseTransformPoint(newPos);
         localPos.x = Mathf.Clamp(localPos.x, minXRightHand, maxXRightHand);
         localPos.y = Mathf.Clamp(localPos.y, minYRightHand, maxYRightHand);
-        transform.position = transform.parent.TransformPoint(localPos);
+        _t.position = _t.parent.TransformPoint(localPos);
     }
 
     private IEnumerator DrinkRoutine()
     {
-        Vector3 currentPos = transform.localPosition;
+        Vector3 currentPos = _t.localPosition;
         float tRot = Mathf.InverseLerp(minFill, maxFill, beer.fillAmount);
         float xRot = Mathf.Lerp(targetTransform.localRotation.eulerAngles.x, maxTilt, tRot);
         float yPos = Mathf.Lerp(targetTransform.localPosition.y, maxHeight, tRot);
         float zPos = Mathf.Lerp(targetTransform.localPosition.z, maxZ, tRot);
-        Quaternion targetRotation = Quaternion.Euler(xRot, transform.localRotation.eulerAngles.y, transform.localRotation.eulerAngles.z);
+        Quaternion targetRotation = Quaternion.Euler(xRot, _t.localRotation.eulerAngles.y, _t.localRotation.eulerAngles.z);
         Vector3 targetPosition = new Vector3(targetTransform.localPosition.x, yPos, zPos);
-        Quaternion maxRotation = Quaternion.Euler(maxTilt, transform.localRotation.eulerAngles.y, transform.localRotation.eulerAngles.z);
+        Quaternion maxRotation = Quaternion.Euler(maxTilt, _t.localRotation.eulerAngles.y, _t.localRotation.eulerAngles.z);
         Vector3 maxPosition = new Vector3(targetTransform.localPosition.x, maxHeight, maxZ);
         extraFillWhileMoving = 0f;
         startingFill = beer.fillAmount;
@@ -319,7 +323,7 @@ public class DrinkSystem : MonoBehaviour
         float endXDrinking = maxRotation.eulerAngles.x;
         float elapsedMovement = 0f;
         float elapsedDrinking = 0f;
-        realDrinkDuration = (beer.fillAmount - maxFill) * -1 * drinkDuration;
+        realDrinkDuration = -1 * (beer.fillAmount - maxFill) * drinkDuration;
         float previousFill = 0f;
         bool firstTime = true;
 
@@ -331,10 +335,10 @@ public class DrinkSystem : MonoBehaviour
                 float t = Mathf.Clamp01(elapsedMovement / glassTiltDuration);
                 Vector3 absolutePos = Vector3.Lerp(currentPos, targetPosition, t);
                 Quaternion absoluteRot = Quaternion.Lerp(startRot, targetRotation, t);
-                Vector3 deltaPos = absolutePos - transform.localPosition;
-                transform.localPosition += deltaPos;
-                Quaternion deltaRot = absoluteRot * Quaternion.Inverse(transform.localRotation);
-                transform.localRotation = deltaRot * transform.localRotation;
+                Vector3 deltaPos = absolutePos - _t.localPosition;
+                _t.localPosition += deltaPos;
+                Quaternion deltaRot = absoluteRot * Quaternion.Inverse(_t.localRotation);
+                _t.localRotation = deltaRot * _t.localRotation;
                 float targetFill = Mathf.Lerp(startingFill, startingFill - shaderBugExtraFill, t);
                 float deltaFill = beer.fillAmount - targetFill;
                 beer.fillAmount -= deltaFill;
@@ -352,14 +356,14 @@ public class DrinkSystem : MonoBehaviour
                 float t = Mathf.Clamp01(elapsedDrinking / realDrinkDuration);
 
                 float x = Mathf.LerpAngle(startXDrinking, endXDrinking, t);
-                float y = transform.localRotation.eulerAngles.y;
-                float z = transform.localRotation.eulerAngles.z;
+                float y = _t.localRotation.eulerAngles.y;
+                float z = _t.localRotation.eulerAngles.z;
                 Quaternion absRot = Quaternion.Euler(x, y, z);
-                transform.localRotation = absRot;
+                _t.localRotation = absRot;
 
                 Vector3 absPos = Vector3.Lerp(targetPosition, maxPosition, t);
-                Vector3 deltaPos = absPos - transform.localPosition;
-                transform.localPosition += deltaPos;
+                Vector3 deltaPos = absPos - _t.localPosition;
+                _t.localPosition += deltaPos;
 
                 float currentFill = Mathf.Lerp(startingFill, maxFill, t);
                 float deltaFill = previousFill - currentFill;
@@ -385,13 +389,13 @@ public class DrinkSystem : MonoBehaviour
         if (beer.fillAmount >= maxFill - shaderBugExtraFill)
         {
             float extraBeerConsumed = maxFill - startingFill - beerConsumed;
-            GameManager.instance.UpdateTotalBeerConsumed(extraBeerConsumed * 4);
+            GameManager.instance.UpdateTotalBeerConsumed(4 * extraBeerConsumed);
             beerConsumed += extraBeerConsumed;
         }
         if (beer.fillAmount + extraFillWhileMoving >= maxFill - 0.01)
         {
             //SFXManager.instance.PlayClipWithRandomPitch(burpAudioClip, burpAudioVolume);
-            beer.fillAmount = maxFill + 2 + extraFillWhileMoving;
+            beer.fillAmount = 2 + maxFill + extraFillWhileMoving;
             iHateJews = true;
             needToGainExtra = false;
         }
@@ -402,12 +406,12 @@ public class DrinkSystem : MonoBehaviour
         float startFill = beer.fillAmount;
         float endFill = startFill + extraFillWhileMoving;
         float maxDistance = Vector3.Distance(new Vector3(targetTransform.localPosition.x, maxHeight, targetTransform.localPosition.z), startPos);
-        float distance = Vector3.Distance(transform.localPosition, startPos);
-        float realReturnDuration = (distance / maxDistance) * returnDuration;
+        float distance = Vector3.Distance(_t.localPosition, startPos);
+        float realReturnDuration = distance / maxDistance * returnDuration;
         float previousFillGain = startFill;
 
-        Vector3 startPosAtReturn = transform.localPosition;
-        Quaternion startRotAtReturn = transform.localRotation;
+        Vector3 startPosAtReturn = _t.localPosition;
+        Quaternion startRotAtReturn = _t.localRotation;
 
         while (elapsed < realReturnDuration)
         {
@@ -415,10 +419,10 @@ public class DrinkSystem : MonoBehaviour
             float t = Mathf.Clamp01(elapsed / returnDuration);
             Vector3 absPos = Vector3.Lerp(startPosAtReturn, startPos, t);
             Quaternion absRot = Quaternion.Lerp(startRotAtReturn, startRot, t);
-            Vector3 deltaPos = absPos - transform.localPosition;
-            transform.localPosition += deltaPos;
-            Quaternion deltaRot = absRot * Quaternion.Inverse(transform.localRotation);
-            transform.localRotation = deltaRot * transform.localRotation;
+            Vector3 deltaPos = absPos - _t.localPosition;
+            _t.localPosition += deltaPos;
+            Quaternion deltaRot = absRot * Quaternion.Inverse(_t.localRotation);
+            _t.localRotation = deltaRot * _t.localRotation;
 
             if (needToGainExtra || extraFillWhileMoving == 0)
             {
@@ -440,10 +444,10 @@ public class DrinkSystem : MonoBehaviour
             }
             iHateJews = false;
         }
-        transform.localRotation = startRot;
+        _t.localRotation = startRot;
         extraFillWhileMoving = 0f;
-        totalBeerConsumed += beerConsumed * 4;
-        GameManager.instance.UpdateAlcoolPower(beerConsumed * 2);
+        totalBeerConsumed += 4 * beerConsumed;
+        GameManager.instance.UpdateAlcoolPower(2 * beerConsumed);
         beerConsumed = 0f;
         state = DrinkState.Idle;
         if (beer.fillAmount > maxFill)
@@ -478,14 +482,14 @@ public class DrinkSystem : MonoBehaviour
         {
             float y = 2 * Time.deltaTime;
             movementLength += y;
-            transform.position += new Vector3(0, y, 0);
+            _t.position += new Vector3(0, y, 0);
             yield return null;
         }
         while (movementLength > 0)
         {
             float y = -2 * Time.deltaTime;
             movementLength += y;
-            transform.position += new Vector3(0, y, 0);
+            _t.position += new Vector3(0, y, 0);
             yield return null;
         }
     }

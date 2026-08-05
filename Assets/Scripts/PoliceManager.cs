@@ -8,6 +8,7 @@ public class PoliceChaseSystem : MonoBehaviour
     [SerializeField] private Image reflectionInTheMirror;
     [SerializeField] private Sprite[] policeReflections;
     [SerializeField] private Light[] lightsOnThePlayer;
+    private GameObject[] lightsOnThePlayerGameObjects;
     [SerializeField] private Light[] lightsOnThePolice;
     [SerializeField] private float lightDuration;
     [SerializeField] private float lightMinIntensity;
@@ -34,6 +35,11 @@ public class PoliceChaseSystem : MonoBehaviour
     {
         reflectionInTheMirror.rectTransform.localScale = new Vector3(reflectionMinSize, reflectionMinSize, 1);
         reflectionInTheMirror.rectTransform.localPosition = new Vector3(0, reflectionMaxPosY, 0);
+        lightsOnThePlayerGameObjects = new GameObject[lightsOnThePlayer.Length];
+        for (int i = 0; i < lightsOnThePlayer.Length; i++)
+        {
+            lightsOnThePlayerGameObjects[i] = lightsOnThePlayer[i].transform.parent.gameObject;
+        }
     }
 
     private void Start()
@@ -67,14 +73,14 @@ public class PoliceChaseSystem : MonoBehaviour
                 policeNear = true;
                 currentColor = 0;
                 timePassed = lightDuration;
-                lightsOnThePlayer[0].transform.parent.gameObject.SetActive(true);
+                lightsOnThePlayerGameObjects[0].SetActive(true);
                 audioSource.Play();
                 StartCoroutine(ApproachThePlayer());
             }
             else if (alcoolPower > policeAlcoolPower && policeNear)
             {
                 policeNear = false;
-                lightsOnThePlayer[0].transform.parent.gameObject.SetActive(false);
+                lightsOnThePlayerGameObjects[0].SetActive(false);
                 audioSource.Stop();
                 StartCoroutine(DepartFromThePlayer());
             }

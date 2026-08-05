@@ -39,6 +39,7 @@ public class Liquid : MonoBehaviour
     float sinewave;
     float time = 0.5f;
     Vector3 comp;
+    private Transform _t;
 
     Vector3 externalVelocity = Vector3.zero;
     Vector3 externalAngularVelocity = Vector3.zero;
@@ -46,13 +47,17 @@ public class Liquid : MonoBehaviour
     float originalRecovery;
     DrinkSystem drinkSystem;
 
-    // Use this for initialization
+    void Awake()
+    {
+        _t = transform;
+    }
+
     void Start()
     {
         GetMeshAndRend();
         originalRecovery = Recovery;
         originalWobbleSpeed = WobbleSpeedMove;
-        drinkSystem = transform.parent.GetComponent<DrinkSystem>();
+        drinkSystem = _t.parent.GetComponent<DrinkSystem>();
     }
 
     private void OnValidate()
@@ -126,8 +131,8 @@ public class Liquid : MonoBehaviour
             wobbleAmountToAddZ = Mathf.Lerp(wobbleAmountToAddZ, 0, (deltaTime * Recovery));
 
             // velocity
-            velocity = (lastPos - transform.position) / deltaTime;
-            angularVelocity = GetAngularVelocity(lastRot, transform.rotation);
+            velocity = (lastPos - _t.position) / deltaTime;
+            angularVelocity = GetAngularVelocity(lastRot, _t.rotation);
 
             velocity += externalVelocity;
             angularVelocity += externalAngularVelocity;
@@ -155,14 +160,14 @@ public class Liquid : MonoBehaviour
         UpdatePos(deltaTime);
 
         // keep last position
-        lastPos = transform.position;
-        lastRot = transform.rotation;
+        lastPos = _t.position;
+        lastRot = _t.rotation;
     }
 
     void UpdatePos(float deltaTime)
     {
 
-        Vector3 worldPos = transform.TransformPoint(new Vector3(mesh.bounds.center.x, mesh.bounds.center.y, mesh.bounds.center.z));
+        Vector3 worldPos = _t.TransformPoint(new Vector3(mesh.bounds.center.x, mesh.bounds.center.y, mesh.bounds.center.z));
         if (CompensateShapeAmount > 0)
         {
             if (deltaTime != 0)
@@ -174,11 +179,11 @@ public class Liquid : MonoBehaviour
                 comp = (worldPos - new Vector3(0, GetLowestPoint(), 0));
             }
 
-            pos = worldPos - transform.position - new Vector3(0, fillAmount - (comp.y * CompensateShapeAmount), 0);
+            pos = worldPos - _t.position - new Vector3(0, fillAmount - (comp.y * CompensateShapeAmount), 0);
         }
         else
         {
-            pos = worldPos - transform.position - new Vector3(0, fillAmount, 0);
+            pos = worldPos - _t.position - new Vector3(0, fillAmount, 0);
         }
         rend.sharedMaterial.SetVector("_FillAmount", pos);
     }
@@ -222,7 +227,7 @@ public class Liquid : MonoBehaviour
         for (int i = 0; i < vertices.Length; i++)
         {
 
-            Vector3 position = transform.TransformPoint(vertices[i]);
+            Vector3 position = _t.TransformPoint(vertices[i]);
 
             if (position.y < lowestY)
             {

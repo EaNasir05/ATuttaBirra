@@ -7,14 +7,16 @@ public class CarCollision : MonoBehaviour
     [SerializeField] private AudioClip[] collisionAudioClips;
     [SerializeField] private float[] collisionAudioVolumes;
     private DrinkSystem drinkSystem;
+    private Transform _t;
     private CameraMovement cameraHandler;
     private float policeAlcoolPower;
     private float maxAlcoolPower;
 
     private void Awake()
     {
-        drinkSystem = transform.GetComponentInChildren<DrinkSystem>();
-        cameraHandler = transform.GetComponentInChildren<CameraMovement>();
+        _t = transform;
+        drinkSystem = _t.GetComponentInChildren<DrinkSystem>();
+        cameraHandler = _t.GetComponentInChildren<CameraMovement>();
     }
 
     private void Start()
@@ -31,7 +33,7 @@ public class CarCollision : MonoBehaviour
             SFXManager.instance.PlayClipWithRandomPitch(collisionAudioClips[i], collisionAudioVolumes[i]);
             CarMovement carMovement = collision.gameObject.GetComponent<CarMovement>();
             ContactPoint contact = collision.GetContact(0);
-            Vector3 contactPointLocal = transform.InverseTransformPoint(contact.point);
+            Vector3 contactPointLocal = _t.InverseTransformPoint(contact.point);
             if (contactPointLocal.x > 0)
                 carMovement.StartSkidding(Direction.right);
             else

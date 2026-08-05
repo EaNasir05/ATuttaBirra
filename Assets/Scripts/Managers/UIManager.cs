@@ -45,7 +45,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject beerImagePrefab;
     [SerializeField] private Vector2 minMaxSize = new Vector2(80, 160);
 
-    private int lastSpawnedLiter = 0; private ParticleSystem.ShapeModule speedShape;
+    private int lastSpawnedLiter = 0;
+    private ParticleSystem.ShapeModule speedShape;
     private Color fogColor;
     private float fogDensity;
     private Coroutine moveCameraRoutine;

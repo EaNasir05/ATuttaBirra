@@ -17,6 +17,7 @@ public class CarMovement : MonoBehaviour
     private Transform skiddingRightTarget;
     private bool skidding;
     private Direction skiddingDirection;
+    private Transform _t;
     private Rigidbody rb;
     private BottleDetector bottleDetector;
     private CarDetector carDetector;
@@ -27,12 +28,17 @@ public class CarMovement : MonoBehaviour
 
     private void Awake()
     {
-        skiddingLeftTarget = GameObject.FindGameObjectWithTag("LeftSkiddingTarget").transform;
-        skiddingRightTarget = GameObject.FindGameObjectWithTag("RightSkiddingTarget").transform;
+        _t = transform;
         rb = GetComponent<Rigidbody>();
         bottleDetector = GetComponentInChildren<BottleDetector>();
         carDetector = GetComponentInChildren<CarDetector>();
         audioSource = GetComponent<AudioSource>();
+    }
+
+    private void Start()
+    {
+        skiddingLeftTarget = GameObject.FindGameObjectWithTag("LeftSkiddingTarget").transform;
+        skiddingRightTarget = GameObject.FindGameObjectWithTag("RightSkiddingTarget").transform;
     }
 
     private void Update()
@@ -50,8 +56,8 @@ public class CarMovement : MonoBehaviour
             currentSpeed = 0;
             Transform skiddingTarget = skiddingDirection == Direction.left ? skiddingLeftTarget : skiddingRightTarget;
             float rotY = skiddingDirection == Direction.left ? -skiddingRotationSpeed : skiddingRotationSpeed;
-            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + rotY * Time.deltaTime, transform.rotation.eulerAngles.z);
-            transform.position = Vector3.MoveTowards(transform.position, skiddingTarget.position, skiddingMovementSpeed * Time.deltaTime);
+            _t.rotation = Quaternion.Euler(_t.rotation.eulerAngles.x, _t.rotation.eulerAngles.y + rotY * Time.deltaTime, _t.rotation.eulerAngles.z);
+            _t.position = Vector3.MoveTowards(_t.position, skiddingTarget.position, skiddingMovementSpeed * Time.deltaTime);
         }
     }
 
