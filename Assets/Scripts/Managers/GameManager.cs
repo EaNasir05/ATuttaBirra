@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float alcoolPowerConsumedPerSecond;
     [SerializeField] private float startingSecondsWithDecelerationImmunity;
     private float secondsWithDecelerationImmunity;
-    private float totalBeerConsumed;
+    [SerializeField] private float totalBeerConsumed;
     private float alcoolPower;
     private bool gameOver;
     private bool tutorial;
@@ -132,7 +132,6 @@ public class GameManager : MonoBehaviour
     {
         totalBeerConsumed += beerConsumed;
         UIManager.instance.UpdateBeerConsumed(Mathf.Round(100 * totalBeerConsumed) / 100);
-        UIManager.instance.UpdateEbrezza();
         spawner.UpdateSpawnTime();
         UIManager.instance.CheckBeerPopups(totalBeerConsumed);
     }

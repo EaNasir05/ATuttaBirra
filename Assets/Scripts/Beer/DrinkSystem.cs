@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -54,6 +55,7 @@ public class DrinkSystem : MonoBehaviour
     [SerializeField] private float returnDuration;
     [SerializeField] private float drinkDuration;
     [SerializeField] private float beerLossDuration;
+    [SerializeField] private float ebbrezzaMultiplier = 0.005f;
     private float realDrinkDuration;
 
     [Header("Audios")]
@@ -175,7 +177,7 @@ public class DrinkSystem : MonoBehaviour
         {
             readyToRandomlyMove = false;
             int index = Random.Range(1, 8);
-            float extraMovement = Mathf.Round(totalBeerConsumed - 1) * randomMovementMultiplier;
+            float extraMovement = UIManager.instance.ebbrezzaLevel * randomMovementMultiplier;
             extraMovement = Mathf.Clamp(extraMovement, 0, maxRandomMovement);
             switch (index)
             {
@@ -447,6 +449,8 @@ public class DrinkSystem : MonoBehaviour
         _t.localRotation = startRot;
         extraFillWhileMoving = 0f;
         totalBeerConsumed += 4 * beerConsumed;
+        if (GameManager.instance.gameStarted)
+            UIManager.instance.UpdateEbrezza(4 * beerConsumed * ebbrezzaMultiplier);
         GameManager.instance.UpdateAlcoolPower(2 * beerConsumed);
         beerConsumed = 0f;
         state = DrinkState.Idle;

@@ -27,8 +27,8 @@ public class UIManager : MonoBehaviour
 
     [Header("VFX")]
     [SerializeField] private float blackScreenFadeDuration;
-    [SerializeField] private int ebrezzaDivider;
-    [SerializeField] private float maxEbrezzaBlend;
+    public float ebbrezzaLevel = 0f;
+    [SerializeField] private float maxEbbrezzaLevel = 0.5f;
     [SerializeField] private FullScreenPassRendererFeature ebrezzaScreenRenderer;
     [SerializeField] private ParticleSystem speedEffect;
     [SerializeField] private float speedEffectMultiplier;
@@ -149,11 +149,11 @@ public class UIManager : MonoBehaviour
         speedShape.radius = 24 - increment;
     }
 
-    public void UpdateEbrezza()
+    public void UpdateEbrezza(float increment)
     {
-        float blend = (GameManager.instance.GetTotalBeerConsumed() - 1) / ebrezzaDivider;
-        blend = Mathf.Clamp(blend, 0, maxEbrezzaBlend);
-        ebrezzaScreenRenderer.passMaterial.SetFloat("_Blend", blend);
+        ebbrezzaLevel += increment; //(GameManager.instance.GetTotalBeerConsumed() - 1) / ebrezzaDivider;
+        ebbrezzaLevel = Mathf.Clamp(ebbrezzaLevel, 0, maxEbbrezzaLevel);
+        ebrezzaScreenRenderer.passMaterial.SetFloat("_Blend", ebbrezzaLevel);
     }
 
     public void StartCameraMovement(float duration)
