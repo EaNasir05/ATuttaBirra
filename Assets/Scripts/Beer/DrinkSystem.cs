@@ -29,7 +29,6 @@ public class DrinkSystem : MonoBehaviour
     [SerializeField] private Transform targetTransform;
     [SerializeField] private ParticleSystem BeerSplash;
     private Transform _t;
-    private GameObject _go;
 
     [Header("Birra")]
     [SerializeField] private Liquid beer;
@@ -40,6 +39,9 @@ public class DrinkSystem : MonoBehaviour
     [SerializeField] private float maxTilt;
     [SerializeField] private float maxHeight;
     [SerializeField] private float maxZ;
+    [SerializeField] private float beerConsumedMultiplier = 4f;
+    [SerializeField] private float ebbrezzaMultiplier = 0.005f;
+    [SerializeField] private float alcoolPowerMultiplier = 2f;
     private float totalBeerConsumed;
     private float extraFillWhileMoving;
     private float startingFill;
@@ -55,7 +57,6 @@ public class DrinkSystem : MonoBehaviour
     [SerializeField] private float returnDuration;
     [SerializeField] private float drinkDuration;
     [SerializeField] private float beerLossDuration;
-    [SerializeField] private float ebbrezzaMultiplier = 0.005f;
     private float realDrinkDuration;
 
     [Header("Audios")]
@@ -86,7 +87,6 @@ public class DrinkSystem : MonoBehaviour
     {
         totalBeerConsumed = 0;
         _t = transform;
-        _go = gameObject;
         startPos = _t.localPosition;
         startRot = _t.localRotation;
         randomHandMovement = Vector2.zero;
@@ -295,8 +295,7 @@ public class DrinkSystem : MonoBehaviour
 
     private void MoveRoutine()
     {
-        int alcoolLevel = (int) totalBeerConsumed > 5 ? 5 : (int) totalBeerConsumed;
-        float speed = rightHandSpeed * (1 - (alcoolLevel * 0.05f));
+        float speed = rightHandSpeed; // * (1 - (alcoolLevel * 0.05f));
         float moveX = rightHandMovement.x;
         float moveY = rightHandMovement.y;
         movingForReal = moveX != 0 || moveY != 0;
@@ -370,7 +369,7 @@ public class DrinkSystem : MonoBehaviour
                 float currentFill = Mathf.Lerp(startingFill, maxFill, t);
                 float deltaFill = previousFill - currentFill;
                 beer.fillAmount -= deltaFill;
-                GameManager.instance.UpdateTotalBeerConsumed(-(deltaFill * 4));
+                GameManager.instance.UpdateTotalBeerConsumed(-(deltaFill * beerConsumedMultiplier));
                 beerConsumed -= deltaFill;
                 previousFill = currentFill;
 
@@ -391,7 +390,7 @@ public class DrinkSystem : MonoBehaviour
         if (beer.fillAmount >= maxFill - shaderBugExtraFill)
         {
             float extraBeerConsumed = maxFill - startingFill - beerConsumed;
-            GameManager.instance.UpdateTotalBeerConsumed(4 * extraBeerConsumed);
+            GameManager.instance.UpdateTotalBeerConsumed(beerConsumedMultiplier * extraBeerConsumed);
             beerConsumed += extraBeerConsumed;
         }
         if (beer.fillAmount + extraFillWhileMoving >= maxFill - 0.01)
@@ -448,10 +447,10 @@ public class DrinkSystem : MonoBehaviour
         }
         _t.localRotation = startRot;
         extraFillWhileMoving = 0f;
-        totalBeerConsumed += 4 * beerConsumed;
+        totalBeerConsumed += beerConsumedMultiplier * beerConsumed;
         if (GameManager.instance.gameStarted)
-            UIManager.instance.UpdateEbrezza(4 * beerConsumed * ebbrezzaMultiplier);
-        GameManager.instance.UpdateAlcoolPower(2 * beerConsumed);
+            UIManager.instance.UpdateEbrezza(beerConsumedMultiplier * beerConsumed * ebbrezzaMultiplier);
+        GameManager.instance.UpdateAlcoolPower(alcoolPowerMultiplier * beerConsumed);
         beerConsumed = 0f;
         state = DrinkState.Idle;
         if (beer.fillAmount > maxFill)
