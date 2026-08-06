@@ -260,4 +260,5 @@ public class UIManager : MonoBehaviour
     public void EnableDrinkTutorialDirection(bool value) => drinkDirectionTutorial.SetActive(value);
     public void EnableDriveTutorial(bool value) => driveTutorial.SetActive(value);
     public void EnableTitle(bool value) => title.SetActive(value);
+    public float GetMaxEbbrezzaLevel() => maxEbbrezzaLevel;
 }

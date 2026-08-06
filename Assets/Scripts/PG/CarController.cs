@@ -11,7 +11,6 @@ public class CarController : MonoBehaviour
     public float maxBaseSpeed = 9f;
     public float accelMultiplier = 1.3f;
     public float accelSmoothing = 10f;
-    public float smoothingLossMultiplier = 0.5f;
     public float minAccelSmoothing = 2.5f;
     public float inputDeadzone = 0.15f;
     public float sameDirectionDotThreshold = 0.6f;
@@ -56,6 +55,7 @@ public class CarController : MonoBehaviour
     private PlayerDirection previousDirection;
     private float maxAlcoolPower;
     private float policeAlcoolPower;
+    private float maxEbbrezzaLevel;
 
     void Awake()
     {
@@ -76,6 +76,7 @@ public class CarController : MonoBehaviour
     {
         maxAlcoolPower = GameManager.instance.GetMaxAlcoolPower();
         policeAlcoolPower = GameManager.instance.GetPoliceAlcoolPower();
+        maxEbbrezzaLevel = UIManager.instance.GetMaxEbbrezzaLevel();
     }
 
     void OnDisable()
@@ -227,10 +228,7 @@ public class CarController : MonoBehaviour
 
     private void UpdateAccelSmoothing()
     {
-        if (startingSmoothing - (GameManager.instance.GetTotalBeerConsumed() * smoothingLossMultiplier) < minAccelSmoothing)
-            accelSmoothing = minAccelSmoothing;
-        else
-            accelSmoothing = startingSmoothing - (GameManager.instance.GetTotalBeerConsumed() * smoothingLossMultiplier);
+        accelSmoothing = Mathf.Lerp(startingSmoothing, minAccelSmoothing, UIManager.instance.ebbrezzaLevel / maxEbbrezzaLevel);
     }
 
     void StartVibration()

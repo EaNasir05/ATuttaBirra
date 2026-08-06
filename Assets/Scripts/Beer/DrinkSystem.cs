@@ -16,7 +16,6 @@ public class DrinkSystem : MonoBehaviour
     [SerializeField] private float minYRightHand = 0.14f;
     private InputHandler inputHandler;
     private bool movingForReal = false;
-    private InputAction holdT, holdS, rightHand;
     private bool holdingT = false;
     private bool holdingS = false;
     private Vector2 rightHandMovement;
@@ -47,10 +46,10 @@ public class DrinkSystem : MonoBehaviour
     private float startingFill;
     private float beerConsumed;
     private float originalMaxWobble;
+    private float maxEbbrezzaLevel;
 
     [Header ("Durate e velocità")]
     [SerializeField] private float rightHandSpeed;
-    [SerializeField] private float randomMovementMultiplier;
     [SerializeField] private float randomMovementDuration;
     [SerializeField] private float maxRandomMovement;
     [SerializeField] private float glassTiltDuration;
@@ -101,6 +100,7 @@ public class DrinkSystem : MonoBehaviour
         inputHandler.OnHoldGlassTInput += OnHoldGlassT;
         inputHandler.OnHoldGlassSInput += OnHoldGlassS;
         inputHandler.OnMoveRInput += OnMoveInput;
+        maxEbbrezzaLevel = UIManager.instance.GetMaxEbbrezzaLevel();
     }
 
     private void OnDestroy()
@@ -177,8 +177,8 @@ public class DrinkSystem : MonoBehaviour
         {
             readyToRandomlyMove = false;
             int index = Random.Range(1, 8);
-            float extraMovement = UIManager.instance.ebbrezzaLevel * randomMovementMultiplier;
-            extraMovement = Mathf.Clamp(extraMovement, 0, maxRandomMovement);
+            float t = UIManager.instance.ebbrezzaLevel / maxEbbrezzaLevel;
+            float extraMovement = Mathf.Lerp(0, maxRandomMovement, t);
             switch (index)
             {
                 case 1:

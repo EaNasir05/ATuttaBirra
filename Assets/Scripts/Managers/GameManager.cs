@@ -225,6 +225,7 @@ public class GameManager : MonoBehaviour
         UIManager.instance.EnableDriveTutorial(false);
         yield return new WaitForSeconds(2);
         tutorial = false;
+        StaticGameVariables.instance.firstTimePlaying = false;
         StartCoroutine(UIManager.instance.FadeInDrinkNDrive());
     }
 
