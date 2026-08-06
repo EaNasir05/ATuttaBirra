@@ -149,7 +149,7 @@ public class UIManager : MonoBehaviour
         speedShape.radius = 24 - increment;
     }
 
-    public void UpdateEbrezza(float increment)
+    public void UpdateEbbrezza(float increment)
     {
         ebbrezzaLevel += increment; //(GameManager.instance.GetTotalBeerConsumed() - 1) / ebrezzaDivider;
         ebbrezzaLevel = Mathf.Clamp(ebbrezzaLevel, 0, maxEbbrezzaLevel);

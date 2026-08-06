@@ -449,7 +449,7 @@ public class DrinkSystem : MonoBehaviour
         extraFillWhileMoving = 0f;
         totalBeerConsumed += beerConsumedMultiplier * beerConsumed;
         if (GameManager.instance.gameStarted)
-            UIManager.instance.UpdateEbrezza(beerConsumedMultiplier * beerConsumed * ebbrezzaMultiplier);
+            UIManager.instance.UpdateEbbrezza(beerConsumedMultiplier * beerConsumed * ebbrezzaMultiplier);
         GameManager.instance.UpdateAlcoolPower(alcoolPowerMultiplier * beerConsumed);
         beerConsumed = 0f;
         state = DrinkState.Idle;

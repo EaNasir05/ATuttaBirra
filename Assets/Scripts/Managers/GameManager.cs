@@ -7,11 +7,14 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public bool gameStarted;
+    private bool gameOver;
+    private bool tutorial;
     public bool policeArrived;
 
     [Header("Player inputs")]
     [SerializeField] private InputActionAsset actionAsset;
     private InputActionMap actionMap;
+    private DeviceType deviceConnected;
 
     [Header("External scripts")]
     [SerializeField] private CarController carController;
@@ -26,13 +29,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float minAlcoolPower;
     [SerializeField] private float policeAlcoolPower;
     [SerializeField] private float alcoolPowerConsumedPerSecond;
+    [SerializeField] private float ebbrezzaConsumedPerSecond;
+    [SerializeField] private float ebbrezzaReductionDelay;
     [SerializeField] private float startingSecondsWithDecelerationImmunity;
     private float secondsWithDecelerationImmunity;
     [SerializeField] private float totalBeerConsumed;
     private float alcoolPower;
-    private bool gameOver;
-    private bool tutorial;
-    private DeviceType deviceConnected;
+    private Coroutine reduceEbbrezzaRoutine;
 
     [Header("Audios")]
     [SerializeField] private AudioClip accelerationAudioClip;
@@ -95,6 +98,8 @@ public class GameManager : MonoBehaviour
             alcoolPower -= alcoolPowerConsumedPerSecond * Time.deltaTime;
             if (alcoolPower < minAlcoolPower && !gameOver)
                 StartCoroutine(SpawnPolice());
+            if (!gameOver && reduceEbbrezzaRoutine == null)
+                reduceEbbrezzaRoutine = StartCoroutine(ReduceEbbrezza());
         }
     }
 
@@ -128,6 +133,23 @@ public class GameManager : MonoBehaviour
         secondsWithDecelerationImmunity += value;
     }
 
+    private void StopReduceEbbrezzaRoutine()
+    {
+        if (reduceEbbrezzaRoutine != null)
+        {
+            StopCoroutine(reduceEbbrezzaRoutine);
+            reduceEbbrezzaRoutine = null;
+        }
+    }
+
+    private IEnumerator ReduceEbbrezza()
+    {
+        yield return new WaitForSeconds(ebbrezzaReductionDelay);
+        if (!IsImmuneToDeceleration())
+            UIManager.instance.UpdateEbbrezza(-ebbrezzaConsumedPerSecond * ebbrezzaReductionDelay);
+        reduceEbbrezzaRoutine = null;
+    }
+
     public void UpdateTotalBeerConsumed(float beerConsumed)
     {
         totalBeerConsumed += beerConsumed;
@@ -152,7 +174,10 @@ public class GameManager : MonoBehaviour
             else
             {
                 if (increment > 0)
+                {
                     AddDecelerationImmunity(4 * increment);
+                    StopReduceEbbrezzaRoutine();
+                }
                 alcoolPower = Mathf.Clamp(alcoolPower + increment, 0, maxAlcoolPower);
             }
         }
