@@ -16,10 +16,18 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image skyboxCover;
     [SerializeField] private Image blackScreen;
     [SerializeField] private GameObject holdGlassTutorial;
+    [SerializeField] private GameObject holdGlassTutorialDualShock;
+    [SerializeField] private GameObject holdGlassTutorialXInput;
     [SerializeField] private GameObject moveGlassTutorial;
+    [SerializeField] private GameObject moveGlassTutorialDualShock;
+    [SerializeField] private GameObject moveGlassTutorialXInput;
     [SerializeField] private GameObject fillGlassTutorial;
     [SerializeField] private GameObject holdLeverTutorial;
+    [SerializeField] private GameObject holdLeverTutorialDualShock;
+    [SerializeField] private GameObject holdLeverTutorialXInput;
     [SerializeField] private GameObject pullLeverTutorial;
+    [SerializeField] private GameObject pullLeverTutorialDualShock;
+    [SerializeField] private GameObject pullLeverTutorialXInput;
     [SerializeField] private GameObject drinkDirectionTutorial;
     [SerializeField] private GameObject driveTutorial;
     [SerializeField] private TMP_Text drinkAndDriveText;
