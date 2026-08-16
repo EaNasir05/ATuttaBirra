@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -10,6 +11,7 @@ public class GameManager : MonoBehaviour
     private bool gameOver;
     private bool tutorial;
     public bool policeArrived;
+    private int tutorialCheckpoint = 0;
 
     [Header("Player inputs")]
     [SerializeField] private InputActionAsset actionAsset;
@@ -224,30 +226,37 @@ public class GameManager : MonoBehaviour
     private IEnumerator Tutorial()
     {
         drinkSystem.EmptyTheGlass();
-        Debug.Log(deviceConnected);
-        UIManager.instance.EnableHoldLeverTutorialImage(true);
+        UIManager.instance.EnableHoldLeverTutorialImage(true, deviceConnected);
         yield return new WaitUntil(() => leverSystem.IsGrabbingTheLever());
         StartCoroutine(UIManager.instance.FadeOutTitle());
-        UIManager.instance.EnableHoldLeverTutorialImage(false);
-        UIManager.instance.EnablePullLeverTutorialImage(true);
+        tutorialCheckpoint = 1;
+        UIManager.instance.EnableHoldLeverTutorialImage(false, deviceConnected);
+        UIManager.instance.EnablePullLeverTutorialImage(true, deviceConnected);
         yield return new WaitUntil(() => liquidStream.IsFlowing());
-        UIManager.instance.EnablePullLeverTutorialImage(false);
-        UIManager.instance.EnableHoldGlassTutorialImage(true);
+        tutorialCheckpoint = 2;
+        UIManager.instance.EnablePullLeverTutorialImage(false, deviceConnected);
+        UIManager.instance.EnableHoldGlassTutorialImage(true, deviceConnected);
         yield return new WaitUntil(() => drinkSystem.IsMoving());
-        UIManager.instance.EnableHoldGlassTutorialImage(false);
-        UIManager.instance.EnableMoveGlassTutorialImage(true);
+        tutorialCheckpoint = 3;
+        UIManager.instance.EnableHoldGlassTutorialImage(false, deviceConnected);
+        UIManager.instance.EnableMoveGlassTutorialImage(true, deviceConnected);
         yield return new WaitUntil(() => drinkSystem.IsMovingForReal());
-        UIManager.instance.EnableMoveGlassTutorialImage(false);
+        tutorialCheckpoint = 4;
+        UIManager.instance.EnableMoveGlassTutorialImage(false, deviceConnected);
         UIManager.instance.EnableFillGlassTutorialImage(true);
         yield return new WaitUntil(() => (drinkSystem.GetBeerFill() < drinkSystem.GetMaxFill() && !liquidStream.IsFillingTheJug()) || drinkSystem.GetBeerFill() <= drinkSystem.GetMinFill());
+        tutorialCheckpoint = 5;
         UIManager.instance.EnableFillGlassTutorialImage(false);
         UIManager.instance.EnableDrinkTutorialDirection(true);
         yield return new WaitUntil(() => drinkSystem.IsDrinking());
+        tutorialCheckpoint = 6;
         UIManager.instance.EnableDrinkTutorialDirection(false);
         yield return new WaitUntil(() => drinkSystem.IsIdling() || drinkSystem.IsMoving());
-        UIManager.instance.EnableDriveTutorial(true);
+        tutorialCheckpoint = 7;
+        UIManager.instance.EnableDriveTutorial(true, deviceConnected);
         yield return new WaitUntil(() => carController.GetLastMove() > 0);
-        UIManager.instance.EnableDriveTutorial(false);
+        tutorialCheckpoint = 8;
+        UIManager.instance.EnableDriveTutorial(false, deviceConnected);
         yield return new WaitForSeconds(2);
         tutorial = false;
         StaticGameVariables.instance.firstTimePlaying = false;
@@ -270,6 +279,31 @@ public class GameManager : MonoBehaviour
             default:
                 deviceConnected = DeviceType.OtherController;
                 break;
+        }
+
+        if (tutorial)
+        {
+            switch (tutorialCheckpoint)
+            {
+                case 0:
+                    UIManager.instance.EnableHoldLeverTutorialImage(true, deviceConnected);
+                    break;
+                case 1:
+                    UIManager.instance.EnablePullLeverTutorialImage(true, deviceConnected);
+                    break;
+                case 2:
+                    UIManager.instance.EnableHoldGlassTutorialImage(true, deviceConnected);
+                    break;
+                case 3:
+                    UIManager.instance.EnableMoveGlassTutorialImage(true, deviceConnected);
+                    break;
+                case 7:
+                    UIManager.instance.EnableDriveTutorial(true, deviceConnected);
+                    break;
+                default:
+                    UnityEngine.Debug.Log("NON SO COSA FARE...");
+                    break;
+            }
         }
     }
 }

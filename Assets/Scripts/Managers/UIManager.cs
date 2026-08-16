@@ -15,23 +15,25 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text beerConsumed;
     [SerializeField] private Image skyboxCover;
     [SerializeField] private Image blackScreen;
-    [SerializeField] private GameObject holdGlassTutorial;
+    [SerializeField] private GameObject holdGlassTutorialKeyboard;
     [SerializeField] private GameObject holdGlassTutorialDualShock;
     [SerializeField] private GameObject holdGlassTutorialXInput;
-    [SerializeField] private GameObject moveGlassTutorial;
+    [SerializeField] private GameObject moveGlassTutorialKeyboard;
     [SerializeField] private GameObject moveGlassTutorialDualShock;
     [SerializeField] private GameObject moveGlassTutorialXInput;
     [SerializeField] private GameObject fillGlassTutorial;
-    [SerializeField] private GameObject holdLeverTutorial;
+    [SerializeField] private GameObject holdLeverTutorialKeyboard;
     [SerializeField] private GameObject holdLeverTutorialDualShock;
     [SerializeField] private GameObject holdLeverTutorialXInput;
-    [SerializeField] private GameObject pullLeverTutorial;
+    [SerializeField] private GameObject pullLeverTutorialKeyboard;
     [SerializeField] private GameObject pullLeverTutorialDualShock;
     [SerializeField] private GameObject pullLeverTutorialXInput;
     [SerializeField] private GameObject drinkDirectionTutorial;
-    [SerializeField] private GameObject driveTutorial;
+    [SerializeField] private GameObject driveTutorialGamepad;
+    [SerializeField] private GameObject driveTutorialKeyboard;
     [SerializeField] private TMP_Text drinkAndDriveText;
     [SerializeField] private GameObject title;
+    private GameObject currentActiveTutorial;
 
     [Header("VFX")]
     [SerializeField] private float blackScreenFadeDuration;
@@ -260,13 +262,204 @@ public class UIManager : MonoBehaviour
         StaticGameVariables.instance.firstTimePlaying = false;
     }
 
-    public void EnableHoldGlassTutorialImage(bool value) => holdGlassTutorial.SetActive(value);
-    public void EnableMoveGlassTutorialImage(bool value) => moveGlassTutorial.SetActive(value);
+    public void EnableHoldGlassTutorialImage(bool value, DeviceType inputSystem)
+    {
+        switch (inputSystem)
+        {
+            case DeviceType.KeyboardMouse:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = holdGlassTutorialKeyboard;
+                }
+                holdGlassTutorialKeyboard.SetActive(value);
+                break;
+            case DeviceType.PSController:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = holdGlassTutorialDualShock;
+                }
+                holdGlassTutorialDualShock.SetActive(value);
+                break;
+            case DeviceType.XboxController:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = holdGlassTutorialXInput;
+                }
+                holdGlassTutorialXInput.SetActive(value);
+                break;
+            default:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = holdGlassTutorialXInput;
+                }
+                holdGlassTutorialXInput.SetActive(value);
+                break;
+        }
+    }
+
+    public void EnableMoveGlassTutorialImage(bool value, DeviceType inputSystem)
+    {
+        switch (inputSystem)
+        {
+            case DeviceType.KeyboardMouse:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = moveGlassTutorialKeyboard;
+                }
+                moveGlassTutorialKeyboard.SetActive(value);
+                break;
+            case DeviceType.PSController:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = moveGlassTutorialDualShock;
+                }
+                moveGlassTutorialDualShock.SetActive(value);
+                break;
+            case DeviceType.XboxController:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = moveGlassTutorialXInput;
+                }
+                moveGlassTutorialXInput.SetActive(value);
+                break;
+            default:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = moveGlassTutorialXInput;
+                }
+                moveGlassTutorialXInput.SetActive(value);
+                break;
+        }
+    }
+
+    public void EnableHoldLeverTutorialImage(bool value, DeviceType inputSystem)
+    {
+        switch (inputSystem)
+        {
+            case DeviceType.KeyboardMouse:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = holdLeverTutorialKeyboard;
+                }
+                holdLeverTutorialKeyboard.SetActive(value);
+                break;
+            case DeviceType.PSController:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = holdLeverTutorialDualShock;
+                }
+                holdLeverTutorialDualShock.SetActive(value);
+                break;
+            case DeviceType.XboxController:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = holdLeverTutorialXInput;
+                }
+                holdLeverTutorialXInput.SetActive(value);
+                break;
+            default:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = holdLeverTutorialXInput;
+                }
+                holdLeverTutorialXInput.SetActive(value);
+                break;
+        }
+    }
+
+    public void EnablePullLeverTutorialImage(bool value, DeviceType inputSystem)
+    {
+        switch (inputSystem)
+        {
+            case DeviceType.KeyboardMouse:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = pullLeverTutorialKeyboard;
+                }
+                pullLeverTutorialKeyboard.SetActive(value);
+                break;
+            case DeviceType.PSController:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = pullLeverTutorialDualShock;
+                }
+                pullLeverTutorialDualShock.SetActive(value);
+                break;
+            case DeviceType.XboxController:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = pullLeverTutorialXInput;
+                }
+                pullLeverTutorialXInput.SetActive(value);
+                break;
+            default:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = pullLeverTutorialXInput;
+                }
+                pullLeverTutorialXInput.SetActive(value);
+                break;
+        }
+    }
+
+    public void EnableDriveTutorial(bool value, DeviceType inputSystem)
+    {
+        switch (inputSystem)
+        {
+            case DeviceType.KeyboardMouse:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = driveTutorialKeyboard;
+                }
+                driveTutorialKeyboard.SetActive(value);
+                break;
+            case DeviceType.PSController:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = driveTutorialGamepad;
+                }
+                driveTutorialGamepad.SetActive(value);
+                break;
+            case DeviceType.XboxController:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = driveTutorialGamepad;
+                }
+                driveTutorialGamepad.SetActive(value);
+                break;
+            default:
+                if (value)
+                {
+                    currentActiveTutorial?.SetActive(false);
+                    currentActiveTutorial = driveTutorialGamepad;
+                }
+                driveTutorialGamepad.SetActive(value);
+                break;
+        }
+    }
+
     public void EnableFillGlassTutorialImage(bool value) => fillGlassTutorial.SetActive(value);
-    public void EnableHoldLeverTutorialImage(bool value) => holdLeverTutorial.SetActive(value);
-    public void EnablePullLeverTutorialImage(bool value) => pullLeverTutorial.SetActive(value);
     public void EnableDrinkTutorialDirection(bool value) => drinkDirectionTutorial.SetActive(value);
-    public void EnableDriveTutorial(bool value) => driveTutorial.SetActive(value);
     public void EnableTitle(bool value) => title.SetActive(value);
+
     public float GetMaxEbbrezzaLevel() => maxEbbrezzaLevel;
 }
