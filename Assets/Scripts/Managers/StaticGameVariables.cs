@@ -10,6 +10,8 @@ public class StaticGameVariables
     public int maxBiomeReached;
     public bool[] unlockedBeers;
     public bool[] unlockedGlasses;
+    public int beerEquipped;
+    public int glassEquipped;
 
     public StaticGameVariables()
     {
@@ -19,6 +21,8 @@ public class StaticGameVariables
         maxBiomeReached = 0;
         unlockedBeers = new bool[10];
         unlockedGlasses = new bool[10];
+        beerEquipped = 0;
+        glassEquipped = 0;
         for (int i = 0; i < 10; i++)
         {
             unlockedBeers[i] = false;

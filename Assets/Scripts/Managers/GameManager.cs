@@ -44,6 +44,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float accelerationAudioVolume;
     private AudioSource carAudioSource;
 
+    [Header("Collectables")]
+    [SerializeField] private CollectableBeers collectableBeers;
+    [SerializeField] private CollectableGlasses collectableGlasses;
+
     private void Awake()
     {
         instance = this;
@@ -103,6 +107,11 @@ public class GameManager : MonoBehaviour
             if (!gameOver && reduceEbbrezzaRoutine == null)
                 reduceEbbrezzaRoutine = StartCoroutine(ReduceEbbrezza());
         }
+    }
+
+    private void UpdateBeerStats(int beerEquipped, float ebbrezzaMultiplier, float speedBoostMultiplier, float immunityDurationMultiplier)
+    {
+        //DO THINGS
     }
 
     private bool UpdateImmunity()

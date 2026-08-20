@@ -16,9 +16,12 @@ public class CollectableBeer
     public float speedBoostMultiplier;
     public float immunityDurationMultiplier;
     public float drinkDurationMultiplier;
-    public float fillGlassDurationMultiplier;
-    public Color beerLiquidColor;
-    public Color beerStreamColor;
+    public float beerStreamEfficiencyMultiplier;
+    public Color beerTintColor;
+    public Color beerRimColor;
     public Color beerFoamColor;
+    public ParticleSystem beerStreamParticles;
+    public ParticleSystem beerSplashParticles;
+    public GameObject beerOverflowObject;
     public bool unlocked;
 }

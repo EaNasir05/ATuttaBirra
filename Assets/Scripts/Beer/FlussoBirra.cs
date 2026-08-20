@@ -13,10 +13,13 @@ public class LiquidStreamToggle : MonoBehaviour
 
     [Header("Particles")]
     public ParticleSystem streamParticles;
+    private Vector3 streamParticlesPosition;
     public ParticleSystem splashParticles;
+    private Vector3 splashParticlesPosition;
 
     [Header("Enough Beer")]
     public GameObject EnoughBeer;
+    private Vector3 overflowObjectPosition;
 
     private bool isFlowing = false;
     private bool wasFillingTheJug = false;
@@ -38,6 +41,10 @@ public class LiquidStreamToggle : MonoBehaviour
 
         if (EnoughBeer != null)
             EnoughBeer.SetActive(false);
+
+        streamParticlesPosition = streamParticles.transform.position;
+        splashParticlesPosition = splashParticles.transform.position;
+        overflowObjectPosition = EnoughBeer.transform.position;
     }
 
     void Start()
@@ -64,7 +71,10 @@ public class LiquidStreamToggle : MonoBehaviour
             loopAudioSource.time = startingLoopSeconds;
     }
 
-    
+    public void UpdateBeerStats(ParticleSystem streamParticles, ParticleSystem splashParticles, GameObject overflowObject, float beerGainMultiplier)
+    {
+        //DO THINGS
+    }
 
     public void SetFlow(bool active)
     {

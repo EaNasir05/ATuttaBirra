@@ -41,6 +41,7 @@ public class DrinkSystem : MonoBehaviour
     [SerializeField] private float beerConsumedMultiplier = 4f;
     [SerializeField] private float ebbrezzaMultiplier = 0.005f;
     [SerializeField] private float alcoolPowerMultiplier = 2f;
+    [SerializeField] private Material beerMaterial;
     private float totalBeerConsumed;
     private float extraFillWhileMoving;
     private float startingFill;
@@ -137,6 +138,11 @@ public class DrinkSystem : MonoBehaviour
         UpdateHands(holdingGlass);
         UpdateWobble();
         UpdateFillWhileNotReceivingBeer();
+    }
+
+    public void UpdateBeerStats(int beerEquipped, float drinkDurationMultiplier, Color beerTintColor, Color beerRimColor, Color beerFoamColor)
+    {
+        //DO THINGS
     }
 
     private void UpdateLocalPosition()

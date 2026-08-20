@@ -12,4 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 984b3ad4bb58ef640947dac787064013, type: 3}
   m_Name: Beers
   m_EditorClassIdentifier: Assembly-CSharp::CollectableBeers
-  beers: []
+  beers:
+  - beerName: Standard
+    ebbrezzaMultiplier: 1
+    speedBoostMultiplier: 1
+    immunityDurationMultiplier: 1
+    drinkDurationMultiplier: 1
+    beerStreamEfficiencyMultiplier: 1
+    beerTintColor: {r: 0.4117647, g: 0.32941177, b: 0.019607844, a: 1}
+    beerRimColor: {r: 1, g: 0.6666667, b: 0, a: 1}
+    beerFoamColor: {r: 1, g: 0.972549, b: 0.7764706, a: 1}
+    beerStreamParticles: {fileID: 0}
+    beerSplashParticles: {fileID: 0}
+    beerOverflowObject: {fileID: 0}
+    unlocked: 1

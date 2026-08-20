@@ -48,6 +48,20 @@ public class SFXManager : MonoBehaviour
         StartCoroutine(MakeSourceAvailable(clip.length, i));
     }
 
+    public void PlayClip(AudioClip clip, float volume, float pitch)
+    {
+        int i = GetTheFirstAvailableSource();
+        if (i == -1)
+            return;
+        availableSources[i] = false;
+        sources[i].clip = clip;
+        sources[i].volume = volume;
+        sources[i].loop = false;
+        sources[i].pitch = pitch;
+        sources[i].Play();
+        StartCoroutine(MakeSourceAvailable(clip.length, i));
+    }
+
     public void PlayClipWithRandomPitch(AudioClip clip, float volume)
     {
         int i = GetTheFirstAvailableSource();
