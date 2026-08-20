@@ -19,10 +19,8 @@ MonoBehaviour:
     immunityDurationMultiplier: 1
     drinkDurationMultiplier: 1
     beerStreamEfficiencyMultiplier: 1
-    beerTintColor: {r: 0.4117647, g: 0.32941177, b: 0.019607844, a: 1}
-    beerRimColor: {r: 1, g: 0.6666667, b: 0, a: 1}
-    beerFoamColor: {r: 1, g: 0.972549, b: 0.7764706, a: 1}
+    beerMaterial: {fileID: 2100000, guid: e6cb9f1ed3d437145aad73aa4d5e4761, type: 2}
     beerStreamParticles: {fileID: 0}
-    beerSplashParticles: {fileID: 0}
+    beerSplashParticleColor: {r: 1, g: 0.9372549, b: 0.6313726, a: 1}
     beerOverflowObject: {fileID: 0}
     unlocked: 1

@@ -10,6 +10,7 @@ public class LiquidStreamToggle : MonoBehaviour
     public LayerMask collisionMask;
     public DrinkSystem drinkSystem;
     public float beerGainRate = 5f;
+    private float standardBeerGainRate;
 
     [Header("Particles")]
     public ParticleSystem streamParticles;
@@ -45,6 +46,7 @@ public class LiquidStreamToggle : MonoBehaviour
         streamParticlesPosition = streamParticles.transform.position;
         splashParticlesPosition = splashParticles.transform.position;
         overflowObjectPosition = EnoughBeer.transform.position;
+        standardBeerGainRate = beerGainRate;
     }
 
     void Start()
@@ -71,9 +73,11 @@ public class LiquidStreamToggle : MonoBehaviour
             loopAudioSource.time = startingLoopSeconds;
     }
 
-    public void UpdateBeerStats(ParticleSystem streamParticles, ParticleSystem splashParticles, GameObject overflowObject, float beerGainMultiplier)
+    public void UpdateBeerStats(ParticleSystem streamParticles, GameObject overflowObject, float beerGainMultiplier)
     {
-        //DO THINGS
+        beerGainRate = standardBeerGainRate * beerGainMultiplier;
+        //cambia streamParticles
+        //cambia overflowObject
     }
 
     public void SetFlow(bool active)

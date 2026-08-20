@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -41,13 +40,15 @@ public class DrinkSystem : MonoBehaviour
     [SerializeField] private float beerConsumedMultiplier = 4f;
     [SerializeField] private float ebbrezzaMultiplier = 0.005f;
     [SerializeField] private float alcoolPowerMultiplier = 2f;
-    [SerializeField] private Material beerMaterial;
+    [SerializeField] private MeshRenderer beerMeshRenderer;
+    private float standardEbbrezzaMultiplier;
     private float totalBeerConsumed;
     private float extraFillWhileMoving;
     private float startingFill;
     private float beerConsumed;
     private float originalMaxWobble;
     private float maxEbbrezzaLevel;
+    private int beerEquipped;
 
     [Header ("Durate e velocità")]
     [SerializeField] private float rightHandSpeed;
@@ -57,6 +58,7 @@ public class DrinkSystem : MonoBehaviour
     [SerializeField] private float returnDuration;
     [SerializeField] private float drinkDuration;
     [SerializeField] private float beerLossDuration;
+    private float standardDrinkDuration;
     private float realDrinkDuration;
 
     [Header("Audios")]
@@ -68,7 +70,8 @@ public class DrinkSystem : MonoBehaviour
     [SerializeField] private float burpAudioVolume;
     [SerializeField] private AudioClip splashAudioClip;
     [SerializeField] private float splashAudioVolume;
-    private int audioSourceIndex;
+    private int audioSourceIndex = -1;
+    private float drinkingAudioPitch = 1;
 
     [Header ("Stati")]
     private DrinkState state = DrinkState.Idle;
@@ -93,6 +96,8 @@ public class DrinkSystem : MonoBehaviour
         iHateJews = false;
         readyToRandomlyMove = true;
         originalMaxWobble = beer.MaxWobble;
+        standardDrinkDuration = drinkDuration;
+        standardEbbrezzaMultiplier = ebbrezzaMultiplier;
     }
 
     private void Start()
@@ -140,9 +145,14 @@ public class DrinkSystem : MonoBehaviour
         UpdateFillWhileNotReceivingBeer();
     }
 
-    public void UpdateBeerStats(int beerEquipped, float drinkDurationMultiplier, Color beerTintColor, Color beerRimColor, Color beerFoamColor)
+    public void UpdateBeerStats(int beerEquipped, float drinkDurationMultiplier, float ebbrezzaMultiplier, Material beerMaterial, Color beerSplashColor)
     {
-        //DO THINGS
+        this.beerEquipped = beerEquipped;
+        this.ebbrezzaMultiplier = standardEbbrezzaMultiplier * ebbrezzaMultiplier;
+        drinkDuration = standardDrinkDuration * drinkDurationMultiplier;
+        drinkingAudioPitch = Mathf.Clamp(1 / drinkDurationMultiplier, 0.75f, 1.75f);
+        beerMeshRenderer.materials[0] = beerMaterial;
+        //cambia beerSplashColor
     }
 
     private void UpdateLocalPosition()
@@ -356,7 +366,7 @@ public class DrinkSystem : MonoBehaviour
                 if (firstTime)
                 {
                     previousFill = beer.fillAmount;
-                    audioSourceIndex = SFXManager.instance.PlayClipWithRandomPitchAndReturnIndex(drinkingAudioClip, drinkingAudioVolume);
+                    audioSourceIndex = SFXManager.instance.PlayClip(drinkingAudioClip, drinkingAudioVolume, drinkingAudioPitch);
                     firstTime = false;
                 }
                 elapsedDrinking += Time.deltaTime;
@@ -406,8 +416,9 @@ public class DrinkSystem : MonoBehaviour
             iHateJews = true;
             needToGainExtra = false;
         }
-        else
+        if (audioSourceIndex != -1)
         {
+            Debug.Log("CI SONO ANCHE IO");
             SFXManager.instance.StopClip(audioSourceIndex);
         }
         float startFill = beer.fillAmount;
@@ -453,6 +464,7 @@ public class DrinkSystem : MonoBehaviour
         }
         _t.localRotation = startRot;
         extraFillWhileMoving = 0f;
+        audioSourceIndex = -1;
         totalBeerConsumed += beerConsumedMultiplier * beerConsumed;
         if (GameManager.instance.gameStarted)
             UIManager.instance.UpdateEbbrezza(beerConsumedMultiplier * beerConsumed * ebbrezzaMultiplier);

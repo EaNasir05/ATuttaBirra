@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -38,6 +37,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float totalBeerConsumed;
     private float alcoolPower;
     private Coroutine reduceEbbrezzaRoutine;
+    private float speedBoostMultiplier = 1;
+    private float immunityDurationMultiplier = 1;
 
     [Header("Audios")]
     [SerializeField] private AudioClip accelerationAudioClip;
@@ -47,6 +48,7 @@ public class GameManager : MonoBehaviour
     [Header("Collectables")]
     [SerializeField] private CollectableBeers collectableBeers;
     [SerializeField] private CollectableGlasses collectableGlasses;
+    private int beerEquipped;
 
     private void Awake()
     {
@@ -84,6 +86,8 @@ public class GameManager : MonoBehaviour
             StartCoroutine(Tutorial());
             startingSecondsWithDecelerationImmunity = 0;
         }
+        int index = StaticGameVariables.instance.beerEquipped;
+        UpdateBeerStats(index, collectableBeers.beers[index].speedBoostMultiplier, collectableBeers.beers[index].immunityDurationMultiplier, collectableBeers.beers[index].drinkDurationMultiplier, collectableBeers.beers[index].ebbrezzaMultiplier, collectableBeers.beers[index].beerMaterial, collectableBeers.beers[index].beerSplashParticleColor, collectableBeers.beers[index].beerStreamParticles, collectableBeers.beers[index].beerOverflowObject, collectableBeers.beers[index].beerStreamEfficiencyMultiplier);
     }
 
     private void OnDestroy()
@@ -109,9 +113,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void UpdateBeerStats(int beerEquipped, float ebbrezzaMultiplier, float speedBoostMultiplier, float immunityDurationMultiplier)
+    private void UpdateBeerStats(int beerEquipped, float speedBoostMultiplier, float immunityDurationMultiplier, float drinkDurationMultiplier, float ebbrezzaMultiplier, Material beerMaterial, Color beerSplashColor, ParticleSystem streamParticles, GameObject overflowObject, float beerGainMultiplier)
     {
-        //DO THINGS
+        this.beerEquipped = beerEquipped;
+        this.speedBoostMultiplier = speedBoostMultiplier;
+        this.immunityDurationMultiplier = immunityDurationMultiplier;
+        drinkSystem.UpdateBeerStats(beerEquipped, drinkDurationMultiplier, ebbrezzaMultiplier, beerMaterial, beerSplashColor);
+        liquidStream.UpdateBeerStats(streamParticles, overflowObject, beerGainMultiplier);
     }
 
     private bool UpdateImmunity()
@@ -186,10 +194,10 @@ public class GameManager : MonoBehaviour
             {
                 if (increment > 0)
                 {
-                    AddDecelerationImmunity(4 * increment);
+                    AddDecelerationImmunity(4 * increment * immunityDurationMultiplier);
                     StopReduceEbbrezzaRoutine();
                 }
-                alcoolPower = Mathf.Clamp(alcoolPower + increment, 0, maxAlcoolPower);
+                alcoolPower = Mathf.Clamp(alcoolPower + (increment * speedBoostMultiplier), 0, maxAlcoolPower);
             }
         }
     }
