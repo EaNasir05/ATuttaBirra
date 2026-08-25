@@ -113,6 +113,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void EquipBeer(int index)
+    {
+        UpdateBeerStats(index, collectableBeers.beers[index].speedBoostMultiplier, collectableBeers.beers[index].immunityDurationMultiplier, collectableBeers.beers[index].drinkDurationMultiplier, collectableBeers.beers[index].ebbrezzaMultiplier, collectableBeers.beers[index].beerMaterial, collectableBeers.beers[index].beerSplashParticleColor, collectableBeers.beers[index].beerStreamParticles, collectableBeers.beers[index].beerOverflowObject, collectableBeers.beers[index].beerStreamEfficiencyMultiplier);
+    }
+
     private void UpdateBeerStats(int beerEquipped, float speedBoostMultiplier, float immunityDurationMultiplier, float drinkDurationMultiplier, float ebbrezzaMultiplier, Material beerMaterial, Color beerSplashColor, ParticleSystem streamParticles, GameObject overflowObject, float beerGainMultiplier)
     {
         this.beerEquipped = beerEquipped;

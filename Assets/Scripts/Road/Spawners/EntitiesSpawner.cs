@@ -1,12 +1,17 @@
-using NUnit.Framework;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 public class EntitiesSpawner : MonoBehaviour
 {
+    [System.Serializable]
+    public class CarsBlocksIndexes
+    {
+        public List<int> blocks = new();
+    }
+
     [SerializeField] private CarsList carsList;
     [SerializeField] private CarsBlocks carsBlocks;
+    [SerializeField] private List<CarsBlocksIndexes> startingBlocks = new();
     [SerializeField] private float startingSpawnTime;
     [SerializeField] private float minSpawnTime;
     [SerializeField] private float spawnTimeReduction;
@@ -19,15 +24,16 @@ public class EntitiesSpawner : MonoBehaviour
     private float timePassed;
     private CarsBlock selectedBlock;
     private int count = 0;
+    private bool firstBlock = true;
+    private int currentBiome = 0;
 
     void Awake()
     {
         timePassed = -spawnTime;
         spawnTime = startingSpawnTime;
-        littleCars = carsList.GetLittleCars();
-        bigCars = carsList.GetBigCars();
+        littleCars = carsList.GetLittleCars(0);
+        bigCars = carsList.GetBigCars(0);
         blocks = carsBlocks.blocks;
-        selectedBlock = blocks[Random.Range(0, 6)];
     }
 
     void Update()
@@ -37,6 +43,11 @@ public class EntitiesSpawner : MonoBehaviour
             timePassed += Time.deltaTime;
             if (timePassed >= spawnTime)
             {
+                if (firstBlock)
+                {
+                    selectedBlock = blocks[startingBlocks[currentBiome].blocks[Random.Range(0, startingBlocks[currentBiome].blocks.Count)]];
+                    firstBlock = false;
+                }
                 for (int i = 0; i < selectedBlock.carsPositionZ.Length; i++)
                 {
                     float posX = 0;
@@ -72,6 +83,14 @@ public class EntitiesSpawner : MonoBehaviour
                 timePassed = 0;
             }
         }
+    }
+
+    public void IncreaseBiomeIndex()
+    {
+        currentBiome++;
+        littleCars = carsList.GetLittleCars(currentBiome);
+        bigCars = carsList.GetBigCars(currentBiome);
+        firstBlock = true;
     }
 
     public void UpdateSpawnTime()

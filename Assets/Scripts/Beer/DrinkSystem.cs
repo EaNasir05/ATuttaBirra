@@ -102,7 +102,7 @@ public class DrinkSystem : MonoBehaviour
 
     private void Start()
     {
-        inputHandler = FindObjectOfType<InputHandler>();
+        inputHandler = FindFirstObjectByType<InputHandler>();
         inputHandler.OnHoldGlassTInput += OnHoldGlassT;
         inputHandler.OnHoldGlassSInput += OnHoldGlassS;
         inputHandler.OnMoveRInput += OnMoveInput;
@@ -418,7 +418,6 @@ public class DrinkSystem : MonoBehaviour
         }
         if (audioSourceIndex != -1)
         {
-            Debug.Log("CI SONO ANCHE IO");
             SFXManager.instance.StopClip(audioSourceIndex);
         }
         float startFill = beer.fillAmount;

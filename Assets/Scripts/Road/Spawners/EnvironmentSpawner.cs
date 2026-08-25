@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnvironmentSpawner : MonoBehaviour
@@ -9,10 +10,13 @@ public class EnvironmentSpawner : MonoBehaviour
     [SerializeField] private Transform firstBlockLinked;
     private Transform lastBlockSpawned;
     private int spawnIndex = 0;
+    private int currentBiome = 0;
+    private List<EnvironmentBlock> currentEnvironmentBlocks;
 
     void Awake()
     {
         lastBlockSpawned = firstBlockLinked;
+        //aggiorna currentEnvironmentBlocks
     }
 
     void Update()
@@ -25,5 +29,11 @@ public class EnvironmentSpawner : MonoBehaviour
             if (spawnIndex == environmentBlocks.Length)
                 spawnIndex = 0;
         }
+    }
+
+    public void IncreaseBiomeIndex()
+    {
+        currentBiome++;
+        //aggiorna currentEnvironmentBlocks
     }
 }
