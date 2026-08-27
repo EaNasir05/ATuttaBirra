@@ -11,21 +11,25 @@ public class EntitiesSpawner : MonoBehaviour
 
     [SerializeField] private CarsList carsList;
     [SerializeField] private CarsBlocks carsBlocks;
+    [SerializeField] private RoadObstacles obstaclesList;
     [SerializeField] private List<CarsBlocksIndexes> startingBlocks = new();
+    [SerializeField] private List<CarsBlocksIndexes> blocksBehindObstacles = new();
     [SerializeField] private float startingSpawnTime;
-    [SerializeField] private float minSpawnTime;
-    [SerializeField] private float spawnTimeReduction;
+    [SerializeField] private float[] spawnDelayAfterObstacles;
     [SerializeField] private float spawnPositionZ;
     [SerializeField] private float[] spawnPositionsX;
     private List<Car> littleCars;
     private List<Car> bigCars;
     private CarsBlock[] blocks;
+    private List<RoadObstacle> obstacles;
     private float spawnTime;
     private float timePassed;
     private CarsBlock selectedBlock;
-    private int count = 0;
     private bool firstBlock = true;
+    private bool spawnAfterObstacle = false;
     private int currentBiome = 0;
+    private bool obstacleSpawned = false;
+    private RoadLane laneBlocked;
 
     void Awake()
     {
@@ -33,6 +37,7 @@ public class EntitiesSpawner : MonoBehaviour
         spawnTime = startingSpawnTime;
         littleCars = carsList.GetLittleCars(0);
         bigCars = carsList.GetBigCars(0);
+        obstacles = obstaclesList.GetObstaclesFromBiome(0);
         blocks = carsBlocks.blocks;
     }
 
@@ -43,25 +48,81 @@ public class EntitiesSpawner : MonoBehaviour
             timePassed += Time.deltaTime;
             if (timePassed >= spawnTime)
             {
+                if (spawnAfterObstacle)
+                {
+                    selectedBlock = blocks[blocksBehindObstacles[currentBiome].blocks[Random.Range(0, blocksBehindObstacles[currentBiome].blocks.Count)]];
+                    spawnAfterObstacle = false;
+                }
                 if (firstBlock)
                 {
                     selectedBlock = blocks[startingBlocks[currentBiome].blocks[Random.Range(0, startingBlocks[currentBiome].blocks.Count)]];
                     firstBlock = false;
                 }
+                if (selectedBlock.isThereAnObstacle)
+                {
+                    if (obstacleSpawned)
+                    {
+                        Debug.LogError("Può essere bloccata solo una corsia alla volta");
+                    }
+                    else
+                    {
+                        RoadLane lane = selectedBlock.obstacleLane;
+                        float posX = 0;
+                        switch (lane)
+                        {
+                            case RoadLane.left:
+                                posX = spawnPositionsX[0];
+                                break;
+                            case RoadLane.center:
+                                posX = spawnPositionsX[0];
+                                lane = RoadLane.left;
+                                Debug.LogError("Non può esistere un ostacolo nella corsia centrale");
+                                break;
+                            case RoadLane.right:
+                                posX = spawnPositionsX[2];
+                                break;
+                        }
+                        laneBlocked = lane;
+                        List<RoadObstacle> selectedObstacles = RoadObstacles.SelectObstaclesByLane(obstacles, lane);
+                        RoadObstacle obstacle = selectedObstacles[Random.Range(0, selectedObstacles.Count)];
+                        GameObject spawnedObstacle = Instantiate(obstacle.prefab);
+                        spawnedObstacle.transform.position = new Vector3(posX, obstacle.positionY, obstacle.positionZ);
+                        obstacleSpawned = true;
+                    }
+                }
                 for (int i = 0; i < selectedBlock.carsPositionZ.Length; i++)
                 {
                     float posX = 0;
                     Car car;
-                    switch (selectedBlock.carsLane[i])
+                    RoadLane lane = selectedBlock.carsLane[i];
+                    switch (lane)
                     {
                         case RoadLane.left:
-                            posX = spawnPositionsX[0];
+                            if (obstacleSpawned && lane == laneBlocked)
+                            {
+                                Debug.LogError("Non può essere istanziata una macchina su una corsia bloccata");
+                                posX = 900;
+                            }
+                            else
+                                posX = spawnPositionsX[0];
                             break;
                         case RoadLane.center:
-                            posX = spawnPositionsX[1];
+                            if (obstacleSpawned && lane == laneBlocked)
+                            {
+                                Debug.LogError("Non può essere istanziata una macchina su una corsia bloccata");
+                                posX = 900;
+                            }
+                            else
+                                posX = spawnPositionsX[1];
                             break;
                         case RoadLane.right:
-                            posX = spawnPositionsX[2];
+                            if (obstacleSpawned && lane == laneBlocked)
+                            {
+                                Debug.LogError("Non può essere istanziata una macchina su una corsia bloccata");
+                                posX = 900;
+                            }
+                            else
+                                posX = spawnPositionsX[2];
                             break;
                     }
                     if (selectedBlock.bigCars[i])
@@ -78,7 +139,7 @@ public class EntitiesSpawner : MonoBehaviour
                 if (count % 3 == 0 && count != 0)
                     newBlock = 18;
                 */
-
+                spawnTime = selectedBlock.spawnDelay;
                 selectedBlock = blocks[newBlock];
                 timePassed = 0;
             }
@@ -90,11 +151,15 @@ public class EntitiesSpawner : MonoBehaviour
         currentBiome++;
         littleCars = carsList.GetLittleCars(currentBiome);
         bigCars = carsList.GetBigCars(currentBiome);
+        obstacles = obstaclesList.GetObstaclesFromBiome(currentBiome);
         firstBlock = true;
     }
 
-    public void UpdateSpawnTime()
+    public void ClearLane()
     {
-        spawnTime = Mathf.Clamp(spawnTime - ((int)((GameManager.instance.GetTotalBeerConsumed() - 1) / 5) * spawnTimeReduction), minSpawnTime, startingSpawnTime);
+        obstacleSpawned = false;
+        spawnAfterObstacle = true;
+        timePassed = 0;
+        spawnTime = spawnDelayAfterObstacles[currentBiome];
     }
 }

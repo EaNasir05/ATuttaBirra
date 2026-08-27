@@ -28,7 +28,10 @@ public class CarsBlock
     public float[] carsPositionX;
     public RoadLane[] carsLane;
     public bool[] bigCars;
+    public bool isThereAnObstacle = false;
+    public RoadLane obstacleLane;
     public int[] possibleNextBlocksIndexes;
+    public float spawnDelay = 1.75f;
     public int biome;
 }
 
