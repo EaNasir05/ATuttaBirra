@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,9 +14,7 @@ public class EntitiesSpawner : MonoBehaviour
     [SerializeField] private CarsBlocks carsBlocks;
     [SerializeField] private RoadObstacles obstaclesList;
     [SerializeField] private List<CarsBlocksIndexes> startingBlocks = new();
-    [SerializeField] private List<CarsBlocksIndexes> blocksBehindObstacles = new();
     [SerializeField] private float startingSpawnTime;
-    [SerializeField] private float[] spawnDelayAfterObstacles;
     [SerializeField] private float spawnPositionZ;
     [SerializeField] private float[] spawnPositionsX;
     private List<Car> littleCars;
@@ -25,11 +24,15 @@ public class EntitiesSpawner : MonoBehaviour
     private float spawnTime;
     private float timePassed;
     private CarsBlock selectedBlock;
+    private int[] blocksBehindObstacle;
     private bool firstBlock = true;
     private bool spawnAfterObstacle = false;
     private int currentBiome = 0;
     private bool obstacleSpawned = false;
     private RoadLane laneBlocked;
+    private readonly float roadLenght = 258;
+    private readonly float carsAvarageSpeed = 35;
+    private readonly float obstaclesAvarageSpeed = 15;
 
     void Awake()
     {
@@ -50,7 +53,7 @@ public class EntitiesSpawner : MonoBehaviour
             {
                 if (spawnAfterObstacle)
                 {
-                    selectedBlock = blocks[blocksBehindObstacles[currentBiome].blocks[Random.Range(0, blocksBehindObstacles[currentBiome].blocks.Count)]];
+                    selectedBlock = blocks[blocksBehindObstacle[Random.Range(0, blocksBehindObstacle.Length)]];
                     spawnAfterObstacle = false;
                 }
                 if (firstBlock)
@@ -83,6 +86,7 @@ public class EntitiesSpawner : MonoBehaviour
                                 break;
                         }
                         laneBlocked = lane;
+                        blocksBehindObstacle = selectedBlock.possibleBlocksBehindThisObstacle;
                         List<RoadObstacle> selectedObstacles = RoadObstacles.SelectObstaclesByLane(obstacles, lane);
                         RoadObstacle obstacle = selectedObstacles[Random.Range(0, selectedObstacles.Count)];
                         GameObject spawnedObstacle = Instantiate(obstacle.prefab);
@@ -157,9 +161,31 @@ public class EntitiesSpawner : MonoBehaviour
 
     public void ClearLane()
     {
+        float alcoolPower = GameManager.instance.GetAlcoolPower();
+        float delay = (roadLenght / (obstaclesAvarageSpeed * alcoolPower)) - (roadLenght / (carsAvarageSpeed * alcoolPower));
+        StartCoroutine(SpawnBlocksBehindObstacles(delay));
+    }
+
+    private IEnumerator SpawnBlocksBehindObstacles(float totalDelay, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        float alcoolPower = GameManager.instance.GetAlcoolPower();
+        float newDelay = (roadLenght / (obstaclesAvarageSpeed * alcoolPower)) - (roadLenght / (carsAvarageSpeed * alcoolPower));
+        if (newDelay > totalDelay)
+        {
+            StartCoroutine(SpawnBlocksBehindObstacles(totalDelay + newDelay, newDelay - totalDelay));
+        }
+        else
+        {
+            obstacleSpawned = false;
+            spawnAfterObstacle = true;
+        }
+    }
+
+    private IEnumerator SpawnBlocksBehindObstacles(float delay)
+    {
+        yield return new WaitForSeconds(delay);
         obstacleSpawned = false;
         spawnAfterObstacle = true;
-        timePassed = 0;
-        spawnTime = spawnDelayAfterObstacles[currentBiome];
     }
 }

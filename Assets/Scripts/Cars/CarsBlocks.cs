@@ -31,6 +31,7 @@ public class CarsBlock
     public bool isThereAnObstacle = false;
     public RoadLane obstacleLane;
     public int[] possibleNextBlocksIndexes;
+    public int[] possibleBlocksBehindThisObstacle;
     public float spawnDelay = 1.75f;
     public int biome;
 }
