@@ -28,12 +28,13 @@ public class CarsBlock
     public float[] carsPositionX;
     public RoadLane[] carsLane;
     public bool[] bigCars;
+    public bool[] mirages;
     public bool isThereAnObstacle = false;
-    public RoadLane obstacleLane;
+    public RoadObstacle obstacle;
     public int[] possibleNextBlocksIndexes;
     public int[] possibleBlocksBehindThisObstacle;
     public float spawnDelay = 1.75f;
     public int biome;
 }
 
-public enum RoadLane { left, center, right }
+public enum RoadLane { left, center, right, extendedLeft, extendedRight }

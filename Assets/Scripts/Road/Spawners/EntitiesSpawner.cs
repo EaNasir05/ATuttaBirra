@@ -12,15 +12,17 @@ public class EntitiesSpawner : MonoBehaviour
 
     [SerializeField] private CarsList carsList;
     [SerializeField] private CarsBlocks carsBlocks;
-    [SerializeField] private RoadObstacles obstaclesList;
     [SerializeField] private List<CarsBlocksIndexes> startingBlocks = new();
     [SerializeField] private float startingSpawnTime;
     [SerializeField] private float spawnPositionZ;
-    [SerializeField] private float[] spawnPositionsX;
+    [SerializeField] private float leftLaneEquivalentPositionX;
+    [SerializeField] private float centerLaneEquivalentPositionX;
+    [SerializeField] private float rightLaneEquivalentPositionX;
+    [SerializeField] private float extendedLeftLaneEquivalentPositionX;
+    [SerializeField] private float extendedRightLaneEquivalentPositionX;
     private List<Car> littleCars;
     private List<Car> bigCars;
     private CarsBlock[] blocks;
-    private List<RoadObstacle> obstacles;
     private float spawnTime;
     private float timePassed;
     private CarsBlock selectedBlock;
@@ -40,7 +42,6 @@ public class EntitiesSpawner : MonoBehaviour
         spawnTime = startingSpawnTime;
         littleCars = carsList.GetLittleCars(0);
         bigCars = carsList.GetBigCars(0);
-        obstacles = obstaclesList.GetObstaclesFromBiome(0);
         blocks = carsBlocks.blocks;
     }
 
@@ -69,26 +70,31 @@ public class EntitiesSpawner : MonoBehaviour
                     }
                     else
                     {
-                        RoadLane lane = selectedBlock.obstacleLane;
+                        RoadObstacle obstacle = selectedBlock.obstacle;
+                        RoadLane lane = obstacle.lane;
                         float posX = 0;
                         switch (lane)
                         {
                             case RoadLane.left:
-                                posX = spawnPositionsX[0];
+                                posX = leftLaneEquivalentPositionX;
                                 break;
                             case RoadLane.center:
-                                posX = spawnPositionsX[0];
+                                posX = centerLaneEquivalentPositionX;
                                 lane = RoadLane.left;
                                 Debug.LogError("Non può esistere un ostacolo nella corsia centrale");
                                 break;
                             case RoadLane.right:
-                                posX = spawnPositionsX[2];
+                                posX = rightLaneEquivalentPositionX;
+                                break;
+                            case RoadLane.extendedLeft:
+                                posX = extendedLeftLaneEquivalentPositionX;
+                                break;
+                            case RoadLane.extendedRight:
+                                posX = extendedRightLaneEquivalentPositionX;
                                 break;
                         }
                         laneBlocked = lane;
                         blocksBehindObstacle = selectedBlock.possibleBlocksBehindThisObstacle;
-                        List<RoadObstacle> selectedObstacles = RoadObstacles.SelectObstaclesByLane(obstacles, lane);
-                        RoadObstacle obstacle = selectedObstacles[Random.Range(0, selectedObstacles.Count)];
                         GameObject spawnedObstacle = Instantiate(obstacle.prefab);
                         spawnedObstacle.transform.position = new Vector3(posX, obstacle.positionY, obstacle.positionZ);
                         obstacleSpawned = true;
@@ -108,7 +114,7 @@ public class EntitiesSpawner : MonoBehaviour
                                 posX = 900;
                             }
                             else
-                                posX = spawnPositionsX[0];
+                                posX = leftLaneEquivalentPositionX;
                             break;
                         case RoadLane.center:
                             if (obstacleSpawned && lane == laneBlocked)
@@ -117,7 +123,7 @@ public class EntitiesSpawner : MonoBehaviour
                                 posX = 900;
                             }
                             else
-                                posX = spawnPositionsX[1];
+                                posX = centerLaneEquivalentPositionX;
                             break;
                         case RoadLane.right:
                             if (obstacleSpawned && lane == laneBlocked)
@@ -126,9 +132,29 @@ public class EntitiesSpawner : MonoBehaviour
                                 posX = 900;
                             }
                             else
-                                posX = spawnPositionsX[2];
+                                posX = rightLaneEquivalentPositionX;
+                            break;
+                        case RoadLane.extendedLeft:
+                            if (obstacleSpawned && lane == laneBlocked)
+                            {
+                                Debug.LogError("Non può essere istanziata una macchina su una corsia bloccata");
+                                posX = 900;
+                            }
+                            else
+                                posX = extendedLeftLaneEquivalentPositionX;
+                            break;
+                        case RoadLane.extendedRight:
+                            if (obstacleSpawned && lane == laneBlocked)
+                            {
+                                Debug.LogError("Non può essere istanziata una macchina su una corsia bloccata");
+                                posX = 900;
+                            }
+                            else
+                                posX = extendedRightLaneEquivalentPositionX;
                             break;
                     }
+                    if (selectedBlock.mirages[i])
+                        Debug.LogWarning("Ancora non è implementata la possibilità di avere miraggi");
                     if (selectedBlock.bigCars[i])
                         car = bigCars[Random.Range(0, bigCars.Count)];
                     else
@@ -155,7 +181,6 @@ public class EntitiesSpawner : MonoBehaviour
         currentBiome++;
         littleCars = carsList.GetLittleCars(currentBiome);
         bigCars = carsList.GetBigCars(currentBiome);
-        obstacles = obstaclesList.GetObstaclesFromBiome(currentBiome);
         firstBlock = true;
     }
 
