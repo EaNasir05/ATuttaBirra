@@ -18,12 +18,3 @@ public class RoadObstacles : ScriptableObject
         return selectedObstacles;
     }
 }
-
-[Serializable]
-public class RoadObstacle
-{
-    public GameObject prefab;
-    public RoadLane lane;
-    public float positionY;
-    public float positionZ;
-}

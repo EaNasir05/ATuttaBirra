@@ -13,469 +13,412 @@ MonoBehaviour:
   m_Name: TestCarsBlocks
   m_EditorClassIdentifier: Assembly-CSharp::CarsBlocks
   blocks:
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 00000000
-    bigCars: 00
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 0
+      big: 0
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 08000000090000000a0000000b000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 00000000
-    bigCars: 01
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 0
+      big: 1
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 08000000090000000a0000000b000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 01000000
-    bigCars: 00
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 1
+      big: 0
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 06000000070000000a0000000b000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 01000000
-    bigCars: 01
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 1
+      big: 1
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 06000000070000000a0000000b000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 02000000
-    bigCars: 00
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 2
+      big: 0
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 06000000070000000800000009000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 02000000
-    bigCars: 01
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 2
+      big: 1
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 06000000070000000800000009000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 00000000
-    bigCars: 00
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 0
+      big: 0
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 0c0000000d0000000e0000000f000000100000001100000012000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 00000000
-    bigCars: 01
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 0
+      big: 1
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 0c0000000d0000000e0000000f000000100000001100000012000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 01000000
-    bigCars: 00
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 1
+      big: 0
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 0c0000000d0000000e0000000f000000100000001100000012000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 01000000
-    bigCars: 01
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 1
+      big: 1
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 0c0000000d0000000e0000000f000000100000001100000012000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 02000000
-    bigCars: 00
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 2
+      big: 0
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 0c0000000d0000000e0000000f000000100000001100000012000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 02000000
-    bigCars: 01
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 2
+      big: 1
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 0c0000000d0000000e0000000f000000100000001100000012000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    - 0
-    carsPositionX:
-    - 0
-    - 0
-    carsLane: 0000000001000000
-    bigCars: 0000
-    mirages: 0000
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 0
+      big: 0
+      mirage: 0
+    - positionZ: 0
+      positionX: 0
+      lane: 1
+      big: 0
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 000000000100000002000000030000000400000005000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    - 0
-    carsPositionX:
-    - 0
-    - 0
-    carsLane: 0200000001000000
-    bigCars: 0000
-    mirages: 0000
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 0
+      big: 0
+      mirage: 0
+    - positionZ: 0
+      positionX: 0
+      lane: 2
+      big: 0
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 000000000100000002000000030000000400000005000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    - 0
-    carsPositionX:
-    - 0
-    - 0
-    carsLane: 0000000002000000
-    bigCars: 0000
-    mirages: 0000
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 1
+      big: 0
+      mirage: 0
+    - positionZ: 0
+      positionX: 0
+      lane: 2
+      big: 0
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 000000000100000002000000030000000400000005000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 01000000
-    bigCars: 00
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 1
+      big: 0
+      mirage: 0
     isThereAnObstacle: 1
     obstacle:
       prefab: {fileID: 27826604021662504, guid: eb41485cc3bce994bb36431f79515dc8, type: 3}
       lane: 0
-      biome: 0
       positionY: 0.5
       positionZ: 300
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 000000000100000002000000030000000400000005000000
     possibleNextBlocksIndexes: 1300000014000000
-    possibleBlocksBehindThisObstacle: 000000000100000002000000030000000400000005000000
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 02000000
-    bigCars: 00
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 2
+      big: 0
+      mirage: 0
     isThereAnObstacle: 1
     obstacle:
       prefab: {fileID: 27826604021662504, guid: eb41485cc3bce994bb36431f79515dc8, type: 3}
       lane: 0
-      biome: 0
       positionY: 0.5
       positionZ: 300
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 000000000100000002000000030000000400000005000000
     possibleNextBlocksIndexes: 1300000014000000
-    possibleBlocksBehindThisObstacle: 000000000100000002000000030000000400000005000000
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 00000000
-    bigCars: 00
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 0
+      big: 0
+      mirage: 0
     isThereAnObstacle: 1
     obstacle:
       prefab: {fileID: 27826604021662504, guid: eb41485cc3bce994bb36431f79515dc8, type: 3}
       lane: 2
-      biome: 0
       positionY: 0.5
       positionZ: 300
-    obstacleLane: 2
+      possibleBlocksBehindThisObstacle: 000000000100000002000000030000000400000005000000
     possibleNextBlocksIndexes: 1500000016000000
-    possibleBlocksBehindThisObstacle: 000000000100000002000000030000000400000005000000
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 01000000
-    bigCars: 00
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 1
+      big: 0
+      mirage: 0
     isThereAnObstacle: 1
     obstacle:
       prefab: {fileID: 27826604021662504, guid: eb41485cc3bce994bb36431f79515dc8, type: 3}
       lane: 2
-      biome: 0
       positionY: 0.5
       positionZ: 300
-    obstacleLane: 2
+      possibleBlocksBehindThisObstacle: 000000000100000002000000030000000400000005000000
     possibleNextBlocksIndexes: 1500000016000000
-    possibleBlocksBehindThisObstacle: 000000000100000002000000030000000400000005000000
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 01000000
-    bigCars: 00
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 1
+      big: 0
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 14000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 02000000
-    bigCars: 00
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 2
+      big: 0
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 13000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 00000000
-    bigCars: 00
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 0
+      big: 0
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 16000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    carsPositionX:
-    - 0
-    carsLane: 01000000
-    bigCars: 00
-    mirages: 00
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 1
+      big: 0
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 15000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.75
     biome: 0
-  - carsPositionZ:
-    - 0
-    - 0
-    - 0
-    carsPositionX:
-    - 0
-    - 0
-    - 0
-    carsLane: 000000000100000002000000
-    bigCars: 000000
-    mirages: 000000
+  - cars:
+    - positionZ: 0
+      positionX: 0
+      lane: 0
+      big: 0
+      mirage: 0
+    - positionZ: 0
+      positionX: 0
+      lane: 1
+      big: 0
+      mirage: 0
+    - positionZ: 0
+      positionX: 0
+      lane: 2
+      big: 0
+      mirage: 0
     isThereAnObstacle: 0
     obstacle:
       prefab: {fileID: 0}
       lane: 0
-      biome: 0
       positionY: 0
       positionZ: 0
-    obstacleLane: 0
+      possibleBlocksBehindThisObstacle: 
     possibleNextBlocksIndexes: 17000000
-    possibleBlocksBehindThisObstacle: 
     spawnDelay: 1.5
     biome: 1

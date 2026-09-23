@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "CarsBlocks", menuName = "Scriptable Objects/CarsBlocks")]
@@ -24,17 +23,32 @@ public class CarsBlocks : ScriptableObject
 [Serializable]
 public class CarsBlock
 {
-    public float[] carsPositionZ;
-    public float[] carsPositionX;
-    public RoadLane[] carsLane;
-    public bool[] bigCars;
-    public bool[] mirages;
+    public CarDisposition[] cars;
     public bool isThereAnObstacle = false;
     public RoadObstacle obstacle;
     public int[] possibleNextBlocksIndexes;
-    public int[] possibleBlocksBehindThisObstacle;
     public float spawnDelay = 1.75f;
     public int biome;
+}
+
+[Serializable]
+public class CarDisposition
+{
+    public float positionZ;
+    public float positionX;
+    public RoadLane lane;
+    public bool big;
+    public bool mirage;
+}
+
+[Serializable]
+public class RoadObstacle
+{
+    public GameObject prefab;
+    public RoadLane lane;
+    public float positionY;
+    public float positionZ;
+    public int[] possibleBlocksBehindThisObstacle;
 }
 
 public enum RoadLane { left, center, right, extendedLeft, extendedRight }

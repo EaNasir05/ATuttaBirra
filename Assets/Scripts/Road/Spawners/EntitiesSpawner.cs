@@ -54,7 +54,8 @@ public class EntitiesSpawner : MonoBehaviour
             {
                 if (spawnAfterObstacle)
                 {
-                    selectedBlock = blocks[blocksBehindObstacle[Random.Range(0, blocksBehindObstacle.Length)]];
+                    if (blocksBehindObstacle != null && blocksBehindObstacle.Length > 0)
+                        selectedBlock = blocks[blocksBehindObstacle[Random.Range(0, blocksBehindObstacle.Length)]];
                     spawnAfterObstacle = false;
                 }
                 if (firstBlock)
@@ -94,17 +95,17 @@ public class EntitiesSpawner : MonoBehaviour
                                 break;
                         }
                         laneBlocked = lane;
-                        blocksBehindObstacle = selectedBlock.possibleBlocksBehindThisObstacle;
+                        blocksBehindObstacle = obstacle.possibleBlocksBehindThisObstacle;
                         GameObject spawnedObstacle = Instantiate(obstacle.prefab);
                         spawnedObstacle.transform.position = new Vector3(posX, obstacle.positionY, obstacle.positionZ);
                         obstacleSpawned = true;
                     }
                 }
-                for (int i = 0; i < selectedBlock.carsPositionZ.Length; i++)
+                for (int i = 0; i < selectedBlock.cars.Length; i++)
                 {
                     float posX = 0;
                     Car car;
-                    RoadLane lane = selectedBlock.carsLane[i];
+                    RoadLane lane = selectedBlock.cars[i].lane;
                     switch (lane)
                     {
                         case RoadLane.left:
@@ -153,14 +154,14 @@ public class EntitiesSpawner : MonoBehaviour
                                 posX = extendedRightLaneEquivalentPositionX;
                             break;
                     }
-                    if (selectedBlock.mirages[i])
+                    if (selectedBlock.cars[i].mirage)
                         Debug.LogWarning("Ancora non è implementata la possibilità di avere miraggi");
-                    if (selectedBlock.bigCars[i])
+                    if (selectedBlock.cars[i].big)
                         car = bigCars[Random.Range(0, bigCars.Count)];
                     else
                         car = littleCars[Random.Range(0, littleCars.Count)];
                     GameObject spawnedCar = Instantiate(car.GetPrefab());
-                    spawnedCar.transform.position = new Vector3(posX + (i < selectedBlock.carsPositionX.Length ? selectedBlock.carsPositionX[i] : 0), car.GetHeight(), spawnPositionZ + selectedBlock.carsPositionZ[i]);
+                    spawnedCar.transform.position = new Vector3(posX + selectedBlock.cars[i].positionX, car.GetHeight(), spawnPositionZ + selectedBlock.cars[i].positionZ);
                 }
                 int newBlock = selectedBlock.possibleNextBlocksIndexes[Random.Range(0, selectedBlock.possibleNextBlocksIndexes.Length)];
 
